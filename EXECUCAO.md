@@ -21,3 +21,13 @@ ou de manutenção.
 - Git: repositório `agro.infra.especialista-drenagem` vinculado, gitdir `C:\gitdirs\especialista-drenagem` (D7).
 - Custo: subagentes 0; só a sessão do Agent Builder.
 - Portão F0: aprovado por André em 2026-10-07.
+
+## 2026-10-07 — F1 · manifesto de fontes
+
+- 1 Sonnet (`BRIEF_F1.md`): `tools/fontes_candidatas.yaml` com **28 itens abertos** (A=5, B=16, C=7) e **21 fontes locais** (12 A, 9 B; todas existem em `G:\Meu Drive\DRENAGEM`); YAML válido, sem IDs duplicados. `NAO_ABERTOS.md` (3,8 KB) e `PENDENTES_DOWNLOAD_MANUAL.md` (2,7 KB).
+- URLs: todas as 28 com GET parcial 200/206 e `%PDF-`. Sem item no manifesto: FAO 38 (403), NRCS 606/607 (conexão reiniciada), USBR (conexão reiniciada) → pendentes. Espelhos marcados: USACE, HEC-11, CED, Snohomish.
+- Fechados: NBR 8890:2020, DAEE Manual de Vazões 1994, NBR 15645 e 16085, Chow-Maidment-Mays, Tucci, AASHTO, ASCE MOP 77, TR de bueiros em perímetro irrigado.
+- Download previsto: ~104 MB, ~2.500 páginas (abertos); fontes locais ~600 MB (251 MB só o Pfafstetter).
+- Conferência: amostra de 3 URLs refeita por mim (3 PDF). Anos de HEC-13, EM 1110-2-2902, EM 1110-2-1413 e título da ES 018/2023 a conferir no download.
+- Custo: ~US$ 1 estimado (243 mil tokens de subagente Sonnet, 93 chamadas). Sem testes novos (tests/hid inalterado).
+- `verificar_instalacao.py` ainda não existe no pacote (entra na F11).
