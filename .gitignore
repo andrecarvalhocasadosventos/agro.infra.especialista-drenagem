@@ -1,0 +1,25 @@
+# Corpus de referências: PDFs e texto extraído ficam só no Drive (pesados; catálogo versionado).
+referencias/**
+!referencias/_catalogo.yaml
+!referencias/MAPA_DE_CONHECIMENTO.md
+!referencias/README.md
+
+# Working set do índice FTS (fora do Drive, em C:\bibhid) e artefatos temporários
+.artefacts/temp/
+*.sqlite
+*.duckdb
+
+# Ambiente Python e caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Lixo de SO / editores / Drive
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+~$*
+.git_quebrado_drive/
+memoria/*(1)*.md

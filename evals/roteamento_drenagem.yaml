@@ -1,0 +1,95 @@
+# Casos de roteamento herdados do pacote Especialista Hidraulica (2026-10-02). Formato: id, prompt, esperado, nao_esperado, nota.
+- id: hid-01
+  prompt: Bacia de 8 km², talvegue de 6,2 km e desnível de 140 m. Calcule o tempo de concentração por Kirpich e por Giandotti e diga qual a faixa de validade de cada um para uma bacia do semiárido.
+  esperado:
+  - hidrologia-de-projeto-para-drenagem
+  nao_esperado:
+  - drenagem-subsuperficial
+  - pocos-tubulares
+  - estacoes-elevatorias-e-bombas
+  nota: 'Tc com formula e faixa (V8). bueiros-e-drenagem-superficial toleravel; a IDF, se faltar, vira [DELEGAR: climatologia] sem reprovar.'
+- id: hid-02
+  prompt: Para uma bacia de 120 ha, uso o método racional ou o SCS? Qual TR para um bueiro de estrada vicinal e qual para um extravasor de reservatório? C de 0,35 e i de 78 mm/h já informados.
+  esperado:
+  - hidrologia-de-projeto-para-drenagem
+  nao_esperado:
+  - drenagem-subsuperficial
+  - pocos-tubulares
+  nota: Escolha do metodo pela area (V8) e TR por obra. normas-e-manuais toleravel (IPR-715).
+- id: hid-03
+  prompt: Hidrograma de projeto pelo SCS para uma bacia de 18 km² com CN 78, Tc de 3,1 h e chuva de 140 mm em 24 h (dado do projeto). Quero pico e volume escoado.
+  esperado:
+  - hidrologia-de-projeto-para-drenagem
+  nao_esperado:
+  - drenagem-subsuperficial
+  - estacoes-elevatorias-e-bombas
+  nota: SCS-CN e hidrograma unitario triangular; a chuva ja veio dada, entao nao e caso de delegacao a climatologia. reservatorios-e-pequenas-barragens toleravel se o hidrograma for usado em laminacao.
+- id: bue-01
+  prompt: Bueiro celular duplo 2,5 × 2,5 m sob o canal, Q = 62 m³/s (já definida), declividade 0,005, comprimento 40 m, tailwater 1,8 m. Verifique controle de entrada e de saída e dê o HW.
+  esperado:
+  - bueiros-e-drenagem-superficial
+  nao_esperado:
+  - drenagem-subsuperficial
+  - pocos-tubulares
+  - estacoes-elevatorias-e-bombas
+  nota: 'So a skill, vazao dada: V3 (dois controles, adota o mais desfavoravel). hidrologia-de-projeto-para-drenagem e normas-e-manuais (HDS-5) toleraveis.'
+- id: bue-02
+  prompt: Uma bacia de 14 km² corta o traçado do canal. Estime a vazão de TR 100 e depois dimensione o bueiro celular para passar essa vazão (vai dar algo perto de 350 m³/s para o evento maior).
+  esperado:
+  - hidrologia-de-projeto-para-drenagem
+  - bueiros-e-drenagem-superficial
+  nao_esperado:
+  - drenagem-subsuperficial
+  - pocos-tubulares
+  nota: 'PAR hidrologia x bueiros: o pedido e vazao mais obra. A chuva de TR 100 vem de climatologia: [DELEGAR: climatologia] toleravel, mas as duas skills hidraulicas sao obrigatorias.'
+- id: bue-03
+  prompt: Dimensione a descida d'água em degraus e a sarjeta triangular do talude de aterro do canal, para o escoamento de uma faixa de 60 m de pista de serviço.
+  esperado:
+  - bueiros-e-drenagem-superficial
+  nao_esperado:
+  - drenagem-subsuperficial
+  - pocos-tubulares
+  nota: 'Descida d''agua e sarjeta: linha de drenagem superficial. vertedouros-e-dissipadores toleravel (energia nos degraus).'
+- id: bue-04
+  prompt: No meu bueiro o controle de entrada dá HW de 4,8 m e o de saída 3,4 m. Qual governa? E por que o método legado de Manning a seção plena me deu 4,5 m?
+  esperado:
+  - bueiros-e-drenagem-superficial
+  nao_esperado:
+  - drenagem-subsuperficial
+  - estacoes-elevatorias-e-bombas
+  nota: 'V3: mais desfavoravel governa; legado so como comparacao rotulada (legado subestima HW). normas-e-manuais toleravel (HDS-5).'
+- id: dsub-01
+  prompt: 'Espaçamento de drenos agrícolas por Hooghoudt: K = 0,8 m/dia, camada impermeável a 4,5 m, recarga de 5 mm/dia, drenos a 1,6 m, quero o lençol a 1,0 m no ponto médio entre drenos.'
+  esperado:
+  - drenagem-subsuperficial
+  nao_esperado:
+  - canais-abertos
+  - hidrologia-de-projeto-para-drenagem
+  - bueiros-e-drenagem-superficial
+  nota: 'So a skill (Hooghoudt, profundidade equivalente). K real e profundidade da camada sao dados da geotecnia/pedologia: premissa a registrar.'
+- id: dsub-02
+  prompt: 'O canal em geomembrana passa em corte com lençol freático alto. Preciso do dreno de fundo para aliviar a subpressão com o canal vazio: vazão por furo na geomembrana, 2 tubos DN200 e a carga admissível.'
+  esperado:
+  - drenagem-subsuperficial
+  - canais-abertos
+  nao_esperado:
+  - pocos-tubulares
+  - vertedouros-e-dissipadores
+  nota: 'PAR drenagem subsuperficial x canais: dreno de fundo e subpressao vao em drenagem-subsuperficial; seçao e NA do canal em canais-abertos. Envoltorio real do tubo seria [DELEGAR: geotecnia], toleravel.'
+- id: dsub-03
+  prompt: Capacidade do tubo dreno PEAD DN160 com i = 0,3%, comprimento de linha de 400 m e q = 1,2 L/s/ha em 6 ha por lateral. Cabe? Qual a velocidade?
+  esperado:
+  - drenagem-subsuperficial
+  nao_esperado:
+  - canais-abertos
+  - adutoras-e-perdas-de-carga
+  nota: Capacidade de tubo dreno como conduto livre; so a skill.
+- id: dsub-04
+  prompt: Os coletores de 600 ha de drenos agrícolas deságuam num canal de drenagem aberto. Dimensione os coletores e o canal coletor para q de projeto de 1,2 L/s/ha.
+  esperado:
+  - drenagem-subsuperficial
+  - bueiros-e-drenagem-superficial
+  nao_esperado:
+  - pocos-tubulares
+  - estacoes-elevatorias-e-bombas
+  nota: 'Combinacao: drenos e coletores (subsuperficial) mais canal de drenagem (bueiros-e-drenagem-superficial); canais-abertos toleravel para a seçao.'
