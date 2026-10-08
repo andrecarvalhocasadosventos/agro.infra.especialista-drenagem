@@ -54,3 +54,16 @@ ou de manutenção.
   em projeto, sarjeta/descida com memória, D-56/D-85 específicos. Tokens de subagente: ~724 mil (Sonnet).
 - F5a (D2): `tools/hid` → `tools/dren`, `tests/hid` → `tests/dren` (git mv, 9 arquivos + 21 com referências
   atualizadas). pytest antes e depois: 127 passed, 11 xfailed. `PACOTE.yaml`: calculadoras/testes/marcadores. ~69 mil tokens.
+
+## 2026-10-08 — F3 · mapa de conhecimento
+
+- 4 Sonnet em paralelo (`tools/briefs/BRIEF_F3.md`): G1 hidrologia (8 docs, ~155 p. lidas), G2 bueiros e tubos
+  (11 docs, ~130 p.), G3 estradas (13 docs, ~200 p.), G4 canais e subsuperficial (12 docs, ~190 p.). 44 documentos
+  mapeados, 0 ignorados (Robson I–IV e FDOT fora por não terem texto/arquivo).
+- Localizados: ~54 gabaritos para calculadora (G1 17, G2 13, G3 13, G4 11), ~150 tabelas/ábacos com página.
+  Divergências entre fontes: G1 7, G2 6, G3 13 (+4 anomalias), G4 7.
+- `referencias/MAPA_DE_CONHECIMENTO.md` consolidado (99,7 KB). Tokens de subagente: ~1,01 milhão (Sonnet).
+- Achados para a F5: A_c = 0,60 D² ganha fonte impressa (IME p. 151–152); Ke = 0,7 de alas paralelas confirmado no
+  HEC-13 Tab. 1 p. 100; Picking com unidade conferida (IME p. 29); fator 1,16 de Glover-Dumm fecha em exemplo
+  (Maniçoba p. 2–3); Ernst com exemplo (WATERLOG-ENDRAIN p. 10, divergência 3,5 %); Dooge, Giandotti, DNOS e o
+  1,5× da Kirpich modificada não estão no corpus próprio.
