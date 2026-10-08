@@ -15,11 +15,11 @@ python: ">=3.12"
 dependencias_externas:
   acervo_projetos: ../../03. Infraestrutura/Projetos de Referência/_BIBLIOTECA_TECNICA
   corpus_hidraulica: ../Especialista Hidraulica/referencias   # D1: corpus por caminho
-  working_sets: {bibhid: C:\bibhid}
+  working_sets: {bibhid: C:\bibhid, bibdren: C:\bibdren}
   fonte_local_andre: G:\Meu Drive\DRENAGEM   # D8: só a lista A/B do PLANO §5.1
 delega_para: [clima, hidraulica, geotecnia, terraplenagem, pavimentacao, irrigacao, orcamento]
 recebe_de: [hidraulica, clima, geotecnia, terraplenagem, irrigacao, pavimentacao]
-fase_atual: F1
-proximo_passo: "F1 aguarda portão do André: lista de downloads (28 abertos + 21 locais; ver tools/fontes_candidatas.yaml). Depois F2 corpus"
-ultima_sessao: 2026-10-07
+fase_atual: F2
+proximo_passo: "F3 (mapa de conhecimento) em paralelo com F4 (casos reais); depois F5. Pendências do corpus: FDOT (PENDENTES_DOWNLOAD_MANUAL.md) e OCR do curso Robson I a IV (opcional)"
+ultima_sessao: 2026-10-08
 maquina_treinamento: "G: (máquina do André)"

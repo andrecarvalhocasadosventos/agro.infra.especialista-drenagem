@@ -1,0 +1,1263 @@
+# Catalogo do corpus de referencias -- gerado por tools/baixar_referencias.py + tools/catalogar.py; nao editar a mao.
+metadados:
+  gerado_em: '2026-10-08T18:41:38'
+  gerado_por: tools/baixar_referencias.py
+  total: 49
+  por_status:
+    ok: 48
+    failed: 0
+    manual_needed: 1
+    link_only: 0
+    pendente_ocr: 0
+  pos_processado_por: tools/catalogar.py
+documentos:
+- id: DERPR-ES-DR-01-23
+  titulo: DER/PR ES-DR 01/23 Drenagem - Sarjetas e valetas
+  orgao: DER/PR
+  fonte: DER/PR
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  tipo: norma
+  vigencia: vigente (Deliberação 111/2023); referência estadual para conferir a DNIT 018
+  url: https://www.der.pr.gov.br/sites/der/arquivos_restritos/files/documento/2023-09/DER-ES-DR-01-23_Final.pdf
+  ano: 2023
+  prioridade: B
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 02_BR-DER-PR/DERPR-ES-DR-01-23_der-pr-es-dr-01-23-drenagem-sarjetas-e-v.pdf
+  sha256: 7f0696a3b7b4a141088863bbba43ff703c4460c44e684e21934274e9f9380efd
+  bytes: 338226
+  paginas: 10
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 29173
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: DERPR-ES-DR-03-23
+  titulo: DER/PR ES-DR 03/23 Drenagem - Entradas e descidas d'água
+  orgao: DER/PR
+  fonte: DER/PR
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  tipo: norma
+  vigencia: vigente (Deliberação 111/2023)
+  url: https://www.der.pr.gov.br/sites/der/arquivos_restritos/files/documento/2023-09/DER-ES-DR-03-23_Final.pdf
+  ano: 2023
+  prioridade: B
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 02_BR-DER-PR/DERPR-ES-DR-03-23_der-pr-es-dr-03-23-drenagem-entradas-e-d.pdf
+  sha256: 25f41cc7aba86ec46859469b8e14bd95c79ea7ab94fb93f118098d2890694112
+  bytes: 440984
+  paginas: 8
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 21849
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: DERPR-ES-DR-05-23
+  titulo: DER/PR ES-DR 05/23 Drenagem - Bocas e caixas para bueiros tubulares
+  orgao: DER/PR
+  fonte: DER/PR
+  temas:
+  - bueiros-e-drenagem-superficial
+  - drenagem-de-estradas-e-plataformas
+  tipo: norma
+  vigencia: vigente (Deliberação 111/2023)
+  url: https://www.der.pr.gov.br/sites/der/arquivos_restritos/files/documento/2023-09/DER-ES-DR-05-23_Final.pdf
+  ano: 2023
+  prioridade: B
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 02_BR-DER-PR/DERPR-ES-DR-05-23_der-pr-es-dr-05-23-drenagem-bocas-e-caix.pdf
+  sha256: 20b54961885e32ad3b5227fbf6dd5393c80b1138c81ccb16f5f0412fe9b1bc0f
+  bytes: 329673
+  paginas: 9
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 24303
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: DERPR-ES-DR-06-23
+  titulo: DER/PR ES-DR 06/23 Drenagem - Drenos longitudinais profundos
+  orgao: DER/PR
+  fonte: DER/PR
+  temas:
+  - drenagem-subsuperficial
+  - drenagem-de-estradas-e-plataformas
+  tipo: norma
+  vigencia: vigente (Deliberação 111/2023); complementa a DNIT ES 015/016 do corpus
+  url: https://www.der.pr.gov.br/sites/der/arquivos_restritos/files/documento/2023-09/DER-ES-DR-06-23_Final.pdf
+  ano: 2023
+  prioridade: B
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 02_BR-DER-PR/DERPR-ES-DR-06-23_der-pr-es-dr-06-23-drenagem-drenos-longi.pdf
+  sha256: b9dad546d9d9878e9f7bcdda45902471309024df5bf1f9c4a9451be6eed4b476
+  bytes: 351725
+  paginas: 12
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 32349
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: DERPR-ES-DR-07-23
+  titulo: DER/PR ES-DR 07/23 Drenagem - Drenos subsuperficiais
+  orgao: DER/PR
+  fonte: DER/PR
+  temas:
+  - drenagem-subsuperficial
+  tipo: norma
+  vigencia: vigente (Deliberação 111/2023)
+  url: https://www.der.pr.gov.br/sites/der/arquivos_restritos/files/documento/2023-09/DER-ES-DR-07-23_Final.pdf
+  ano: 2023
+  prioridade: B
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 02_BR-DER-PR/DERPR-ES-DR-07-23_der-pr-es-dr-07-23-drenagem-drenos-subsu.pdf
+  sha256: 1539f16d4834035e22dad30757e90858d813737544b7e6ad35fc5925aba868d0
+  bytes: 337324
+  paginas: 10
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 26393
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: DNIT-ES018-2023
+  titulo: DNIT 018/2023-ES Drenagem - Sarjetas e valetas - Especificação de serviço
+  orgao: DNIT
+  fonte: DNIT
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  - drenagem-normas-e-manuais
+  tipo: norma
+  vigencia: vigente; substitui a DNIT 018/2006-ES (a 2006 só em espelho; não incluída). Título inferido pela numeração e pela versão 2006; conferir no download
+  url: https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/ipr/coletanea-de-normas/coletanea-de-normas/especificacao-de-servico-es/dnit_018_2023_es-1.pdf
+  ano: 2023
+  prioridade: A
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 01_BR-DNIT/DNIT-ES018-2023_dnit-018-2023-es-drenagem-sarjetas-e-val.pdf
+  sha256: 1727305b228ffced1f0bdb7ee5d9fe06c899c4e8e9eb6d905d3818218dc3bb49
+  bytes: 256595
+  paginas: 7
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 35495
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: DNIT-ES020-2006
+  titulo: DNIT 020/2006-ES Drenagem - Meios-fios e guias - Especificação de serviço
+  orgao: DNIT
+  fonte: DNIT
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  tipo: norma
+  vigencia: edição de 2006; não verificado se há revisão posterior
+  url: https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/ipr/coletanea-de-normas/coletanea-de-normas/especificacao-de-servico-es/dnit_020_2006_es.pdf
+  ano: 2006
+  prioridade: C
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 01_BR-DNIT/DNIT-ES020-2006_dnit-020-2006-es-drenagem-meios-fios-e-g.pdf
+  sha256: 7955cb1ef2303d99604660bb6b6d4c0b7d6f6f21ebbb92344a60ef6eb0d69d01
+  bytes: 83501
+  paginas: 6
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 30394
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: DNIT-ES021-2023
+  titulo: DNIT 021/2023-ES Drenagem - Entradas e descidas d'água - Especificação de serviço (com errata 1)
+  orgao: DNIT
+  fonte: DNIT
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  - drenagem-normas-e-manuais
+  tipo: norma
+  vigencia: vigente (versão corrigida 11/2024); cancela e substitui a DNIT 021/2004-ES
+  url: https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/ipr/coletanea-de-normas/coletanea-de-normas/especificacao-de-servico-es/dnit_021_2023_es_com_incorporacao_errata_1.pdf
+  ano: 2023
+  prioridade: A
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 01_BR-DNIT/DNIT-ES021-2023_dnit-021-2023-es-drenagem-entradas-e-des.pdf
+  sha256: b93681d920c008731bfbda710a98fff9623d8bd4bf54f621ed0732b1e267f7af
+  bytes: 231509
+  paginas: 7
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 29367
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: DNIT-IPR726-2006
+  titulo: Diretrizes Básicas para Elaboração de Estudos e Projetos Rodoviários - Escopos Básicos / Instruções de Serviço (IPR-726, 3ª ed.)
+  orgao: DNIT/IPR
+  fonte: DNIT
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  - hidrologia-de-projeto-para-drenagem
+  - drenagem-normas-e-manuais
+  tipo: manual
+  vigencia: edição na coletânea de manuais vigentes do IPR em 2026-10
+  url: https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/ipr/coletanea-de-manuais/vigentes/ipr_726_3aedicao_2006.pdf
+  ano: 2006
+  prioridade: B
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 01_BR-DNIT/DNIT-IPR726-2006_diretrizes-basicas-para-elaboracao-de-es.pdf
+  sha256: 23ad53b0f32c2d64c57ae77cb148aaa1c51a0032ea75954c55fe48e198a32fb2
+  bytes: 3957256
+  paginas: 487
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 1044636
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 9
+  tem_texto: true
+  ocr: nao-necessario
+- id: EMBRAPA-BEBEDOURO-1986
+  titulo: Parâmetros de drenagem subterrânea nos latossolos do perímetro irrigado de Bebedouro (Anais do 7º CONIRD)
+  orgao: Embrapa/ABID
+  fonte: Embrapa
+  temas:
+  - drenagem-subsuperficial
+  tipo: artigo
+  vigencia: o PDF pode ser o volume inteiro dos anais (4 MB); conferir o trecho de Bebedouro
+  url: https://www.alice.cnptia.embrapa.br/alice/bitstream/doc/133513/1/VIICONGRESSONACIONALDEIRRIGACAOEDRENAGEM.pdf
+  ano: 1986
+  prioridade: B
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 03_BR-EMBRAPA/EMBRAPA-BEBEDOURO-1986_parametros-de-drenagem-subterranea-nos-l.pdf
+  sha256: 36dffbf613f56708b40a3629f42819d535d1789c3e104e7a810a60a3bbc2c87b
+  bytes: 4285465
+  paginas: 7
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 44061
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: EMBRAPA-DOC237-VARZEA
+  titulo: Drenagem superficial para cultivos rotacionados em solos de várzea (Embrapa Documentos 237)
+  orgao: Embrapa
+  fonte: Embrapa
+  temas:
+  - canais-de-drenagem-e-macrodrenagem
+  - hidrologia-de-projeto-para-drenagem
+  tipo: manual
+  vigencia: edição de 2008; várzea do Sul do Brasil, útil como método de drenagem superficial em português, não como dado regional
+  url: https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/746698/1/documento237.pdf
+  ano: 2008
+  prioridade: B
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 03_BR-EMBRAPA/EMBRAPA-DOC237-VARZEA_drenagem-superficial-para-cultivos-rotac.pdf
+  sha256: a25a488955b6d78c0bfe9b7f42137f455e52bb9daa807528c6f72bba415f1b0b
+  bytes: 2851139
+  paginas: 24
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 24746
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 3
+  tem_texto: true
+  ocr: nao-necessario
+- id: EMBRAPA-ESPACAMENTO-1990
+  titulo: Validade de algumas equações de drenagem para espaçamento de drenos cobertos - I. Regime de escoamento permanente (PAB 25(3):353-363)
+  orgao: Embrapa
+  fonte: Embrapa
+  temas:
+  - drenagem-subsuperficial
+  tipo: artigo
+  vigencia: série de dois artigos; só a parte I foi verificada
+  url: https://www.alice.cnptia.embrapa.br/alice/bitstream/doc/480493/1/Validadealgumas.pdf
+  ano: 1990
+  prioridade: B
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 03_BR-EMBRAPA/EMBRAPA-ESPACAMENTO-1990_validade-de-algumas-equacoes-de-drenagem.pdf
+  sha256: 4b4d31b27202fcd091d3507ec15f5ae6d87cd6cbd8c3204c5d9cabc843450acb
+  bytes: 7179044
+  paginas: 11
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 51477
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: EMBRAPA-MANICOBA-1988
+  titulo: Drenagem subterrânea no Perímetro Irrigado de Maniçoba - critérios de dimensionamento e avaliação de performance
+  orgao: Embrapa Semiárido (Pesquisa Agropecuária Brasileira 23(4):405-413)
+  fonte: Embrapa
+  temas:
+  - drenagem-subsuperficial
+  tipo: artigo
+  vigencia: dados de campo do Vale do São Francisco (Juazeiro, BA); comparar com Hooghoudt e Glover-Dumm
+  url: https://www.alice.cnptia.embrapa.br/alice/bitstream/doc/133662/1/84311.pdf
+  ano: 1988
+  prioridade: A
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 03_BR-EMBRAPA/EMBRAPA-MANICOBA-1988_drenagem-subterranea-no-perimetro-irriga.pdf
+  sha256: c69fc846d46506fee6eb7242e88874aff06785c90cfb513070d2819d6abcbd75
+  bytes: 315934
+  paginas: 9
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 38163
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: FDOT-DRAINAGE-MANUAL-2016
+  titulo: FDOT Drainage Manual (janeiro de 2016)
+  orgao: FDOT
+  fonte: FDOT
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  tipo: manual
+  vigencia: existe versão posterior no site da FDOT (2018 ou mais nova); esta é a que respondeu 200/206. Conferir antes do download
+  url: https://www.fdot.gov/docs/default-source/roadway/drainage/files/2016Jan-DrainageManual.pdf
+  ano: 2016
+  prioridade: C
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: null
+  sha256: null
+  bytes: null
+  paginas: null
+  data_download: null
+  status: manual_needed
+  obs: servidor entrega PDF truncado (1.844.371 bytes, sem xref/EOF; 0 paginas legiveis; 2 tentativas identicas); baixar no navegador ou obter edicao atual
+  tem_texto: false
+  ocr: nao
+- id: FHWA-HDS3
+  titulo: HDS-3 Design Charts for Open-Channel Flow (FHWA-EPD-86-102)
+  orgao: FHWA
+  fonte: FHWA
+  temas:
+  - canais-de-drenagem-e-macrodrenagem
+  - bueiros-e-drenagem-superficial
+  tipo: manual
+  vigencia: arquivada, mas sem substituta direta (gráficos de Manning para seções, gramados e tubos parcialmente cheios)
+  url: https://www.fhwa.dot.gov/engineering/hydraulics/pubs/hds3.pdf
+  ano: 1961
+  prioridade: B
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 04_FHWA/FHWA-HDS3_hds-3-design-charts-for-open-channel-flo.pdf
+  sha256: ef510f3bf78d6ea6e1d50a75752966fb5ab506fa17d56526d2863dbd6f6070df
+  bytes: 4131092
+  paginas: 116
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 748376
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: FHWA-HEC11
+  titulo: HEC-11 Design of Riprap Revetment (1989)
+  orgao: FHWA
+  fonte: FHWA
+  temas:
+  - canais-de-drenagem-e-macrodrenagem
+  tipo: manual
+  vigencia: edição 1989; o link oficial FHWA não respondeu (404). Dimensionamento do dissipador é do Hidráulico (D3); aqui só revestimento de canal de drenagem
+  url: https://snohomishcountywa.gov/DocumentCenter/View/52449/L-3-FHA-Hydraulic-Engineering-Circular-No-11-dated-March-1989-PDF
+  ano: 1989
+  prioridade: C
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 04_FHWA/FHWA-HEC11_hec-11-design-of-riprap-revetment-1989.pdf
+  sha256: 36eb7d4ee8c91755191c2de9f3956842adb624c2e5fcf7a241a60e826342770e
+  bytes: 13617856
+  paginas: 182
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 388484
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 13
+  tem_texto: true
+  ocr: nao-necessario
+- id: FHWA-HEC12
+  titulo: HEC-12 Drainage of Highway Pavements (FHWA-TS-84-202)
+  orgao: FHWA
+  fonte: FHWA
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  tipo: manual
+  vigencia: arquivada; o conteúdo de bocas de lobo e sarjetas foi absorvido pelo HEC-22 (corpus, FHWA-HEC22); útil só para sarjeta triangular e interceptação em estrada de serviço
+  url: https://www.fhwa.dot.gov/engineering/hydraulics/pubs/hec/hec12.pdf
+  ano: 1984
+  prioridade: B
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 04_FHWA/FHWA-HEC12_hec-12-drainage-of-highway-pavements-fhw.pdf
+  sha256: 7629907732dd0d87685f0f3acc3201c7a08e02d6e9760757cd9b689d8f622ade
+  bytes: 7555390
+  paginas: 155
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 389731
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: FHWA-HEC13
+  titulo: HEC-13 Hydraulic Design of Improved Inlets for Culverts
+  orgao: FHWA
+  fonte: FHWA
+  temas:
+  - bueiros-e-drenagem-superficial
+  tipo: manual
+  vigencia: arquivada; incorporada ao HDS-5 (corpus). Ano a conferir no documento
+  url: https://www.fhwa.dot.gov/engineering/hydraulics/pubs/hec/hec13.pdf
+  ano: 1972
+  prioridade: C
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 04_FHWA/FHWA-HEC13_hec-13-hydraulic-design-of-improved-inle.pdf
+  sha256: 549203df5966e0ebf0e278c6b510370010c2d2978aa672486d398f8b7350b6db
+  bytes: 6229998
+  paginas: 185
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 662089
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: FHWA-HY8-V770-NRCS
+  titulo: FHWA HY-8 Culvert Hydraulic Analysis, Version 7.70 - Computer Program and User Documentation (cópia NRCS UG 210-22-3)
+  orgao: NRCS (cópia da documentação FHWA)
+  fonte: FHWA
+  temas:
+  - bueiros-e-drenagem-superficial
+  tipo: manual
+  vigencia: 'HY-8 vigente é a versão 8.0 (2024), cujo manual vem só no instalador FHWA; esta é a única documentação em PDF aberta. Uso: conferência cruzada de bueiros'
+  url: https://directives.nrcs.usda.gov/sites/default/files2/1712941101/UG%20210-22-3%20ENG%20FHWA%20HY-8%2C%20Culvert%20Hydraulic%20Analysis%2C%20Version%207.70%2C%20Computer%20Program%20and%20User%20Documentation.pdf
+  ano: 2023
+  prioridade: B
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 04_FHWA/FHWA-HY8-V770-NRCS_fhwa-hy-8-culvert-hydraulic-analysis-ver.pdf
+  sha256: 17408d40cf19fa75e8f45023cdac95165b4717652f96136a993a1d6173569bf5
+  bytes: 86608
+  paginas: 2
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 3304
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: ILRI-56-ENVELOPE
+  titulo: Envelope Design for Subsurface Drains (ILRI Publication 56; Vlotman, Willardson, Dierickx)
+  orgao: ILRI/Wageningen
+  fonte: ILRI
+  temas:
+  - drenagem-subsuperficial
+  tipo: livro
+  vigencia: edição única; cobre critério hidráulico e granulométrico de envoltório (fronteira com geotecnia, D-86 do CDV)
+  url: https://edepot.wur.nl/81694
+  ano: 2000
+  prioridade: A
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 07_ILRI-WATERLOG/ILRI-56-ENVELOPE_envelope-design-for-subsurface-drains-il.pdf
+  sha256: bfa62491be77bfdb90af94f40fc26cd10c56b1069cca47b09bdcbf36b992b760
+  bytes: 20178965
+  paginas: 380
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 1037902
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 16
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-ABTC-ALTERACOES-NBR8890
+  titulo: ABTC - Alterações da norma NBR 8890
+  orgao: ABTC
+  fonte: ABTC
+  temas:
+  - bueiros-e-drenagem-superficial
+  - drenagem-normas-e-manuais
+  tipo: local
+  prioridade: A
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\ABTC\DREN-ABTC-ALTERAÇÕES DA NORMA NBR 8890.pdf
+  arquivo: 11_LOCAL-ABTC/LOC-ABTC-ALTERACOES-NBR8890.pdf
+  sha256: 7c9cb208909c6c8009b2f1e921c7263142d9e009d3e8d6543276aaeb5221dd7e
+  bytes: 657902
+  paginas: 5
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  url: null
+  caracteres: 14909
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-ABTC-COMPARACAO-CONCRETO-POLIMERO
+  titulo: ABTC - Comparação tubos de concreto vs polímero
+  orgao: ABTC
+  fonte: ABTC
+  temas:
+  - bueiros-e-drenagem-superficial
+  tipo: local
+  prioridade: B
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\ABTC\DREN-ABTC-COMPARAÇÃO TUBOS DE CONCRETO VS POLÍMERO.pdf
+  arquivo: 11_LOCAL-ABTC/LOC-ABTC-COMPARACAO-CONCRETO-POLIMERO.pdf
+  sha256: 2484d0f4d5590a1a75514d9742d2c1b6c465d1906ce5224a837e1ebe4725d504
+  bytes: 1236116
+  paginas: 11
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  url: null
+  caracteres: 15471
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-ABTC-ESPEC-TUBOS-LICITACOES
+  titulo: ABTC - Especificação de tubos de concreto em licitações
+  orgao: ABTC
+  fonte: ABTC
+  temas:
+  - bueiros-e-drenagem-superficial
+  - drenagem-normas-e-manuais
+  tipo: local
+  prioridade: A
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\ABTC\DREN-ABTC-ESPECIFICAÇÃO DE TUBOS DE CONCRETO EM LICITAÇÕES.pdf
+  arquivo: 11_LOCAL-ABTC/LOC-ABTC-ESPEC-TUBOS-LICITACOES.pdf
+  sha256: 4c08f5a2d0eeb415707d1ad6ab7a6eef67f7e5aec97613a58b0bfbd80ba45677
+  bytes: 8288440
+  paginas: 7
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  url: null
+  caracteres: 9382
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-ABTC-HISTORIA-MANNING
+  titulo: ABTC - História do coeficiente de Manning
+  orgao: ABTC
+  fonte: ABTC
+  temas:
+  - bueiros-e-drenagem-superficial
+  tipo: local
+  prioridade: B
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\ABTC\DREN-ABTC-HISTÓRIA COEFICIENTE DE MANNING.pdf
+  arquivo: 11_LOCAL-ABTC/LOC-ABTC-HISTORIA-MANNING.pdf
+  sha256: 4d2a1df5f37ed1796593f44fc7982b4c1cac43822bcdeae61e3a06668e4387e8
+  bytes: 513220
+  paginas: 12
+  data_download: '2026-10-08'
+  status: ok
+  obs: 474 caracteres em 2 páginas
+  url: null
+  caracteres: 32210
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-ABTC-PROJETO-ESTRUTURAL-ADUELAS
+  titulo: ABTC - Projeto estrutural de aduelas
+  orgao: ABTC
+  fonte: ABTC
+  temas:
+  - bueiros-e-drenagem-superficial
+  tipo: local
+  prioridade: A
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\ABTC\DREN-ABTC-PROJETO ESTRUTURAL DE ADUELAS.pdf
+  arquivo: 11_LOCAL-ABTC/LOC-ABTC-PROJETO-ESTRUTURAL-ADUELAS.pdf
+  sha256: 221fbcd155fa7fb339a10711059dbdc21f209fc5a0e3a4ae4696fe58b7830572
+  bytes: 31451182
+  paginas: 85
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  url: null
+  caracteres: 138728
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-ABTC-PROJETO-ESTRUTURAL-TUBOS
+  titulo: ABTC - Projeto estrutural de tubos circulares de concreto armado
+  orgao: ABTC
+  fonte: ABTC
+  temas:
+  - bueiros-e-drenagem-superficial
+  tipo: local
+  prioridade: A
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\ABTC\DREN-ABTC-PROJETO ESTRUTURAL DE TUBOS CIRCULARES DE CONCRETO ARMADO.pdf
+  arquivo: 11_LOCAL-ABTC/LOC-ABTC-PROJETO-ESTRUTURAL-TUBOS.pdf
+  sha256: 8330e41fa46dc72b44692c45bf28cf64c99a1132fc1d5550f177b96f71f466ef
+  bytes: 6307840
+  paginas: 69
+  data_download: '2026-10-08'
+  status: ok
+  obs: 217 caracteres em 2 páginas (possível slides)
+  url: null
+  caracteres: 170617
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 1
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-COMAER-EDMIR-DREN-SUBSUPERFICIAL
+  titulo: COMAER/Edmir - Drenagem subsuperficial e subterrânea
+  orgao: COMAER
+  fonte: COMAER
+  temas:
+  - drenagem-subsuperficial
+  - drenagem-de-estradas-e-plataformas
+  tipo: local
+  prioridade: A
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\COMAER\DREN - COMAER - EDMIR - DRENAGEM SUBSUPERFICIAL E SUBTERRÂNEA.pdf
+  arquivo: 13_LOCAL-ESTRADAS/LOC-COMAER-EDMIR-DREN-SUBSUPERFICIAL.pdf
+  sha256: 49a21a9b17b5f36a6e72dfb28bfa50a801fd97e338c66c6582f6e0f125730f5b
+  bytes: 1473465
+  paginas: 93
+  data_download: '2026-10-08'
+  status: ok
+  obs: 476 caracteres em 2 páginas
+  url: null
+  caracteres: 164940
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 2
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-DNIT-ALBUM-2018
+  titulo: DNIT - Projetos-tipo de dispositivos de drenagem (2018)
+  orgao: DNIT
+  fonte: DNIT
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  - drenagem-normas-e-manuais
+  tipo: local
+  prioridade: A
+  licenca: aberta
+  origem: G:\Meu Drive\DRENAGEM\DNIT\DREN - DNIT - PROJETOS TIPO DE DISPOSITIVOS DE DRENAGEM (2018).pdf
+  arquivo: 13_LOCAL-ESTRADAS/LOC-DNIT-ALBUM-2018.pdf
+  sha256: def78f1232e8a13b5b02e63b51d9c09cd084b3b1cd2731a13bf90a1f88d6e23b
+  bytes: 70276820
+  paginas: 227
+  data_download: '2026-10-08'
+  status: ok
+  obs: 566 caracteres em 2 páginas (capa e sumário?). Conferir 5 páginas de desenho antes de decidir OCR; o IPR-736 do corpus é escaneado
+  url: null
+  caracteres: 296149
+  escaneado: true
+  paginas_ocr: 203
+  paginas_sem_texto: 18
+  tem_texto: true
+  ocr: parcial
+  ocr_motor: rapidocr-onnx (local), 200 dpi
+- id: LOC-ESLAMIAN-HANDBOOK-HYDROLOGY
+  titulo: Eslamian - Handbook of Engineering Hydrology
+  orgao: Estudos
+  fonte: Estudos
+  temas:
+  - hidrologia-de-projeto-para-drenagem
+  tipo: local
+  prioridade: B
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\01. ESTUDOS\DREN - EST - SAEID ESLAMIAN - HANDBOOK OF ENGINEERING HIDROLOGY.pdf
+  arquivo: 12_LOCAL-HIDROLOGIA/LOC-ESLAMIAN-HANDBOOK-HYDROLOGY.pdf
+  sha256: fdd117a35d39abdfc81b3f3b97605090d30bc5b3951871195ea24175a8d66752
+  bytes: 11885879
+  paginas: 594
+  data_download: '2026-10-08'
+  status: ok
+  obs: livro com direitos reservados; 80 caracteres em 2 páginas
+  url: null
+  caracteres: 2202924
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 14
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-IME-DRENAGEM-URBANA-RODOVIAS
+  titulo: IME - Drenagem urbana e de rodovias
+  orgao: IME
+  fonte: IME
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  - bueiros-e-drenagem-superficial
+  tipo: local
+  prioridade: A
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\IME\DREN - IME - DRENAGEM URBANA E DE RODOVIAS.PDF
+  arquivo: 13_LOCAL-ESTRADAS/LOC-IME-DRENAGEM-URBANA-RODOVIAS.pdf
+  sha256: b98f067eefd098a5fedcdb684b6801190eaa330faf43f1bbd7d377c99dd8698c
+  bytes: 9779233
+  paginas: 176
+  data_download: '2026-10-08'
+  status: ok
+  obs: 391 caracteres em 2 páginas
+  url: null
+  caracteres: 292513
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-MCCUEN-HYDROLOGIC-ANALYSIS
+  titulo: McCuen - Hydrologic Analysis and Design
+  orgao: Estudos
+  fonte: Estudos
+  temas:
+  - hidrologia-de-projeto-para-drenagem
+  tipo: local
+  prioridade: A
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\01. ESTUDOS\DREN - EST - RICHARD H MACCUEN - HYDROLOGIC ANALYSIS AND DESIGN.pdf
+  arquivo: 12_LOCAL-HIDROLOGIA/LOC-MCCUEN-HYDROLOGIC-ANALYSIS.pdf
+  sha256: 5b1f3169fcabac2006559aef154fa10967e5afd078de9af8602e4e1cbbc17a65
+  bytes: 32137939
+  paginas: 833
+  data_download: '2026-10-08'
+  status: ok
+  obs: livro com direitos reservados; 200 caracteres em 2 páginas (capa/frontispício ou imagem); fora do git
+  url: null
+  caracteres: 2105509
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 9
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-NEH-TC-ESCOAMENTO-PLANO
+  titulo: Tempo de Concentração - National Engineering Handbook (NRCS)
+  orgao: Estudos
+  fonte: Estudos
+  temas:
+  - hidrologia-de-projeto-para-drenagem
+  tipo: local
+  prioridade: A
+  licenca: dominio-publico
+  origem: G:\Meu Drive\DRENAGEM\01. ESTUDOS\ESCOAMENTO PLANO\Tempo de Concentração - National Engineering Handbook.pdf
+  arquivo: 12_LOCAL-HIDROLOGIA/LOC-NEH-TC-ESCOAMENTO-PLANO.pdf
+  sha256: 887503c4a58481dc737b5bf689a5289b686cc40107808a7f6a444867a696762e
+  bytes: 1082890
+  paginas: 29
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  url: null
+  caracteres: 97913
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-PFAFSTETTER-CHUVAS-INTENSAS
+  titulo: Chuvas Intensas no Brasil (Pfafstetter, DNOS)
+  orgao: Pfafstetter/DNOS
+  fonte: Pfafstetter/DNOS
+  temas:
+  - hidrologia-de-projeto-para-drenagem
+  - drenagem-normas-e-manuais
+  tipo: local
+  prioridade: A
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\PFAFSTETTER\DREN - PFAFSTETTER - CHUVAS INTENSAS NO BRASIL.pdf
+  arquivo: 10_LOCAL-PFAFSTETTER/LOC-PFAFSTETTER-CHUVAS-INTENSAS.pdf
+  sha256: 0161e4149a4bc2fedb099219a7bce58b923ee8716aa5687e4328a84b718a9f3b
+  bytes: 263531102
+  paginas: 426
+  data_download: '2026-10-08'
+  status: ok
+  obs: 0 caractere em 2 páginas; OCR local na F2; compartilhar com o Clima por caminho
+  url: null
+  caracteres: 106479
+  escaneado: true
+  paginas_ocr: 422
+  paginas_sem_texto: 4
+  tem_texto: true
+  ocr: completo
+  ocr_motor: rapidocr-onnx (local), 200 dpi
+- id: LOC-PLANILHA-ESCOAMENTO-PLANO-001
+  titulo: Planilha - Tempo de escoamento plano (0.01)
+  orgao: Estudos
+  fonte: Estudos
+  temas:
+  - hidrologia-de-projeto-para-drenagem
+  tipo: local
+  prioridade: A
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\01. ESTUDOS\ESCOAMENTO PLANO\20220414_Tempo de escoamento plano_0.01.xlsx
+  arquivo: 12_LOCAL-HIDROLOGIA/LOC-PLANILHA-ESCOAMENTO-PLANO-001.xlsx
+  sha256: f662bc7af3020cb4c20934fafa6bcf38c877673a57dfc02ef32a138f2a85a848
+  bytes: 1497943
+  paginas: null
+  data_download: '2026-10-08'
+  status: ok
+  obs: planilha; vira caso numérico de calculadora
+  url: null
+  caracteres: 530
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-PLANILHA-ESCOAMENTO-PLANO-REDENCAO
+  titulo: Planilha - Tempo de escoamento plano (Redenção)
+  orgao: Estudos
+  fonte: Estudos
+  temas:
+  - hidrologia-de-projeto-para-drenagem
+  tipo: local
+  prioridade: A
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\01. ESTUDOS\ESCOAMENTO PLANO\20220414_Tempo de escoamento plano_redenção.xlsx
+  arquivo: 12_LOCAL-HIDROLOGIA/LOC-PLANILHA-ESCOAMENTO-PLANO-REDENCAO.xlsx
+  sha256: 2f8336f020945be1c650f206bcda8291b748366e39fa2808fc566a6a8413ed52
+  bytes: 1499222
+  paginas: null
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  url: null
+  caracteres: 2253
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-RETROANALISE-CANAL-GABIAO
+  titulo: Retroanálise de canal em gabião (planilha)
+  orgao: Estudos
+  fonte: Estudos
+  temas:
+  - canais-de-drenagem-e-macrodrenagem
+  tipo: local
+  prioridade: B
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\01. ESTUDOS\RETROANÁLISE CANAL GABIÃO.xlsx
+  arquivo: 14_LOCAL-SOFTWARE-CASOS/LOC-RETROANALISE-CANAL-GABIAO.xlsx
+  sha256: 32f09c5e217691658ce546535fbc69aa8118e9bf8a242a614d6f5d9feaecd4ae
+  bytes: 15452
+  paginas: null
+  data_download: '2026-10-08'
+  status: ok
+  obs: possível caso real de canal de drenagem (F4)
+  url: null
+  caracteres: 24417
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: LOC-ROBSON-DRENAGEM-RODOVIAS-I
+  titulo: Curso Drenagem de Rodovias (Robson) - parte I
+  orgao: Curso Robson
+  fonte: Curso Robson
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  tipo: local
+  prioridade: B
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\01. ESTUDOS\C3D E SSA\CURSO DRENAGEM RODOVIAS - ROBSON\parte-i.pdf
+  arquivo: 15_LOCAL-CURSO-ROBSON/LOC-ROBSON-DRENAGEM-RODOVIAS-I.pdf
+  sha256: b952ad5c05d436b4fa4a4e89818983fd81997814af832c1c5f1cbaa66be69190
+  bytes: 31123025
+  paginas: 284
+  data_download: '2026-10-08'
+  status: ok
+  obs: slides (73 caracteres em 2 páginas); só se o IPR-724 não bastar
+  url: null
+  caracteres: 121252
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 69
+  tem_texto: true
+  ocr: pendente
+- id: LOC-ROBSON-DRENAGEM-RODOVIAS-II
+  titulo: Curso Drenagem de Rodovias (Robson) - parte II
+  orgao: Curso Robson
+  fonte: Curso Robson
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  tipo: local
+  prioridade: B
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\01. ESTUDOS\C3D E SSA\CURSO DRENAGEM RODOVIAS - ROBSON\parte-ii.pdf
+  arquivo: 15_LOCAL-CURSO-ROBSON/LOC-ROBSON-DRENAGEM-RODOVIAS-II.pdf
+  sha256: 89959a9c39df8e969eb68501ea501626a346ef4fc50d5b41f4e8f1ee9ada9b8a
+  bytes: 22697341
+  paginas: 283
+  data_download: '2026-10-08'
+  status: ok
+  obs: slides (162 caracteres em 2 páginas)
+  url: null
+  caracteres: 39116
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 80
+  tem_texto: true
+  ocr: pendente
+- id: LOC-ROBSON-DRENAGEM-RODOVIAS-III
+  titulo: Curso Drenagem de Rodovias (Robson) - parte III
+  orgao: Curso Robson
+  fonte: Curso Robson
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  tipo: local
+  prioridade: B
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\01. ESTUDOS\C3D E SSA\CURSO DRENAGEM RODOVIAS - ROBSON\parte-iii.pdf
+  arquivo: 15_LOCAL-CURSO-ROBSON/LOC-ROBSON-DRENAGEM-RODOVIAS-III.pdf
+  sha256: 9459ae952eec4544e6ea6545958362a8efe7fbe79e4659c302f0367c7879baff
+  bytes: 36771848
+  paginas: 341
+  data_download: '2026-10-08'
+  status: ok
+  obs: slides (147 caracteres em 2 páginas)
+  url: null
+  caracteres: 73002
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 155
+  tem_texto: true
+  ocr: pendente
+- id: LOC-ROBSON-DRENAGEM-RODOVIAS-IV
+  titulo: Curso Drenagem de Rodovias (Robson) - parte IV
+  orgao: Curso Robson
+  fonte: Curso Robson
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  tipo: local
+  prioridade: B
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\01. ESTUDOS\C3D E SSA\CURSO DRENAGEM RODOVIAS - ROBSON\parte-iv.pdf
+  arquivo: 15_LOCAL-CURSO-ROBSON/LOC-ROBSON-DRENAGEM-RODOVIAS-IV.pdf
+  sha256: 9953d4dacdf5f6ba3202d53a2c43b3b94355bb4cb3c3b791a1649190ae37da4e
+  bytes: 66417439
+  paginas: 367
+  data_download: '2026-10-08'
+  status: ok
+  obs: slides (116 caracteres em 2 páginas)
+  url: null
+  caracteres: 28496
+  escaneado: true
+  paginas_ocr: 0
+  paginas_sem_texto: 217
+  tem_texto: true
+  ocr: pendente
+- id: LOC-SISCCOH-MANUAL-V11
+  titulo: SisCCoH - Manual técnico v1.1
+  orgao: SisCCoH
+  fonte: SisCCoH
+  temas:
+  - bueiros-e-drenagem-superficial
+  - drenagem-de-estradas-e-plataformas
+  tipo: local
+  prioridade: B
+  licenca: uso-interno
+  origem: G:\Meu Drive\DRENAGEM\01. ESTUDOS\SiSCCOH - COMPONENTES HIDRAULICOS\Manual-Tecnico-SisCCoH_v.1.1.pdf
+  arquivo: 14_LOCAL-SOFTWARE-CASOS/LOC-SISCCOH-MANUAL-V11.pdf
+  sha256: b5a896d52d2edf17f34bf3156953a8f5d8f45d541809d712b2d7aa72976a3839
+  bytes: 3503956
+  paginas: 87
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  url: null
+  caracteres: 143858
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: NRCS-CPS608-2023
+  titulo: Conservation Practice Standard 608 Surface Drain, Main or Lateral (Ft.)
+  orgao: USDA NRCS
+  fonte: NRCS
+  temas:
+  - canais-de-drenagem-e-macrodrenagem
+  - drenagem-subsuperficial
+  tipo: norma
+  vigencia: agosto de 2023 (vigente); as normas 606 e 607 estão em PENDENTES (host nrcs.usda.gov reinicia a conexão)
+  url: https://nrcs-prod.azureedge.us/sites/default/files/2024-10/Surface-Drain%2C-Main-or-Lateral-%28608%29-%28Ft.%29-Standard-Document.pdf
+  ano: 2023
+  prioridade: B
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 06_US-USGS-NRCS-DOT/NRCS-CPS608-2023_conservation-practice-standard-608-surfa.pdf
+  sha256: f987e3ba4ea7ba3cbf5837a5a83dc61cde6dab6b16c8a63dd072eb74d6b83cf5
+  bytes: 114269
+  paginas: 4
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 11402
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: USACE-EM1110-2-1413
+  titulo: EM 1110-2-1413 Hydrologic Analysis of Interior Areas
+  orgao: USACE
+  fonte: USACE
+  temas:
+  - hidrologia-de-projeto-para-drenagem
+  - canais-de-drenagem-e-macrodrenagem
+  tipo: manual
+  vigencia: edição de 1987 a conferir; host oficial USACE bloqueia robô
+  url: https://www.cedengineering.com/userfiles/C11-002%20-%20Hydrologic%20Analysis%20of%20Interior%20Areas%20-%20US.pdf
+  ano: 1987
+  prioridade: C
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 05_USACE/USACE-EM1110-2-1413_em-1110-2-1413-hydrologic-analysis-of-in.pdf
+  sha256: 70b0efcccab37ab2a4dcae9b48cd83509257adc429fcea483858d1481c463d8f
+  bytes: 2630761
+  paginas: 125
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 293473
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: USACE-EM1110-2-1601
+  titulo: EM 1110-2-1601 Hydraulic Design of Flood Control Channels (com Change 1, 1994)
+  orgao: USACE
+  fonte: USACE
+  temas:
+  - canais-de-drenagem-e-macrodrenagem
+  tipo: manual
+  vigencia: vigente no catálogo USACE em 2026 (conferir); o host oficial publications.usace.army.mil devolve 403 a robô (ver PENDENTES_DOWNLOAD_MANUAL.md)
+  url: https://damfailures.org/sites/default/files/wp-pdf/em_1110-2-1601.pdf
+  ano: 1991
+  prioridade: A
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 05_USACE/USACE-EM1110-2-1601_em-1110-2-1601-hydraulic-design-of-flood.pdf
+  sha256: 281e0b95854e18d4b171757be92c059de80d6c13162b4165d8df9d218ea6b55b
+  bytes: 2405047
+  paginas: 183
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 874684
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: USACE-EM1110-2-2902
+  titulo: EM 1110-2-2902 Conduits, Culverts, and Pipes (edição antiga)
+  orgao: USACE
+  fonte: USACE
+  temas:
+  - bueiros-e-drenagem-superficial
+  tipo: manual
+  vigencia: SUBSTITUÍDA pela edição de 31/12/2020 (risco informado); esta cópia aberta é antiga. Ano a conferir no documento. Parte estrutural pertence a estruturas; aqui só carregamento e hidráulica de
+    bueiro
+  url: https://damtoolbox.org/images/3/37/EM_1110-2-2902.pdf
+  ano: 1998
+  prioridade: C
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 05_USACE/USACE-EM1110-2-2902_em-1110-2-2902-conduits-culverts-and-pip.pdf
+  sha256: 21f454bcd4ef34814e805d260b63a39cbb85b4ceba69d7697757fad2aba8570c
+  bytes: 3214927
+  paginas: 87
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 300414
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: USGS-WSP1849
+  titulo: Roughness Characteristics of Natural Channels (Barnes, Water-Supply Paper 1849)
+  orgao: USGS
+  fonte: USGS
+  temas:
+  - canais-de-drenagem-e-macrodrenagem
+  - hidrologia-de-projeto-para-drenagem
+  tipo: relatório
+  vigencia: referência clássica, sem substituta; n de Manning por fotos de 50 canais
+  url: https://pubs.usgs.gov/wsp/wsp_1849/pdf/wsp_1849.pdf
+  ano: 1967
+  prioridade: B
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 06_US-USGS-NRCS-DOT/USGS-WSP1849_roughness-characteristics-of-natural-cha.pdf
+  sha256: adc9416ccd2aa9c16a022931f1dc420ced7ee8c5e9bfc13597d33366dd1c416c
+  bytes: 14985509
+  paginas: 219
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 285611
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: WATERLOG-DRAINAGE-EQUATION
+  titulo: Drainage equation (Oosterbaan) - relação entre profundidade, espaçamento de drenos e condutividade hidráulica
+  orgao: ILRI/WUR (R. J. Oosterbaan, waterlog.info)
+  fonte: WATERLOG
+  temas:
+  - drenagem-subsuperficial
+  tipo: artigo
+  vigencia: nota de aula do autor; ano não informado no PDF consultado. Usar só como conferência de Hooghoudt/Ernst com ILRI-DPA16 (corpus)
+  url: https://waterlog.info/lec/equation.pdf
+  prioridade: B
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 07_ILRI-WATERLOG/WATERLOG-DRAINAGE-EQUATION_drainage-equation-oosterbaan-relacao-ent.pdf
+  sha256: 67e51aa65f36c4f22df13352db416c1556635d12249c4774027667c9ee95615c
+  bytes: 401349
+  paginas: 9
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 8355
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: WATERLOG-ENDRAIN
+  titulo: EnDrain - balanço de energia do escoamento subterrâneo (paper e programa gratuito)
+  orgao: ILRI/WUR (R. J. Oosterbaan, waterlog.info)
+  fonte: WATERLOG
+  temas:
+  - drenagem-subsuperficial
+  tipo: artigo
+  vigencia: versão de 2021 do software; método alternativo de espaçamento, não padrão do pacote
+  url: https://www.waterlog.info/pdf/EnDrain%20paper.pdf
+  ano: 2021
+  prioridade: C
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 07_ILRI-WATERLOG/WATERLOG-ENDRAIN_endrain-balanco-de-energia-do-escoamento.pdf
+  sha256: 74c011da1505b2477f4b6c1ba0c73399e5e1bb9ce2bffd504add925a50eac5a9
+  bytes: 954283
+  paginas: 19
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 27968
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: WSDOT-HYDRAULICS-M2303-12
+  titulo: WSDOT Hydraulics Manual M 23-03.12 (manual completo; cap. 2 hidrologia, 3 bueiros, 4 canais, 5 pavimentos, 6 coletores e drenos)
+  orgao: WSDOT
+  fonte: WSDOT
+  temas:
+  - drenagem-de-estradas-e-plataformas
+  - bueiros-e-drenagem-superficial
+  - canais-de-drenagem-e-macrodrenagem
+  tipo: manual
+  vigencia: M 23-03.12 (abril de 2025), a mais recente listada; manual estadual americano, referência de prática, não norma brasileira
+  url: https://wsdot.wa.gov/publications/manuals/fulltext/M23-03/M230312Complete.pdf
+  ano: 2025
+  prioridade: B
+  licenca: aberta
+  origem: aberta/F1
+  arquivo: 06_US-USGS-NRCS-DOT/WSDOT-HYDRAULICS-M2303-12_wsdot-hydraulics-manual-m-23-03-12-manua.pdf
+  sha256: 313f0d92a1d3610cd4c2c99bc5acd04e54ea4781af3b352aafb2d309d2d45945
+  bytes: 18265223
+  paginas: 325
+  data_download: '2026-10-08'
+  status: ok
+  obs: null
+  caracteres: 953763
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
