@@ -3,7 +3,7 @@ vazao e capacidade de tubos drenos, dreno de fundo de canal revestido (subpressa
 geomembrana, criterio de filtro (Terzaghi) e tabelas indicativas.
 
 Unidades SI: m, m/d (recarga q e condutividade K, como em ILRI/USBR), m3/s para vazoes de tubo;
-tempo em dias. Apenas stdlib. CLI: python -m tools.hid.drenos --json '{"funcao":
+tempo em dias. Apenas stdlib. CLI: python -m tools.dren.drenos --json '{"funcao":
 "hooghoudt_espacamento", "q": 0.002, "K": 1.0, "h": 0.6, "D": 5.0, "r": 0.1}'
 
 Fontes (corpus local, referencias/):
@@ -436,5 +436,5 @@ FUNCOES = {
 }
 
 if __name__ == "__main__":
-    from tools.hid._cli import principal
-    principal("tools.hid.drenos", VERSAO, FUNCOES)
+    from tools.dren._cli import principal
+    principal("tools.dren.drenos", VERSAO, FUNCOES)

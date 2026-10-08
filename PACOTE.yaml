@@ -6,9 +6,9 @@ versao: 0.1.2
 estado: em-treinamento
 modelo_padrao: sonnet
 variavel_raiz: DRENAGEM_ROOT
-marcadores_raiz: [tools/hid/bueiros.py, casos/drenagem/]
-calculadoras: tools/hid   # migra para tools/dren na F5 (D2)
-testes: tests/hid
+marcadores_raiz: [tools/dren/bueiros.py, casos/drenagem/]
+calculadoras: tools/dren   # migrado na F5a (D2), 2026-10-08
+testes: tests/dren
 repo: https://github.com/andrecarvalhocasadosventos/agro.infra.especialista-drenagem
 gitdir: C:\gitdirs\especialista-drenagem
 python: ">=3.12"

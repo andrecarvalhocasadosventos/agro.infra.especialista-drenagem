@@ -14,7 +14,7 @@ seguranca):
 - DAEE-SP (Instrucao Tecnica DPO 11/2017, Pluviometria e drenagem).
 - Casos do acervo: casos/drenagem_dissipadores/*.md.
 
-CLI: python -m tools.hid.hidrologia --json '{"funcao": "racional", "args": {...}}'
+CLI: python -m tools.dren.hidrologia --json '{"funcao": "racional", "args": {...}}'
 
 CHANGELOG
 0.2.0 (achados da redacao da skill hidrologia-de-projeto-para-drenagem; paginas = marcador
@@ -707,7 +707,7 @@ _FUNCOES = {
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(prog="python -m tools.hid.hidrologia")
+    ap = argparse.ArgumentParser(prog="python -m tools.dren.hidrologia")
     ap.add_argument("--json", required=True,
                     help='{"funcao": "racional", "args": {"C":0.3,"i":50,"A":1.2}}; funcoes: '
                          + ", ".join(_FUNCOES))

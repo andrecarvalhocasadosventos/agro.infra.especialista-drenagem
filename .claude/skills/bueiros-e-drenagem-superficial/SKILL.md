@@ -68,7 +68,7 @@ Com X = Ku·Q/(A·D^0,5), **Ku = 1,811 (SI)**, A = área plena do barril, D = al
 - Não submersa, forma 1: HW/D = Hc/D + K·X^M + Ks·S; forma 2: HW/D = K·X^M; vale até X ≈ 3,5 [HDS5 p. 190, eqs. A.1, A.2].
 - Submersa: HW/D = c·X² + Y + Ks·S; vale a partir de X ≈ 4,0 [HDS5 p. 191, eq. A.3]. Ks = −0,5 (mitrada: +0,7).
 - Zona de transição (3,5 < X < 4,0): o HDS-5 traça curva tangente [p. 86, 190]; a calculadora **interpola linearmente** entre os dois
-  extremos (diferença pequena, `DIVERGENCIAS_bueiros.md`). Hc = dc + Vc²/2g na seção de controle.
+  extremos (diferença pequena, `DIVERGENCIAS.md`). Hc = dc + Vc²/2g na seção de controle.
 - K, M, c, Y e Ke por tipo de entrada: **`references/constantes-hds5.md`** (Tabelas A.1 e A.2 [HDS5 p. 197-198]; Ke da Tabela C.2 [p. 216]).
 - Declividade dos nomogramas = 2 %; a calculadora usa a real. Declividade nula ou adversa e mitrado: [HDS5 p. 107].
 - A entrada afunilada (lateral ou de declividade) eleva a capacidade e usa a Tabela A.1 charts 55-59 [HDS5 p. 197]; a calculadora não
@@ -168,24 +168,24 @@ saída (V alta no pé da boca de jusante) [DNIT-HIDRO p. 24].
   0,643 (50), 0,588 (75), 0,548 (100) [DNIT-DREN p. 91, Tabela 22]; só vale com carga ≤ 2 D.
 - **Manning em seção plena ou lâmina fixa** (Baixio, CSB, Salitre, Iuiu): dá capacidade e V, **não o HW**.
 - No DNIT/ENAP o bueiro tubular se dimensiona "como canal" e se verifica "como orifício" [ENAP-BUEIROS p. 13]; [DNIT-DREN p. 32]. Esse é o método normativo
-  da rodovia; o HDS-5 é mais completo. O legado subestima o HW em **6 a 18 %** (`DIVERGENCIAS_bueiros.md`). Entregar sempre o HDS-5 e a comparação com o legado, rotulada.
+  da rodovia; o HDS-5 é mais completo. O legado subestima o HW em **6 a 18 %** (`DIVERGENCIAS.md`). Entregar sempre o HDS-5 e a comparação com o legado, rotulada.
 
-## 4. Calculadoras (`tools/hid/bueiros.py`; `canais.py`)
+## 4. Calculadoras (`tools/dren/bueiros.py`; `canais.py`)
 
-| Cálculo | Função | Fórmula e fonte | Testes (`tests/hid/test_bueiros.py`) |
+| Cálculo | Função | Fórmula e fonte | Testes (`tests/dren/test_bueiros.py`) |
 |---|---|---|---|
 | HW de entrada | `controle_de_entrada` | HDS-5 A.1-A.3, Tab. A.1/A.2 | `test_entrada_submersa_formula_fechada`, `test_entrada_nao_submersa_forma1_usa_carga_critica`, `test_transicao_liga_os_extremos`, `test_ku_si_equivale_a_unidades_inglesas` |
 | HW de saída | `controle_de_saida` | HDS-5 3.1, 3.4, 3.5; Ke Tab. C.2 | `test_saida_formula_fechada_afogado`, `test_saida_livre_usa_dc_mais_D_sobre_2_e_avisa` |
 | HW controlante e catálogo | `dimensionar_bueiro` | max(entrada, saída); ordena por área | `test_dimensionar_ordena_por_area_e_respeita_HW_max` |
 | V, y, Fr de saída; dissipador | `velocidade_de_saida`, `dissipador_necessario` | HDS-5 §3.1.6; limite da calculadora | `test_velocidade_saida_e_dissipador` |
 | Legado | `orificio`, `comparar_legado_hds5` (CLI); `verificacao_manning_plena` (só Python) | orifício C = 0,62; Manning | `test_orificio_ida_e_volta`, `test_baixio_legado_vs_hds5_5pct` |
-| Valeta, canal, y_normal, y_crítica, Fr, folga | `canais.y_normal`, `y_critica`, `froude`, `manning_Q`, `borda_livre` | Manning, Chow | `tests/hid/test_canais.py` |
+| Valeta, canal, y_normal, y_crítica, Fr, folga | `canais.y_normal`, `y_critica`, `froude`, `manning_Q`, `borda_livre` | Manning, Chow | `tests/dren/test_canais.py` |
 
 Comandos de exemplo (SI):
 
 ```
-python -m tools.hid.bueiros --json '{"funcao":"controle_de_entrada","Q":8.495,"forma":"retangular","dim":[1.524,1.524],"tipo_de_entrada":"ret_alas_90_15","S0":0.02}'
-python -m tools.hid.bueiros --json '{"funcao":"controle_de_saida","Q":5.663,"forma":"circular","dim":1.3716,"n":0.012,"Ke":0.2,"L":60.96,"S0":0.01,"TW":1.067}'
+python -m tools.dren.bueiros --json '{"funcao":"controle_de_entrada","Q":8.495,"forma":"retangular","dim":[1.524,1.524],"tipo_de_entrada":"ret_alas_90_15","S0":0.02}'
+python -m tools.dren.bueiros --json '{"funcao":"controle_de_saida","Q":5.663,"forma":"circular","dim":1.3716,"n":0.012,"Ke":0.2,"L":60.96,"S0":0.01,"TW":1.067}'
 ```
 
 O que conferir em `avisos`: "saída livre (TW < D)" (energia aproximada; ir ao remanso se HW < 1,2 D); "HW de saída < D" (resultado não aplicável);
@@ -228,7 +228,7 @@ n escolhido e porquê; quantitativos para o Orçamento; pendências para o bási
 | 11 | Limite de velocidade da calculadora até 2× mais permissivo que o DNIT (areia, cascalho; concreto 6,0 x 4,5 m/s); HEC-15 não traz tabela de velocidade | `bueiros.py` x IPR-724 p. 131 | comparar a V de saída com a Tabela 31; abrir pendência |
 | 12 | "Declividade mínima 5 %" do bueiro: provavelmente 0,5 % ou o intervalo "0,4 a 5 %" do IPR-724 truncado | Iuiu 1051:331 | hipótese a confirmar na página; usar 0,4 % mínimo (DNIT-DREN p. 34) |
 | 13 | Orifício com C = 0,62 fixo: ignora L/D (C de Manning: 0,77 em L/D = 10; 0,643 em 50; 0,548 em 100); conservador para L/D < 50, contra a segurança acima | legado (Baixio, L/D ≈ 16) | conferir L/D e carga ≤ 2 D contra [DNIT-DREN p. 91] |
-| 14 | Folga ao terreno do gabarito que não fecha (0,66 x 0,464 m; cota 407,846 reproduz) | Baixio BU-CP0-15 | refazer a aritmética da folga; ver `DIVERGENCIAS_bueiros.md` |
+| 14 | Folga ao terreno do gabarito que não fecha (0,66 x 0,464 m; cota 407,846 reproduz) | Baixio BU-CP0-15 | refazer a aritmética da folga; ver `DIVERGENCIAS.md` |
 
 ## 7. O que a norma e o manual exigem e a quem se aplica (resumo; detalhe em `normas-e-manuais`)
 
@@ -244,7 +244,7 @@ n escolhido e porquê; quantitativos para o Orçamento; pendências para o bási
 FHWA-HDS5: p. 83-94, 96-100, 105-108, 139-142, 149-150, 190-200, 208, 216, 272-281. FHWA-HEC15: p. 29-35, 98. FHWA-HEC22: p. 70, 79-80. FHWA-HDS4: cap. 9 (p. 158,
 remete ao HDS-5). DNIT-DREN (IPR-724): p. 32-34, 54-56, 91, 101-102, 114, 130-134, 158-190, 202. DNIT-HIDRO (IPR-715): p. 23-24. DNIT-ALBUM (IPR-736): Sumário PDF p. 9-15,
 Introdução p. 23. DNIT-ES019/022/023/024/025/026/030/096. ENAP-BUEIROS e ABDER-APOSTILA: didáticos (repetem o DNIT). PMSP-DRENURB-V2 p. 30. DAEE-IT-DPO11. Casos:
-`casos/drenagem_dissipadores/`; `tools/hid/DIVERGENCIAS_bueiros.md`.
+`casos/drenagem_dissipadores/`; `tools/dren/DIVERGENCIAS.md`.
 
 ## 9. Lacunas do corpus e o que pedir
 

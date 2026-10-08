@@ -7,5 +7,5 @@
   esperado: "V = 4,1 m/s; Q por camara = 8,1 m3/s (doc 1357:197)"
   tolerancia: "V rel 3 %; Q rel 6 %"
   status: reproduz
-  nota: "tests/hid/test_bueiros.py::test_salitre_manning_v (parametro BTCC1; tambem BTCC2, BTCC7 e BDCC5). Rastro A. Atencao: o mesmo documento tem BTCC-N17 (doc 1341:205) que NAO reproduz (-27 %, ver DIVERGENCIAS_bueiros.md)."
+  nota: "tests/dren/test_bueiros.py::test_salitre_manning_v (parametro BTCC1; tambem BTCC2, BTCC7 e BDCC5). Rastro A. Atencao: o mesmo documento tem BTCC-N17 (doc 1341:205) que NAO reproduz (-27 %, ver DIVERGENCIAS.md)."
 

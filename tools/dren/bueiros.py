@@ -17,7 +17,7 @@ fixa. Mantidos para comparacao com o HDS-5 (funcao comparar_legado_hds5); nao
 sao recomendados como metodo principal (ignoram contracao de entrada, perdas
 de entrada/saida e a transicao entre regimes).
 
-CLI: python -m tools.hid.bueiros --json '{"funcao": "controle_de_entrada", ...}'
+CLI: python -m tools.dren.bueiros --json '{"funcao": "controle_de_entrada", ...}'
 
 CHANGELOG
 0.2.0 (2026-10-01), conforme achados da skill bueiros-e-drenagem-superficial:
@@ -31,12 +31,12 @@ CHANGELOG
   em vez da fonte inexistente "HDS-5/HEC-14".
 - Parametro opcional fonte_ke="hds5"|"dnit" (padrao hds5) em dimensionar_bueiro e
   comparar_legado_hds5; ke_entrada(). Muro de ala paralelo: HDS-5 p. 216 = 0,7;
-  DNIT-DREN p. 130 (Tab. 30) = 0,2 (DIVERGENCIAS_bueiros.md).
+  DNIT-DREN p. 130 (Tab. 30) = 0,2 (DIVERGENCIAS.md).
 - vazao_critica_legado_dnit (Tabelas 1 e 2 do DNIT-DREN p. 55-56; Vc = 2,56 D^0,5,
   ~7 % acima da exata no tubular) e vazao_critica_exata.
 - sarjeta_triangular_izzard (HEC-22 p. 79-80, eqs. 5.2 e 5.4, Ku = 0,376 SI).
 - Constante Y da linha arco_corrugado_projetante: mantida a da Tabela A.2 (0,57,
-  HDS-5 p. 198); o exemplo A.3.1 (p. 191) usa 0,53 (DIVERGENCIAS_bueiros.md).
+  HDS-5 p. 198); o exemplo A.3.1 (p. 191) usa 0,53 (DIVERGENCIAS.md).
 0.1.0: versao inicial (HDS-5 controle de entrada/saida, dimensionamento, legados).
 """
 from __future__ import annotations
@@ -456,7 +456,7 @@ def _catalogo_padrao(forma):
 def ke_entrada(tipo_de_entrada, fonte_ke="hds5"):
     """Ke de entrada. "hds5" (padrao): Tabela C.2, HDS-5 p. 216 (campo Ke de ENTRADAS).
     "dnit": Tabela 30 do DNIT-DREN p. 130; difere so em muros de ala paralelos
-    (0,2 contra 0,7 do HDS-5; ver DIVERGENCIAS_bueiros.md)."""
+    (0,2 contra 0,7 do HDS-5; ver DIVERGENCIAS.md)."""
     if fonte_ke not in FONTES_KE:
         raise ValueError("fonte_ke deve ser 'hds5' ou 'dnit'")
     if tipo_de_entrada not in ENTRADAS:
@@ -697,7 +697,7 @@ _FUNCOES = {"vazao_critica_legado_dnit": _f_vc, "sarjeta_triangular_izzard": sar
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(prog="python -m tools.hid.bueiros")
+    ap = argparse.ArgumentParser(prog="python -m tools.dren.bueiros")
     ap.add_argument("--json", required=True,
                     help="JSON {'funcao': nome, ...args} ou {'funcao':..., 'args': {...}}; funcoes: "
                          + ", ".join(_FUNCOES))

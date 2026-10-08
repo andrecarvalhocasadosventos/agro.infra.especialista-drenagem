@@ -1,8 +1,8 @@
 # Exemplos numéricos de conferência (primário x calculadora x acervo)
 
 Uso: validar a calculadora e treinar o agente. Todos os comandos rodam na raiz do pacote
-(`python -m tools.hid.bueiros --json '{...}'`). Data da conferência: 2026-10-01. Valores "calc." foram obtidos com
-`tools/hid/bueiros.py` v0.1.0. Marca: **[prim.]** = número do primário; **[calc.]** = saída da calculadora; **[hip.]** = entrada
+(`python -m tools.dren.bueiros --json '{...}'`). Data da conferência: 2026-10-01. Valores "calc." foram obtidos com
+`tools/dren/bueiros.py` v0.1.0. Marca: **[prim.]** = número do primário; **[calc.]** = saída da calculadora; **[hip.]** = entrada
 hipotética do avaliador (não é gabarito do projeto).
 
 ## 1. HDS-5, Design Guideline 1 (exemplos resolvidos pelo FHWA)
@@ -15,7 +15,7 @@ hipotética do avaliador (não é gabarito do projeto).
 | bisel de 45° (chart 10, `ret_muro_bisel_45`) | 108,6 − 100 = 8,6 ft = **2,62 m** | **2,612 m** | −0,3 % |
 
 ```
-python -m tools.hid.bueiros --json '{"funcao":"controle_de_entrada","Q":8.495,"forma":"retangular","dim":[1.524,1.524],"tipo_de_entrada":"ret_alas_90_15","S0":0.02}'
+python -m tools.dren.bueiros --json '{"funcao":"controle_de_entrada","Q":8.495,"forma":"retangular","dim":[1.524,1.524],"tipo_de_entrada":"ret_alas_90_15","S0":0.02}'
 ```
 
 Controle de entrada governa (o HW de saída do exemplo é 103,2 − 100 = 3,2 ft). Velocidade de saída [prim.] 6,47 m/s (1524 x 1524 mm). A
@@ -32,11 +32,11 @@ descrição "square edges" não diz qual das famílias de aresta viva o exemplo 
 | Velocidade de saída, lâmina normal | 15,3 ft/s = 4,66 m/s (nomograma); HY-8 14,9 ft/s | 4,64 m/s (y = 1,06 m, Fr = 1,44) | −0,4 % |
 
 ```
-python -m tools.hid.bueiros --json '{"funcao":"controle_de_entrada","Q":5.663,"forma":"circular","dim":1.3716,"tipo_de_entrada":"circ_concreto_boca_sino_muro","S0":0.01}'
-python -m tools.hid.bueiros --json '{"funcao":"velocidade_de_saida","Q":5.663,"forma":"circular","dim":1.3716,"n":0.012,"S0":0.01,"TW":1.067}'
+python -m tools.dren.bueiros --json '{"funcao":"controle_de_entrada","Q":5.663,"forma":"circular","dim":1.3716,"tipo_de_entrada":"circ_concreto_boca_sino_muro","S0":0.01}'
+python -m tools.dren.bueiros --json '{"funcao":"velocidade_de_saida","Q":5.663,"forma":"circular","dim":1.3716,"n":0.012,"S0":0.01,"TW":1.067}'
 ```
 
-Sugestão de teste novo (`tests/hid/test_bueiros.py`): os dois itens acima, com tolerância de 2 % (a do HDS-5 é ±10 % no HW).
+Sugestão de teste novo (`tests/dren/test_bueiros.py`): os dois itens acima, com tolerância de 2 % (a do HDS-5 é ±10 % no HW).
 Outros tamanhos de HDS-5 DG1 (72" CMP, projetante e muro, HWi = 105,8 ft; HWo = 105,5 ft; p. 273): não conferidos aqui (n do
 CMP e tipo de entrada não fecham sozinhos).
 
@@ -70,16 +70,16 @@ S_L = 0,010; Sx = 0,020; n = 0,016; Ku = 0,376 (SI).
 - Q = 0,051 m³/s → T = [Q n/(Ku Sx^1,67 S_L^0,5)]^0,375 = **2,76 m** (manual: 2,7 m / 9,0 ft).
 - T = 2,5 m → Q = (Ku/n) Sx^1,67 S_L^0,5 T^2,67 = **0,0395 m³/s** (manual: 0,040 m³/s / 1,4 ft³/s).
 
-Não há função de sarjeta em `tools/hid/` (lacuna). Calcular com a fórmula e registrar o comando.
+Não há função de sarjeta em `tools/dren/` (lacuna). Calcular com a fórmula e registrar o comando.
 
-## 4. Legado do acervo x HDS-5 (de `DIVERGENCIAS_bueiros.md`)
+## 4. Legado do acervo x HDS-5 (de `DIVERGENCIAS.md`)
 
 Entrada hipotética (alas 30-75, L = 40 m, TW = 0): HW legado (orifício, C = 0,62) 3,31 / 4,51 / 5,02 m; HDS-5 3,60 / 4,82 / 5,44 m
 (BU-CP0-13 / 15 / 18): **−8,0 / −6,4 / −7,8 %**. BU-CP0-27 e BU-CS1-01: −4,3 %. Dentro da incerteza do HDS-5 (±10 %), mas **sempre
 para menos**. Com alas 90/15 ou 0°: −12 a −18 %. Comando de comparação:
 
 ```
-python -m tools.hid.bueiros --json '{"funcao":"comparar_legado_hds5","Q":61.98,"forma":"retangular","dim":[2.5,2.5],"tipo_de_entrada":"ret_alas_30_75","n":0.015,"L":40,"S0":0.005,"TW":0,"n_celulas":2}'
+python -m tools.dren.bueiros --json '{"funcao":"comparar_legado_hds5","Q":61.98,"forma":"retangular","dim":[2.5,2.5],"tipo_de_entrada":"ret_alas_30_75","n":0.015,"L":40,"S0":0.005,"TW":0,"n_celulas":2}'
 ```
 
 (Q50 de BU-CP0-15 [896:1], 2 células de 2,5 x 2,5; ver `casos/.../baixio_irece_bueiros_dimensionamento.md`.)
@@ -95,7 +95,7 @@ Entrada hipotética `ret_alas_30_75`; declividade de jusante ou do corpo do proj
 | Salitre BTCC 7 | 60,45; 3; 2,0 x 2,0; 0,0107 | **2,25** (4,50 m) | submersa, X = 6,5 | Q/célula 20 m³/s em 2 x 2 m: acima da capacidade crítica de 9,6 m³/s |
 | Xingó BU-24 (1419:154) | 48,8; 2; 3,0 x 3,0; 0,00976 | 1,01 (3,04 m) | não submersa, X = 2,8 | o projeto usa energia crítica na entrada com K = 0,5: confere com HDS-5 |
 | Xingó BU-01 | 8,96; 2; 1,5 x 1,5; 0,01009 | 1,04 (1,56 m) | não submersa | idem |
-| CSB BTCC-17 (1341:205) | 39,18; 3; 2,0 x 2,0; 0,0045 | 1,41 (2,83 m) | submersa, X = 4,2 | coincide com `DIVERGENCIAS_bueiros.md` (HW 2,83 m, HW/D ≈ 1,4) |
+| CSB BTCC-17 (1341:205) | 39,18; 3; 2,0 x 2,0; 0,0045 | 1,41 (2,83 m) | submersa, X = 4,2 | coincide com `DIVERGENCIAS.md` (HW 2,83 m, HW/D ≈ 1,4) |
 
 Moral: o método "Manning" (Salitre, CSB, Iuiu) não revela o HW; o método "energia crítica na entrada" (Xingó) equivale ao HDS-5 não
 submerso. Quando Q/célula excede a capacidade crítica da seção, a entrada afoga e **o HW passa de D**. Exigir HW/D e a cota de
@@ -105,5 +105,5 @@ montante no parecer, nunca só V e Yo.
 
 Q = 2,44 m³/s (doc) ou 2 x 1,27 = 2,54 m³/s; 2 células 1,5 x 1,5 m; L = 90 m; n = 0,015; NA jusante 480,09 m.
 htotal = hen + hf + hs; hf = (19,63 n² L/R^1,33) V²/2g; V = 0,564 m/s com 1,27 m³/s por célula; hf = 0,024 m (doc 0,02);
-perda total 0,048 m (Ke = 0,5 e saída com V²/2g inteira) e **NA de montante 480,138 m** [calc.] contra 480,13 m do doc (tolerância 0,01 m); o doc soma 0,04 m com ke e kex não impressos. Teste existente: `tests/hid/test_bueiros.py` (Jaíba, listado em
-`DIVERGENCIAS_bueiros.md` como reproduz). A divergência Q = 2,44 x 2,54 fica no caso.
+perda total 0,048 m (Ke = 0,5 e saída com V²/2g inteira) e **NA de montante 480,138 m** [calc.] contra 480,13 m do doc (tolerância 0,01 m); o doc soma 0,04 m com ke e kex não impressos. Teste existente: `tests/dren/test_bueiros.py` (Jaíba, listado em
+`DIVERGENCIAS.md` como reproduz). A divergência Q = 2,44 x 2,54 fica no caso.

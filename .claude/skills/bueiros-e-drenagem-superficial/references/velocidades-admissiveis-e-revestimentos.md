@@ -166,9 +166,9 @@ n = 0,016: Q = 0,051 m³/s dá T = 2,7 m; T = 2,5 m dá Q = 0,040 m³/s [HEC22 p
 
 ## 6. Tabela de velocidade da calculadora x fontes (pendência na calculadora)
 
-`tools/hid/bueiros.py::LIMITE_VELOCIDADE_MATERIAL` (usada por `dissipador_necessario` e por `dimensionar_bueiro`) traz:
+`tools/dren/bueiros.py::LIMITE_VELOCIDADE_MATERIAL` (usada por `dissipador_necessario` e por `dimensionar_bueiro`) traz:
 areia fina 0,75; silte argiloso 0,9; argila rija 1,4; cascalho fino 1,5; cascalho grosso 1,8; grama 1,8; enrocamento 3,0;
-concreto 6,0 m/s, rotulada "tipo Fortier-Scobey via HEC-15; CONFERIR" (`DIVERGENCIAS_bueiros.md`, observações de método).
+concreto 6,0 m/s, rotulada "tipo Fortier-Scobey via HEC-15; CONFERIR" (`DIVERGENCIAS.md`, observações de método).
 **HEC-15 não traz essa tabela** (confirmado no `_texto`). Comparada com o DNIT (Tabela 31):
 
 | Material | Calculadora (m/s) | DNIT Tab. 31 (m/s) | Diferença |

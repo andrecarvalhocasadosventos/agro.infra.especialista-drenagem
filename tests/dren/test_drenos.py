@@ -1,8 +1,8 @@
-"""Testes de tools.hid.drenos.
+"""Testes de tools.dren.drenos.
 
 (a) livro/consistencia: exemplos do USBR Drainage Manual (1993) e propriedades de monotonia;
 (b) gabaritos dos casos reais (casos/drenagem_dissipadores/*.md), tolerancia 5 % (D11) salvo o
-indicado. Divergencia > 5 % => xfail(strict=True) e linha em tools/hid/DIVERGENCIAS.md.
+indicado. Divergencia > 5 % => xfail(strict=True) e linha em tools/dren/DIVERGENCIAS.md.
 """
 import json
 import math
@@ -12,7 +12,7 @@ import sys
 
 import pytest
 
-from tools.hid import drenos as D
+from tools.dren import drenos as D
 
 RAIZ = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
@@ -248,7 +248,7 @@ def test_iuiu_drenabilidade_sem_dreno_parcelar():
 # ---------------------------------------------------------------- CLI
 def _cli(args):
     env = dict(os.environ, PYTHONIOENCODING="utf-8")
-    return subprocess.run([sys.executable, "-m", "tools.hid.drenos"] + args, cwd=RAIZ, capture_output=True,
+    return subprocess.run([sys.executable, "-m", "tools.dren.drenos"] + args, cwd=RAIZ, capture_output=True,
                           text=True, env=env, encoding="utf-8", stdin=subprocess.DEVNULL)
 
 

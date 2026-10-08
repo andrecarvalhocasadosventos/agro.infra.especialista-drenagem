@@ -43,3 +43,14 @@ ou de manutenção.
 - Índice FTS5 por página fora do Drive: `C:\bibdren\db\corpus.sqlite` (48 documentos, 6.396 páginas com texto, 39,5 MB; tabelas `doc`, `pagina`, `busca_pagina`; tokenizer `unicode61 remove_diacritics 2`). Cobre só o corpus próprio do Drenagem; o do Hidráulico segue por caminho (D1). Reconstrói com `python tools/indexar_fts.py`.
 - Conferências de manifesto: HEC-13 é a edição de 1972 (arquivada, superada pelo HDS-5); EM 1110-2-2902 é de 1997 com Change 1 de 1998; o arquivo `USACE-EM1110-2-1413` é a cópia do curso CED (C11-002); título da DNIT 018/2023-ES confirmado ("Drenagem – Sarjetas e valetas").
 - Tempo de sessão: ~1 h 50 min (downloads 3 min, extração ~5 min, OCR 81 min em segundo plano). Custo: 0 de subagente.
+
+## 2026-10-08 — F4 · casos reais e F5a · migração
+
+- F4: 3 Sonnet em paralelo (`tools/briefs/BRIEF_F4.md`), lotes L1 canais de drenagem, L2 estradas e hidrologia,
+  L3 bueiros e subsuperficial. **16 casos novos** (10 positivos, 6 negativos) em `casos/drenagem/2026-10-08_*.md`;
+  total 26. Documentos do acervo: 1069, 1122, 1128, 1131, 1139, 1182, 1390, 1419, 1492–1494, 1515, 1520, 1521,
+  1584, 1585 + planilha local do gabião. Nenhum número com `✓h` (gabaritos candidatos). `casos/drenagem/_INDICE.md`
+  consolidado. Sugestões numéricas em `evals/sugestoes_casos_numericos_F4.md`. Sem caso: Hooghoudt/Ernst calculado
+  em projeto, sarjeta/descida com memória, D-56/D-85 específicos. Tokens de subagente: ~724 mil (Sonnet).
+- F5a (D2): `tools/hid` → `tools/dren`, `tests/hid` → `tests/dren` (git mv, 9 arquivos + 21 com referências
+  atualizadas). pytest antes e depois: 127 passed, 11 xfailed. `PACOTE.yaml`: calculadoras/testes/marcadores. ~69 mil tokens.

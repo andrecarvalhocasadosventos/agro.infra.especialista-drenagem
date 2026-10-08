@@ -30,12 +30,12 @@ Notas de uso:
   §A.3.2]; na calculadora o `arco` usa elipse e avisa.
 - Precisão do método: HW com ±10 % [HDS5 p. 83, §3.1.1]. Esse é o piso de incerteza de qualquer comparação.
 - Conferência cruzada: HDS-5 Tabela A.1 impressa na p. 197 do PDF; a `bueiros.py` cita "p.197 do arquivo" em
-  `DIVERGENCIAS_bueiros.md` (mesma página).
+  `DIVERGENCIAS.md` (mesma página).
 
 ## 2. Tabela A.1: círculos, caixas e entradas afuniladas [HDS5 p. 197]
 
 Forma da equação: 1 ou 2. Ke = coeficiente de perda de entrada da Tabela C.2 para a mesma configuração [HDS5 p. 216].
-"Chave" = nome em `tools/hid/bueiros.py::ENTRADAS`; "—" = não implementada (usar a linha mais próxima, rotulada, ou HY-8).
+"Chave" = nome em `tools/dren/bueiros.py::ENTRADAS`; "—" = não implementada (usar a linha mais próxima, rotulada, ou HY-8).
 
 | Chart/escala | Forma e material | Configuração de entrada | Eq. | K | M | c | Y | Ke | Chave |
 |---|---|---|---|---|---|---|---|---|---|

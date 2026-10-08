@@ -26,8 +26,8 @@ armadilhas encontradas, critérios que valem reaproveitar).
 - Lição que contradiz o corpus ou V1-V12 não entra; o corpus prevalece e o conflito vira `revisar`.
 - Não registrar coeficiente, constante de ábaco, rugosidade, celeridade, número de página como fato nem número de
   projeto do acervo: isso vem do corpus, da calculadora ou do acervo. Só método, critério e armadilha.
-- Não é lição: divergência calculadora × acervo acima de 5% -> `tools/hid/DIVERGENCIAS.md` (D11); erro numa skill
-  ou calculadora -> pendência em `PLANO.md` (o agente não altera skills nem `tools/hid/`); decisão D-xx do CDV ->
+- Não é lição: divergência calculadora × acervo acima de 5% -> `tools/dren/DIVERGENCIAS.md` (D11); erro numa skill
+  ou calculadora -> pendência em `PLANO.md` (o agente não altera skills nem `tools/dren/`); decisão D-xx do CDV ->
   fica no CDV (aqui, no máximo, o método transferível, sem números).
 - Não duplicar: antes de propor, Grep pelo tema e propor a atualização da linha existente.
 

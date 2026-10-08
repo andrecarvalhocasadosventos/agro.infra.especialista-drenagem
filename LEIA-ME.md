@@ -25,15 +25,15 @@ entrega IDF e chuva de projeto com incerteza; a transformação chuva → vazão
 |---|---|---|
 | `.claude/skills/hidrologia-de-projeto-para-drenagem/` | SKILL.md (24,9 KB) + 6 references (Tc, C, CN, TR, [DELEGAR: climatologia], gabaritos). ~60 fórmulas conferidas no primário | v0.1, revisada só por amostragem |
 | `.claude/skills/bueiros-e-drenagem-superficial/` | SKILL.md (25 KB) + 6 references (constantes HDS-5, velocidades, TR, dispositivos DNIT, valetas/sarjetas, exemplos). ~120 valores conferidos | v0.1, idem |
-| `tools/hid/hidrologia.py` (0.2.0), `bueiros.py` (0.2.0), `drenos.py` (0.1.0) | calculadoras em Python puro, CLI JSON padrão (`python -m tools.hid.<modulo> --json ...`) | testadas |
-| `tests/hid/` | 127 testes passando, 11 xfail (divergências do acervo > 5%, regra D11) | `python -m pytest tests/hid -q` |
+| `tools/dren/hidrologia.py` (0.2.0), `bueiros.py` (0.2.0), `drenos.py` (0.1.0) | calculadoras em Python puro, CLI JSON padrão (`python -m tools.dren.<modulo> --json ...`) | testadas |
+| `tests/dren/` | 127 testes passando, 11 xfail (divergências do acervo > 5%, regra D11) | `python -m pytest tests/dren -q` |
 | `casos/drenagem/` | 10 casos reais do acervo de projetos (Baixio de Irecê, CSB, Iuiu, Jaíba, Salitre, Xingó) com dados, método, gabarito e divergências | rastro A/B |
 | `evals/roteamento_drenagem.yaml` | 11 casos de roteamento herdados (hid-, bue-, dsub-) | a completar |
-| `tools/hid/DIVERGENCIAS_bueiros.md` | divergências calculadora × acervo e entre fontes (Ke DNIT × HDS-5, Y da Tab. A.2, legado subestima HW) | para sessão com o André |
+| `tools/dren/DIVERGENCIAS.md` | divergências calculadora × acervo e entre fontes (Ke DNIT × HDS-5, Y da Tab. A.2, legado subestima HW) | para sessão com o André |
 | `PENDENCIAS_DE_TREINAMENTO.md` | o que falta para virar agente | — |
 
 Os módulos `_cli.py` e `__init__.py` e o `conftest.py` são cópias do pacote hidráulico (mesmo padrão). `drenos.py`
-não depende de `canais.py`. `README_origem_hidraulica.md` é o README das calculadoras na data da separação.
+não depende de `canais.py`. `README.md` é o README das calculadoras na data da separação.
 
 ## O que é compartilhado e NÃO foi copiado
 
@@ -51,7 +51,7 @@ não depende de `canais.py`. `README_origem_hidraulica.md` é o README das calcu
   (`.claude/agents/engenheiro-hidraulico.md`, `.claude/skills/hidraulica-fundamentos/`, `tools/BRIEF_SKILL.md`,
   `evals/README.md`, `PLANO.md`).
 
-Ao treinar, decidir: corpus próprio ou compartilhado por caminho; biblioteca `tools/hid` compartilhada (um dono) ou
+Ao treinar, decidir: corpus próprio ou compartilhado por caminho; biblioteca `tools/dren` compartilhada (um dono) ou
 duplicada; repositório git próprio (sugestão: `agro.infra.especialista-drenagem`, privado).
 
 ## 2026-10-07 — pacote movido para `08. AI Squad`

@@ -1,4 +1,6 @@
-# tools/hid - calculadoras hidraulicas verificaveis
+Migrado de tools/hid em 2026-10-08 (D2).
+
+# tools/dren - calculadoras hidraulicas verificaveis
 
 Convencoes (D5, D10, D14): SI em toda interface (m, m3/s, m/s, Pa ou m.c.a. declarado, kg/m3);
 nomes em portugues sem acento; cada funcao publica tem docstring com formula, fonte e faixa de
@@ -7,10 +9,10 @@ validade; cada modulo tem CLI que imprime JSON com `entradas`, `saidas`, `metodo
 ```
 cd "<RAIZ>"            # Especialista Hidraulica
 set PYTHONIOENCODING=utf-8
-python -m tools.hid.perdas --json "{\"funcao\": \"hf_darcy\", \"Q\": 0.1, \"L\": 500, \"D\": 0.3, \"eps\": 1e-4}"
-python -m tools.hid.perdas --funcao hf_hazen_williams --Q 0.47 --L 4596 --D 0.7 --C 130
-python -m tools.hid.canais --json "{\"funcao\": \"y_normal\", \"secao\": {\"tipo\": \"trapezoidal\", \"b\": 5, \"z\": 1.5}, \"Q\": 22, \"n\": 0.0142857, \"S0\": 0.00015}"
-python -m tools.hid.<modulo> --listar        # lista as funcoes da CLI
+python -m tools.dren.perdas --json "{\"funcao\": \"hf_darcy\", \"Q\": 0.1, \"L\": 500, \"D\": 0.3, \"eps\": 1e-4}"
+python -m tools.dren.perdas --funcao hf_hazen_williams --Q 0.47 --L 4596 --D 0.7 --C 130
+python -m tools.dren.canais --json "{\"funcao\": \"y_normal\", \"secao\": {\"tipo\": \"trapezoidal\", \"b\": 5, \"z\": 1.5}, \"Q\": 22, \"n\": 0.0142857, \"S0\": 0.00015}"
+python -m tools.dren.<modulo> --listar        # lista as funcoes da CLI
 ```
 
 Secoes na CLI de canais: `{"tipo": "trapezoidal", "b":, "z":}`, `retangular {b}`, `triangular {z}`,
@@ -20,7 +22,7 @@ Versao dos modulos: `perdas` 0.1.0, `canais` 0.1.0. Infra comum em `_cli.py`.
 Python usado: o do sistema (Python 3.14, pytest 9.1, numpy 2.4); o `.venv` de "Especialista Orcamento" nao existe nesta
 copia do Drive. Os modulos usam so a stdlib.
 
-## Resultado dos testes (`python -m pytest tests/hid/test_perdas.py tests/hid/test_canais.py -q`)
+## Resultado dos testes (`python -m pytest tests/dren/test_perdas.py tests/dren/test_canais.py -q`)
 
 ```
 107 passed, 3 xfailed in 90.51s
@@ -74,7 +76,7 @@ O tempo e dominado por 2 testes de CLI (subprocess a partir do Drive G:).
 
 ## Modulos `hidrologia.py` e `bueiros.py`
 
-Calculadoras de hidrologia de projeto e de bueiros (stdlib; CLI `python -m tools.hid.hidrologia|bueiros --json '{"funcao": ..., ...}'`). Testes: `tests/hid/test_hidrologia.py`, `tests/hid/test_bueiros.py`; divergencias dos casos em `DIVERGENCIAS_bueiros.md`.
+Calculadoras de hidrologia de projeto e de bueiros (stdlib; CLI `python -m tools.dren.hidrologia|bueiros --json '{"funcao": ..., ...}'`). Testes: `tests/dren/test_hidrologia.py`, `tests/dren/test_bueiros.py`; divergencias dos casos em `DIVERGENCIAS.md`.
 
 | funcao | formula | fonte |
 |---|---|---|
@@ -91,7 +93,7 @@ Calculadoras de hidrologia de projeto e de bueiros (stdlib; CLI `python -m tools
 
 ## Modulo `bombas.py`
 
-Reutiliza `hf_darcy`, `hf_localizada`, `hf_hazen_williams` de `perdas.py`. CLI: `python -m tools.hid.bombas --json '{"funcao": "...", ...}'` (`--listar`).
+Reutiliza `hf_darcy`, `hf_localizada`, `hf_hazen_williams` de `perdas.py`. CLI: `python -m tools.dren.bombas --json '{"funcao": "...", ...}'` (`--listar`).
 
 | funcao | formula | fonte | teste |
 |---|---|---|---|
@@ -110,7 +112,7 @@ Reutiliza `hf_darcy`, `hf_localizada`, `hf_hazen_williams` de `perdas.py`. CLI: 
 
 ## Modulo `ancoragem.py`
 
-CLI: `python -m tools.hid.ancoragem --json '{"funcao": "...", ...}'`. Pressoes em Pa (ou `unidade_p`: kPa, MPa, bar, mca, kgf/cm2); forcas em N/kN/daN.
+CLI: `python -m tools.dren.ancoragem --json '{"funcao": "...", ...}'`. Pressoes em Pa (ou `unidade_p`: kPa, MPa, bar, mca, kgf/cm2); forcas em N/kN/daN.
 
 | funcao | formula | fonte | teste |
 |---|---|---|---|
@@ -125,7 +127,7 @@ CLI: `python -m tools.hid.ancoragem --json '{"funcao": "...", ...}'`. Pressoes e
 
 ### Transientes hidraulicos (`transientes.py`)
 
-Golpe de ariete (stdlib; CLI `python -m tools.hid.transientes --json '{"funcao": ..., ...}'`). Teste: `tests/hid/test_transientes.py`; divergencias dos casos em `DIVERGENCIAS.md` (secao Transientes). Nivel: anteprojeto (padrao: celeridade, Joukowsky, Michaud, coluna rigida, pre-dimensionamento) e basico (MOC, a pedido).
+Golpe de ariete (stdlib; CLI `python -m tools.dren.transientes --json '{"funcao": ..., ...}'`). Teste: `tests/dren/test_transientes.py`; divergencias dos casos em `DIVERGENCIAS.md` (secao Transientes). Nivel: anteprojeto (padrao: celeridade, Joukowsky, Michaud, coluna rigida, pre-dimensionamento) e basico (MOC, a pedido).
 
 | funcao | formula | fonte |
 |---|---|---|
@@ -141,7 +143,7 @@ Golpe de ariete (stdlib; CLI `python -m tools.hid.transientes --json '{"funcao":
 
 ### Drenagem subsuperficial (`drenos.py`)
 
-CLI: `python -m tools.hid.drenos --json '{"funcao": "...", ...}'`. Unidades: m, m/d (q e K), m3/s (tubos), dias. Teste: `tests/hid/test_drenos.py`; divergencias em `DIVERGENCIAS.md` (secao Drenos e dissipadores). ILRI 16 e FAO 38 **nao estao no corpus**: Ernst e as tabelas indicativas sao "a confirmar".
+CLI: `python -m tools.dren.drenos --json '{"funcao": "...", ...}'`. Unidades: m, m/d (q e K), m3/s (tubos), dias. Teste: `tests/dren/test_drenos.py`; divergencias em `DIVERGENCIAS.md` (secao Drenos e dissipadores). ILRI 16 e FAO 38 **nao estao no corpus**: Ernst e as tabelas indicativas sao "a confirmar".
 
 | funcao | formula | fonte |
 |---|---|---|
@@ -156,7 +158,7 @@ CLI: `python -m tools.hid.drenos --json '{"funcao": "...", ...}'`. Unidades: m, 
 
 ### Vertedouros e dissipadores (`dissipadores.py`)
 
-CLI: `python -m tools.hid.dissipadores --json '{"funcao": "...", ...}'`. Reutiliza `canais` (secoes, `froude`, `y_critica`, `ressalto_hidraulico`). Teste: `tests/hid/test_dissipadores.py`. Curvas de L/y2, Ho/W_B e C do ogee **digitalizadas** dos graficos do corpus (+-2 %).
+CLI: `python -m tools.dren.dissipadores --json '{"funcao": "...", ...}'`. Reutiliza `canais` (secoes, `froude`, `y_critica`, `ressalto_hidraulico`). Teste: `tests/dren/test_dissipadores.py`. Curvas de L/y2, Ho/W_B e C do ogee **digitalizadas** dos graficos do corpus (+-2 %).
 
 | funcao | formula | fonte |
 |---|---|---|
@@ -172,14 +174,14 @@ CLI: `python -m tools.hid.dissipadores --json '{"funcao": "...", ...}'`. Reutili
 
 ### `bueiros.py` v0.2.0 (2026-10-01)
 
-Mudancas (detalhe no CHANGELOG da docstring e em `DIVERGENCIAS_bueiros.md`): `dissipador_necessario(V, material, fonte="dnit", criterio="min")` usa a Tabela 31 do DNIT-DREN p. 131 (`LIMITE_VELOCIDADE_DNIT`; a tabela antiga ficou em `LIMITE_VELOCIDADE_MATERIAL_LEGADO`) e cita a fonte em `metodo`; `fonte_ke="hds5"|"dnit"` em `dimensionar_bueiro` e `comparar_legado_hds5` (`ke_entrada`); aviso de afastamento entre celulas cita DNIT-ES023 p. 4 e DNIT-ES025 p. 5.
+Mudancas (detalhe no CHANGELOG da docstring e em `DIVERGENCIAS.md`): `dissipador_necessario(V, material, fonte="dnit", criterio="min")` usa a Tabela 31 do DNIT-DREN p. 131 (`LIMITE_VELOCIDADE_DNIT`; a tabela antiga ficou em `LIMITE_VELOCIDADE_MATERIAL_LEGADO`) e cita a fonte em `metodo`; `fonte_ke="hds5"|"dnit"` em `dimensionar_bueiro` e `comparar_legado_hds5` (`ke_entrada`); aviso de afastamento entre celulas cita DNIT-ES023 p. 4 e DNIT-ES025 p. 5.
 
 | funcao nova | formula | fonte |
 |---|---|---|
 | `vazao_critica_legado_dnit`, `vazao_critica_exata` | legado: Vc = 2,56 H^0,5 (celular Q = 1,705 B H^1,5; tubular A_c = 0,60 D^2, ~7 % acima da exata); exata: dc + Vc^2/2g = H | DNIT-DREN p. 55-56 (Tab. 1 e 2) |
 | `sarjeta_triangular_izzard` (CLI) | Q = (0,376/n) Sx^1,67 SL^0,5 T^2,67; T = [Q n/(Ku Sx^1,67 SL^0,5)]^0,375 | HEC-22 p. 79-80 (eqs. 5.2, 5.4; Ex. 5.1) |
 
-Testes: `tests/hid/test_bueiros.py` (HDS-5 p. 273-274 e 280, HEC-22 p. 80, legados DNIT rotulados "legado", Ke, Tab. 31).
+Testes: `tests/dren/test_bueiros.py` (HDS-5 p. 273-274 e 280, HEC-22 p. 80, legados DNIT rotulados "legado", Ke, Tab. 31).
 
 ## hidrologia 0.2.0 (2026-10-02)
 

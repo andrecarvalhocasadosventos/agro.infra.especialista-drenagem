@@ -1,4 +1,4 @@
-"""Testes de tools.hid.hidrologia.
+"""Testes de tools.dren.hidrologia.
 
 Tolerancias: casos reais = 5 % (D11) salvo indicacao do gabarito do caso;
 formulas fechadas = 1e-6 relativo.
@@ -12,7 +12,7 @@ import sys
 
 import pytest
 
-from tools.hid import hidrologia as h
+from tools.dren import hidrologia as h
 
 RAIZ = str(pathlib.Path(__file__).resolve().parents[2])
 
@@ -134,7 +134,7 @@ def test_gumbel_momentos_e_aviso():
 
 
 def test_cli_json():
-    cmd = [sys.executable, "-m", "tools.hid.hidrologia", "--json",
+    cmd = [sys.executable, "-m", "tools.dren.hidrologia", "--json",
            json.dumps({"funcao": "racional", "args": {"C": 0.3, "i": 60, "A": 3.0}})]
     env = dict(os.environ, PYTHONIOENCODING="utf-8")
     out = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", env=env,
@@ -178,7 +178,7 @@ def test_iuiu_dp08_racional():
 
 
 @pytest.mark.xfail(reason="DP11 t1 (1051:322): S e Tc da bacia nao informados; hipotese S=i do dreno, "
-                          "Tc Kirpich e i=P/Tc; divergencia > 5 % (ver DIVERGENCIAS_bueiros.md)",
+                          "Tc Kirpich e i=P/Tc; divergencia > 5 % (ver DIVERGENCIAS.md)",
                    strict=False)
 def test_iuiu_dp11_mcmath():
     A, L, S = 189.0, 4670.0, 0.0028
@@ -210,7 +210,7 @@ def test_baixio_hu_geometria_e_qp():
 
 @pytest.mark.xfail(reason="Baixio 902:1: hietograma (tabela T-K, ordenamento) nao recuperavel do acervo; "
                           "hipotese: blocos alternados com P=55,56 mm distribuida em 12 blocos de d. "
-                          "Pico depende do ordenamento (ver DIVERGENCIAS_bueiros.md)", strict=False)
+                          "Pico depende do ordenamento (ver DIVERGENCIAS.md)", strict=False)
 def test_baixio_hut_pico_tr25():
     hu = h.hidrograma_unitario_triangular(3.234, 0.9633, 0.16055)
     # hietograma triangular (maior bloco no centro), total 55,56 mm em 12 blocos
@@ -286,7 +286,7 @@ def test_mcmath_aviso_declividade_do_dreno():
 def test_iuiu_dp11_mcmath_sensibilidade_ao_S_do_canal():
     # Reteste com a interpretacao correta (S = canal principal). O caso nao informa o S do canal
     # principal (0,0028 e o do dreno). Com Tc de Kirpich consistente, S ~ 0,0020 m/m reproduz 2,34
-    # dentro de 5 %: o S necessario e plausivel, mas NAO e dado do projeto (ver DIVERGENCIAS_bueiros.md).
+    # dentro de 5 %: o S necessario e plausivel, mas NAO e dado do projeto (ver DIVERGENCIAS.md).
     A, L = 189.0, 4670.0
 
     def q(S):
@@ -419,7 +419,7 @@ def test_cli_v02_funcoes_novas():
     env = dict(os.environ, PYTHONIOENCODING="utf-8")
 
     def run(req):
-        out = subprocess.run([sys.executable, "-m", "tools.hid.hidrologia", "--json", json.dumps(req)],
+        out = subprocess.run([sys.executable, "-m", "tools.dren.hidrologia", "--json", json.dumps(req)],
                              capture_output=True, text=True, encoding="utf-8", env=env,
                              cwd=RAIZ, stdin=subprocess.DEVNULL).stdout
         return json.loads(out)

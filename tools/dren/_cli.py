@@ -1,8 +1,8 @@
-"""Infraestrutura comum de CLI dos modulos tools.hid (apenas stdlib).
+"""Infraestrutura comum de CLI dos modulos tools.dren (apenas stdlib).
 
 Uso:
-    python -m tools.hid.perdas --json '{"funcao": "hf_darcy", "Q": 0.1, "L": 500, "D": 0.3, "eps": 1e-4}'
-    python -m tools.hid.perdas --funcao hf_darcy --Q 0.1 --L 500 --D 0.3 --eps 1e-4
+    python -m tools.dren.perdas --json '{"funcao": "hf_darcy", "Q": 0.1, "L": 500, "D": 0.3, "eps": 1e-4}'
+    python -m tools.dren.perdas --funcao hf_darcy --Q 0.1 --L 500 --D 0.3 --eps 1e-4
 
 Saida (stdout, JSON UTF-8): entradas, saidas, metodo, avisos, versao.
 """

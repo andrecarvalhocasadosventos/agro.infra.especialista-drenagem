@@ -1,6 +1,6 @@
 # Conferências numéricas com primário (candidatas a teste da calculadora)
 
-Páginas = página física do PDF. Os valores da última coluna foram calculados com `tools/hid/hidrologia.py` nesta redação.
+Páginas = página física do PDF. Os valores da última coluna foram calculados com `tools/dren/hidrologia.py` nesta redação.
 
 | Primário | Entradas | Resultado do primário | Resultado da calculadora |
 |---|---|---|---|

@@ -128,7 +128,7 @@ O corpus **não traz IDF, CN, C nem hietograma validados para o semiárido baian
 
 ## 4. Calculadoras (mapa fórmula → função → teste)
 
-`python -m tools.hid.hidrologia --json '{"funcao": "<nome>", ...}'` (campos planos ou dentro de `args`; `--listar` não existe neste módulo, a lista sai com função desconhecida). A saída traz `avisos`: reproduzi-los no parecer.
+`python -m tools.dren.hidrologia --json '{"funcao": "<nome>", ...}'` (campos planos ou dentro de `args`; `--listar` não existe neste módulo, a lista sai com função desconhecida). A saída traz `avisos`: reproduzi-los no parecer.
 
 | Cálculo | Função (CLI) | Exemplo de entrada | Teste | Conferir nos `avisos` |
 |---|---|---|---|---|
@@ -162,12 +162,12 @@ Conferências numéricas com primário (candidatas a teste novo): `references/ga
 
 | Armadilha | Onde | Como detectar e tratar |
 |---|---|---|
-| McMath +24 % (2,90 contra 2,34 m³/s) no DP11 do Iuiu | `DIVERGENCIAS_bueiros.md` | S e Tc usados são do dreno, não da bacia; coluna "i" sem rótulo (41,9 mm/h daria 2,34). Pedir S do talvegue da bacia [USBR-DRAINAGE p. 57]; não ajustar a calculadora (D11) |
+| McMath +24 % (2,90 contra 2,34 m³/s) no DP11 do Iuiu | `DIVERGENCIAS.md` | S e Tc usados são do dreno, não da bacia; coluna "i" sem rótulo (41,9 mm/h daria 2,34). Pedir S do talvegue da bacia [USBR-DRAINAGE p. 57]; não ajustar a calculadora (D11) |
 | Constante 0,0091 com S em % ou em m/km | Qualquer uso de McMath | S em % multiplica Q por 2,5; em m/km, por 4. Conferir a unidade de S contra 0,0091 (m/m) ou 0,0023 (m/km) |
-| HUT do Baixio não reproduzido (6,03 contra 2,70 m³/s) | `DIVERGENCIAS_bueiros.md` | Geometria do HU confere (tp 0,658 h; tb 1,758 h; qp 10,22 m³/s por 10 mm; S 155,39 mm), mas o hietograma (tabela T-K, "Soma(p)") e a lâmina efetiva (3,3 mm) não estão no acervo. Sem hietograma, não reproduzir pico |
+| HUT do Baixio não reproduzido (6,03 contra 2,70 m³/s) | `DIVERGENCIAS.md` | Geometria do HU confere (tp 0,658 h; tb 1,758 h; qp 10,22 m³/s por 10 mm; S 155,39 mm), mas o hietograma (tabela T-K, "Soma(p)") e a lâmina efetiva (3,3 mm) não estão no acervo. Sem hietograma, não reproduzir pico |
 | Limite do racional diferente por projeto (50, 100, 350 ha, 2 km²) | Iuiu, Baixio, CSB, Xingó | Declarar o limite e a fonte; ver 3.1 |
-| `dnos` da calculadora ≠ fórmula DNIT | `tools/hid/hidrologia.py` | 19,3 min contra 45,5 min no mesmo caso; K divide no DNIT. Usar a forma DNIT em Python à parte e abrir pendência |
-| Unidade de L: `kirpich` em m, `kirpich_modificada_dnit` e `california_culverts` em km | `tools/hid/hidrologia.py` | Conferir o `entradas` da saída |
+| `dnos` da calculadora ≠ fórmula DNIT | `tools/dren/hidrologia.py` | 19,3 min contra 45,5 min no mesmo caso; K divide no DNIT. Usar a forma DNIT em Python à parte e abrir pendência |
+| Unidade de L: `kirpich` em m, `kirpich_modificada_dnit` e `california_culverts` em km | `tools/dren/hidrologia.py` | Conferir o `entradas` da saída |
 | Gumbel de amostra infinita (K 14 % a 28 % menor que o K de n, para n de 30 a 10, em TR 25 e 100) | `gumbel_P_TR` | Usar K de n (HDS-2 Tab. 5.13) para TR ≥ 25; aviso só diz "n < 20" |
 | `chuva_efetiva(lam=0,05)` com CN de Ia = 0,2·S | `hidrologia.py` | O NRCS exige outro conjunto de CN [NRCS-NEH630-CH10 p. 10]; só usar 0,2 |
 | Intensidade com unidade errada (mm/min no texto, mm/h nos números) | Iuiu 1051:318 | Refazer a conta e fechar com o valor do projeto (DP08: 0,83 m³/s) |
@@ -194,7 +194,7 @@ Conferências numéricas com primário (candidatas a teste novo): `references/ga
 - NRCS-NEH630-CH07 (12), CH09 (7-15), CH10 (10, 12-13, 17-19, 25), CH15 (8-10, 13), CH16 (10-16, 33-35); NRCS-NEH650-CH02 (11).
 - USBR-DRAINAGE (1993): 57-58, 61. EMBRAPA-DREN-SUP (1984): 5.
 - ENAP-HIDRO-DREN: sem método hidrológico, não citado. NRCS-TR60: barragem, fora de escopo.
-- Casos: `casos/drenagem_dissipadores/` (CSB, Baixio, Iuiu, Xingó); `tools/hid/DIVERGENCIAS_bueiros.md`.
+- Casos: `casos/drenagem_dissipadores/` (CSB, Baixio, Iuiu, Xingó); `tools/dren/DIVERGENCIAS.md`.
 
 ## 9. Lacunas (o que o corpus não cobre e o que pedir)
 
@@ -203,4 +203,4 @@ Conferências numéricas com primário (candidatas a teste novo): `references/ga
 - A conferir nos PDFs: fórmula do Quadro 1 do DAEE, unidade de S em Dooge, faixa de Giandotti, 0,42 de Peltier, tabelas de c do DNIT (tc, A, CN, FP), parâmetros Pfafstetter dos 98 postos.
 - TR de dreno parcelar, canal coletor e OAC de perímetro irrigado: só a prática do acervo; pedir ao contratante.
 - Margem de erro da vazão por método; fator de pico para terreno plano; ARF do semiárido.
-- Pendências para `tools/hid`: blocos alternados, risco J, K de Gumbel por n, DNOS conforme o DNIT.
+- Pendências para `tools/dren`: blocos alternados, risco J, K de Gumbel por n, DNOS conforme o DNIT.
