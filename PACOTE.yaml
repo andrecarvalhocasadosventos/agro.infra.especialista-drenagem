@@ -1,8 +1,8 @@
 id: drenagem
 nome: Especialista Drenagem
-agente: engenheiro-de-drenagem   # criar na F8
-nucleo: drenagem-fundamentos   # criar na F6
-versao: 0.1.2
+agente: engenheiro-de-drenagem
+nucleo: drenagem-fundamentos
+versao: 0.2.0
 estado: em-treinamento
 modelo_padrao: sonnet
 variavel_raiz: DRENAGEM_ROOT
@@ -19,7 +19,7 @@ dependencias_externas:
   fonte_local_andre: G:\Meu Drive\DRENAGEM   # D8: só a lista A/B do PLANO §5.1
 delega_para: [clima, hidraulica, geotecnia, terraplenagem, pavimentacao, irrigacao, orcamento]
 recebe_de: [hidraulica, clima, geotecnia, terraplenagem, irrigacao, pavimentacao]
-fase_atual: F2
-proximo_passo: "F3 (mapa de conhecimento) em paralelo com F4 (casos reais); depois F5. Pendências do corpus: FDOT (PENDENTES_DOWNLOAD_MANUAL.md) e OCR do curso Robson I a IV (opcional)"
+fase_atual: F8
+proximo_passo: "F7 interativa com o André (decisões) e F9 evals"
 ultima_sessao: 2026-10-08
 maquina_treinamento: "G: (máquina do André)"

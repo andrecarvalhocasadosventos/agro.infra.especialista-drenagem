@@ -1,8 +1,8 @@
 # Lições aprendidas do Especialista em Drenagem
 
 Caixa de entrada curada e versionada, na RAIZ do pacote (vale para toda instalação, Modo A ou B). Lição não mora
-aqui para sempre: é **incorporada na skill** na avaliação periódica (`PLANO.md` §10) e sai da busca. Entradas não
-substituem o corpus, as calculadoras nem as regras V1-V12: são calibragens de uso (correções do usuário,
+aqui para sempre: é **incorporada na skill** na sessão `/incorporar-licoes` e sai da busca. Entradas não
+substituem o corpus, as calculadoras nem as regras V1–V18: são calibragens de uso (correções do usuário,
 armadilhas encontradas, critérios que valem reaproveitar).
 
 ## Como o agente usa este arquivo (sem ler inteiro)
@@ -23,11 +23,11 @@ armadilhas encontradas, critérios que valem reaproveitar).
   `incorporada` (já está na skill; coluna **Incorporada em** = `skill@commit`, ex.: `canais-abertos@b8e60f8`).
 - **Base:** `[ID p. N]` do corpus, `doc:pág` do acervo com a marca de ancoragem, ou `sem base no corpus` (nunca
   citada como fonte). **Origem:** pasta do parecer, `conversa` ou `correção do usuário`.
-- Lição que contradiz o corpus ou V1-V12 não entra; o corpus prevalece e o conflito vira `revisar`.
+- Lição que contradiz o corpus ou V1–V18 não entra; o corpus prevalece e o conflito vira `revisar`.
 - Não registrar coeficiente, constante de ábaco, rugosidade, celeridade, número de página como fato nem número de
   projeto do acervo: isso vem do corpus, da calculadora ou do acervo. Só método, critério e armadilha.
-- Não é lição: divergência calculadora × acervo acima de 5% -> `tools/dren/DIVERGENCIAS.md` (D11); erro numa skill
-  ou calculadora -> pendência em `PLANO.md` (o agente não altera skills nem `tools/dren/`); decisão D-xx do CDV ->
+- Não é lição: divergência calculadora × acervo acima de 5 % -> `tools/dren/DIVERGENCIAS.md` (D11); erro numa skill
+  ou calculadora -> pendência em `PLANO.md` (o agente não altera skills nem `tools/dren/`); ponto aberto de critério (TR, Ke, limite do racional, Tc mínimo) -> `tools/dren/DIVERGENCIAS.md` e sessão interativa; fato de contexto -> `memoria/`; decisão D-xx do CDV ->
   fica no CDV (aqui, no máximo, o método transferível, sem números).
 - Não duplicar: antes de propor, Grep pelo tema e propor a atualização da linha existente.
 
