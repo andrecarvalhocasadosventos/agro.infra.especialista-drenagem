@@ -24,7 +24,7 @@ entrega IDF e chuva de projeto com incerteza; a transformação chuva → vazão
 | Pasta | Conteúdo | Estado |
 |---|---|---|
 | `.claude/skills/hidrologia-de-projeto-para-drenagem/` | SKILL.md (24,9 KB) + 6 references (Tc, C, CN, TR, [DELEGAR: climatologia], gabaritos). ~60 fórmulas conferidas no primário | v0.1, revisada só por amostragem |
-| `.claude/skills/bueiros-e-drenagem-superficial/` | SKILL.md (25 KB) + 6 references (constantes HDS-5, velocidades, TR, dispositivos DNIT, valetas/sarjetas, exemplos). ~120 valores conferidos | v0.1, idem |
+| `.claude/skills/bueiros-e-travessias/` | SKILL.md (25 KB) + 6 references (constantes HDS-5, velocidades, TR, dispositivos DNIT, valetas/sarjetas, exemplos). ~120 valores conferidos | v0.1, idem |
 | `tools/dren/hidrologia.py` (0.2.0), `bueiros.py` (0.2.0), `drenos.py` (0.1.0) | calculadoras em Python puro, CLI JSON padrão (`python -m tools.dren.<modulo> --json ...`) | testadas |
 | `tests/dren/` | 127 testes passando, 11 xfail (divergências do acervo > 5%, regra D11) | `python -m pytest tests/dren -q` |
 | `casos/drenagem/` | 10 casos reais do acervo de projetos (Baixio de Irecê, CSB, Iuiu, Jaíba, Salitre, Xingó) com dados, método, gabarito e divergências | rastro A/B |

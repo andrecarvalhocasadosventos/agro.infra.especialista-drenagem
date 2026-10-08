@@ -72,6 +72,9 @@ Nota: as duas fontes diferem no "íngreme, solo compacto" (0,25 a 0,35 no HDS-2;
 | CSB GEOHIDRO (doc 1341:47, 74, 145) | C10 rural 0,05 a 0,30; adotado 0,20; valetas 0,10 | C_T = 0,8·T^0,1·C10 (TR 100: 0,25) | Mais coeficiente de distribuição Cd = A^-0,10 |
 | Vale do Iuiu (doc 1051:316) | 0,3 | 10 | Racional até 50 ha |
 | Baixio de Irecê (doc 670:116) | 0,10 a 0,40 conforme textura e declividade (Quadro 7.4 do memorial) | 25 | Racional até 100 ha, k de área 1 / 0,95 / 0,9 |
+| **CAC Trecho 1** (doc 1139:227) | 0,20 no anteprojeto e no licitado; **0,40 no executivo** (visitas de campo, estudos da UFC); racional < 3,5 km², TR 100 | 100 | Calibração local sem vazão observada: rotular, não generalizar |
+| **Delmiro Gouveia** (lotes, docs 1520-1521) | 0,15; racional com IDF TR 10, Tc Kirpich + viagem; n 0,025 | 10 | Caso `delmiro_gouveia_drenos_lotes_racional_manning` |
+| **CAC Castanhão** (doc 1128:107) | 0,8 (semi-impermeável, J > 50 %) e 0,6 (demais), tc 5 min | não informado | Caso negativo: P (mm) usada como mm/h |
 | Exemplo ABDER (p. 66, 69) | 0,30 a 0,36 (região montanhosa), 0,35 em 8,5 km² | 25 | Gariglio/Ferrari |
 
 ## 3. Piso e condição futura
@@ -84,10 +87,11 @@ DAEE-SP: C e C2 mínimos de 0,25 e CN mínimo de 60; os coeficientes devem refle
 - HEC-22: o fator de correção por frequência existe em algumas agências, mas a FHWA **não o endossa** [FHWA-HEC22 p. 56-57].
 - PMSP: C_T a partir de C10 (Eq. 1.25, em imagem; a confirmar no PDF) [PMSP-DRENURB-V2 p. 55].
 - Acervo (CSB): C_T = 0,8·T^0,1·C10, limitado a 1,0. Função `coef_c_para_tr`. Fatores derivados: TR 2 = 0,86; 5 = 0,94; 10 = 1,01; 25 = 1,10; 50 = 1,18; 100 = 1,27; 200 = 1,36.
+- McCuen Tab. 7-9: duas colunas, "< 25 anos" e "≥ 25 anos"; usar a média da faixa [LOC-MCCUEN-HYDROLOGIC-ANALYSIS p. 395 física]. Eslamian Tab. 16.1: C igual para qualquer TR, com fator fa = 1,0 (2 a 10 anos), 1,1 (25), 1,2 (50) e 1,25 (100) e limite de 80 ha [LOC-ESLAMIAN-HANDBOOK-HYDROLOGY p. 350-352]. Divergência de fontes: declarar qual.
 - DNIT: sem correção por TR no racional; usa o "fator de precipitação" FP e tabelas de c em função de tc, A, CN e FP (tabelas não reproduzidas no `_texto`) [DNIT-HIDRO p. 129-131].
 
 Regra do agente: C_T com a forma do CSB só em anteprojeto, rotulada "forma do acervo, equação-fonte a confirmar". No projeto básico, ou se C10·f(TR) > 0,6, comparar com o SCS-CN do mesmo TR: o CN já tem a dependência com a chuva.
 
 ## 5. Média ponderada
 
-C = Σ C_i·A_i / A [FHWA-HDS2 p. 183, eq. 6.11; FHWA-HEC22 p. 57, eq. 4.2]. Para plataforma e talude, o peso é a largura do implúvio [DNIT-DREN p. 171].
+C = Σ C_i·A_i / A [FHWA-HDS2 p. 183, eq. 6.11; FHWA-HEC22 p. 57, eq. 4.2]. Para plataforma e talude, o peso é a largura do implúvio [DNIT-DREN p. 171]. Função `c_ponderado(C, A)`; McCuen Ex. 7-11 (p. 398-399 física; C 0,2/0,4/0,6 em 5,3/7,2/6,4 ac → 0,412; Q 37,4 ft³/s com i = 4,8 pol/h; soma simples das sub-bacias 41,8; hidrograma do racional 28,1) e Ex. 7-9 (C 0,95, 2,4 ac, i 8,6 → 19,6 ft³/s; com tc mínimo de 15 min, i 6,5 → 15 ft³/s). Testes: `test_mccuen_racional_ex_7_9_e_7_11`.

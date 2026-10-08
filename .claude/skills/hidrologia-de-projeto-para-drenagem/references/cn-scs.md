@@ -96,6 +96,9 @@ Vale do Iuiu CN 78 (solo B, cultura em fileira, boa), igual ao da Tab. 9-1 (SR, 
 - DNIT, procedimento B (o mais usado no Brasil): usa CN já elevado (74 no lugar de 60), sem chuvas antecedentes [DNIT-HIDRO p. 57-58, 108].
 - Regra do agente: para obra de drenagem em solo de perímetro irrigado, a umidade do solo no dia da chuva é maior que a da bacia natural. Declarar ARC II ou III e mostrar a sensibilidade (Q com CN II e CN III). A escolha é do projetista (D2) e vai ao parecer como premissa.
 
+**CN do CAC Trecho 1 (doc 1139:227):** 65 no anteprojeto e no licitado, **85 no executivo** (HUT acima de 3,5 km², TR 100), sem calibração com vazão observada. CN 85 é alto frente às tabelas do NRCS: tratar como calibração local do semiárido cearense, não como valor de livro, e mostrar a sensibilidade (CN 65, 75 e 85). Delmiro BHD1: CN 75,2 (planossolo B-C, sub-bacia 1), S = 83,77 mm, P bacia 112,40 mm → Pe 50,99 mm (`casos-l2-e-divergencias-f5.md` seção 1).
+
 ## 5. CN ponderado ou Q ponderado
 
 Se os CN das partes são próximos, os dois métodos dão o mesmo Q. Se diferem muito, o CN ponderado erra para mais ou para menos conforme o tamanho da chuva; o Q ponderado é exato, com mais trabalho [NRCS-NEH630-CH10 p. 17-19, ex. 10-3 a 10-5]. Ponderar por área (CN) só com subáreas de CN próximo.
+Função `escoamento_ponderado(P, CN, A)` pondera o **escoamento** (não o CN). McCuen Ex. 7-17/7-18 [LOC-MCCUEN-HYDROLOGIC-ANALYSIS p. 408-409 física]: P = 7 pol; CN 55, 70, 75 e 83 → Q = 2,12; 3,62; 4,15 e 5,03 pol; no Ex. 7-17 o CN médio dá 0,28 pol contra 0,385 pol do Q ponderado. Teste: `test_mccuen_scs_ex_7_15_a_7_18_e_ponderacao_do_escoamento`. Conversão de CN para Ia = 0,05·S: `cn_para_lambda_005` (a conversão por si não torna o CN tabelado válido; ver NRCS-NEH630-CH10 p. 10).

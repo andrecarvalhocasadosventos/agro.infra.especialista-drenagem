@@ -1,10 +1,9 @@
 # Velocidades admissíveis, tensão admissível e rugosidade por revestimento
 
-Uso: valetas, canais de drenagem, sarjetas, descidas d'água e canal de restituição de bueiro (velocidade de saída
-comparada com o material de jusante). Páginas = marcador `<!-- p. N -->` do `_texto` (página física do PDF). A página
+Uso aqui: canal de restituição de bueiro (velocidade de saída comparada com o material de jusante) e n do canal natural a jusante. O arquivo é compartilhado por leitura com `canais-de-drenagem-e-macrodrenagem` e `drenagem-de-estradas-e-plataformas`, que dimensionam valeta, canal, sarjeta e descida. Páginas = marcador `<!-- p. N -->` do `_texto` (página física do PDF). A página
 impressa do DNIT-DREN é a física menos 4.
 
-Regra de escolha (resumo; detalhe no SKILL.md §3.8): o **DNIT** dá velocidade máxima por revestimento (Tabela 31); o
+Regra de escolha (resumo; o dimensionamento de valeta e canal é de `canais-de-drenagem-e-macrodrenagem` e `drenagem-de-estradas-e-plataformas`): o **DNIT** dá velocidade máxima por revestimento (Tabela 31); o
 **HEC-15** recomenda o método da **tensão trativa** (τp ≥ SF·τd) e **não traz tabela de velocidade admissível**
 [FHWA-HEC15 p. 30, §2.2.1]. Valores de velocidade equivalente do HEC-15 abaixo são **derivados** (cálculo próprio, ver §3)
 e servem só para comparar ordens de grandeza.
@@ -150,36 +149,16 @@ imagem da página; tratar como faixa mínimo-máximo.)
 A Tabela 34 traz também faixas para cursos d'água naturais (Tabelas 32 e 33, p. 131-132), úteis para o TW do canal
 natural a jusante do bueiro.
 
-## 5. Sarjeta pavimentada: n e capacidade
+## 5. Sarjeta pavimentada
 
-| Tipo | n | Fonte |
-|---|---|---|
-| Sarjeta de concreto, acabamento a colher | 0,012 | [FHWA-HEC22 p. 79, Tabela 5.3] |
-| Pavimento asfáltico liso / áspero | 0,013 / 0,016 | idem |
-| Asfalto liso com sarjeta de concreto / áspero com sarjeta de concreto | 0,013 / 0,015 | idem |
-| Concreto desempenado / vassourado | 0,014 / 0,016 | idem |
-| Aumentar n em 0,002 se a sarjeta tem pouca declividade e acumula sedimento | — | idem |
+Movida para `drenagem-de-estradas-e-plataformas` (n do HEC-22 Tab. 5.3 e Izzard: `bueiros.sarjeta_triangular_izzard`).
 
-Capacidade (Izzard modificada): Q = (Ku/n) Sx^1,67 S_L^0,5 T^2,67, **Ku = 0,376 em SI**, T = largura da lâmina (m) [HEC22
-p. 79, eq. 5.2]; espalhamento T = [Q n/(Ku Sx^1,67 S_L^0,5)]^0,375 [eq. 5.4]. Exemplo do manual: S_L = 0,010, Sx = 0,020,
-n = 0,016: Q = 0,051 m³/s dá T = 2,7 m; T = 2,5 m dá Q = 0,040 m³/s [HEC22 p. 80, Ex. 5.1] (conferido: 2,76 m e 0,0395 m³/s).
+## 6. Tabela de velocidade da calculadora x fontes (estado após a v0.2.0)
 
-## 6. Tabela de velocidade da calculadora x fontes (pendência na calculadora)
-
-`tools/dren/bueiros.py::LIMITE_VELOCIDADE_MATERIAL` (usada por `dissipador_necessario` e por `dimensionar_bueiro`) traz:
-areia fina 0,75; silte argiloso 0,9; argila rija 1,4; cascalho fino 1,5; cascalho grosso 1,8; grama 1,8; enrocamento 3,0;
-concreto 6,0 m/s, rotulada "tipo Fortier-Scobey via HEC-15; CONFERIR" (`DIVERGENCIAS.md`, observações de método).
-**HEC-15 não traz essa tabela** (confirmado no `_texto`). Comparada com o DNIT (Tabela 31):
-
-| Material | Calculadora (m/s) | DNIT Tab. 31 (m/s) | Diferença |
-|---|---|---|---|
-| Areia fina | 0,75 | 0,30 a 0,40 | calculadora ≈ 2× mais permissiva |
-| Cascalho fino | 1,5 | 0,50 a 0,80 | ≈ 2× |
-| Argila rija (ou argila) | 1,4 | 0,80 a 1,30 | acima do teto do DNIT |
-| Grama | 1,8 | 1,50 a 1,80 | no teto |
-| Concreto | 6,0 | 4,50 | 33 % acima |
-| Enrocamento | 3,0 | sem linha na Tabela 31 | sem fonte no corpus |
-
-Consequência: `dissipador_necessario` pode responder "não precisa" onde o critério do DNIT indicaria proteção. Até a
-calculadora ser corrigida (abrir pendência; o agente não altera `tools/`), **comparar a velocidade de saída com a Tabela 31
-no parecer** e rotular o resultado da função como "limite da calculadora, não da norma".
+`dissipador_necessario` e `dimensionar_bueiro` usam por padrão a **Tabela 31 do DNIT** (`LIMITE_VELOCIDADE_DNIT`, faixa mín-máx, critério
+"min" = conservador) [DNIT-DREN p. 131]. A tabela antiga (tipo Fortier-Scobey, sem página) ficou em
+`LIMITE_VELOCIDADE_MATERIAL_LEGADO` (até 2x mais permissiva: areia fina 0,75; cascalho fino 1,5; concreto 6,0 x 4,5 m/s) e só entra com
+`fonte="legado"` ou para cascalho grosso e enrocamento (sem linha na Tab. 31; aviso). **HEC-15 não traz tabela de velocidade.**
+Alternativa com fonte: EM 1110-2-1601 Tab. 2-5 p. 25 (areia fina 2,0 fps = 0,61 m/s) contra DNIT 0,30-0,40 m/s;
+`canais_drenagem.velocidade_admissivel(fonte=...)` obriga a escolher (`DIVERGENCIAS.md`). No parecer: declarar a fonte e o critério
+(min ou max) do limite e reproduzir o aviso de material sem equivalente.

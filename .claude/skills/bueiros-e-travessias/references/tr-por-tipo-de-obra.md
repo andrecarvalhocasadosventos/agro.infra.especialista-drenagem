@@ -1,7 +1,7 @@
 # Período de retorno (TR) por tipo de obra: fontes e prática dos projetos do acervo
 
-Este arquivo **só escolhe o TR**. A vazão para esse TR (método, Tc, IDF, CN) vem de `hidrologia-de-projeto-para-drenagem`;
-o IDF e a chuva de projeto são de Climatologia (`[DELEGAR: climatologia]`). Páginas = marcador do `_texto`
+Este arquivo **só escolhe o TR** (linhas de sarjeta e valeta valem aqui só como TR; o dimensionamento é de `drenagem-de-estradas-e-plataformas`). A vazão para esse TR (método, Tc, IDF, CN) vem de `hidrologia-de-projeto-para-drenagem`;
+o IDF e a chuva de projeto são do Clima (`chuvas-intensas-e-idf`; `[DELEGAR: clima]`). Páginas = marcador do `_texto`
 (página física do PDF).
 
 ## 1. O que as fontes dizem
@@ -21,7 +21,7 @@ o IDF e a chuva de projeto são de Climatologia (`[DELEGAR: climatologia]`). Pá
 | Cheia de verificação | maior que a de projeto, quando a norma exige (ex.: 100 anos para a planície regulatória) | [FHWA-HDS5 p. 64, §2.1.3; p. 72] | HDS-5 não fixa TR de projeto: é critério do órgão |
 | Canalização e travessia, **zona rural** | **25** (mínimo); **100** em obra de maior porte ou importância, qualquer localização | [DAEE-IT-DPO11 p. 1, Tabela 1] | outorga no Estado de SP; referência fora de SP |
 | Canalização e travessia, zona urbana ou de expansão | **100** (mínimo) | [DAEE-IT-DPO11 p. 1] | |
-| Barramento (para comparar com extravasor) | 100 a 10.000, por altura e risco a jusante | [DAEE-IT-DPO11 p. 1-2, Tabela 2] | é do `vertedouros-e-dissipadores` |
+| Barramento (para comparar com extravasor) | 100 a 10.000, por altura e risco a jusante | [DAEE-IT-DPO11 p. 1-2, Tabela 2] | é do `vertedouros-e-dissipadores` (Hidráulica) |
 | Microdrenagem urbana | 2 a 10 | [PMSP-DRENURB-V2 p. 30, Tabela 1.4] | |
 | Macrodrenagem urbana | 25 a 50 | idem | |
 | Grandes corredores de tráfego e áreas vitais | 100 | idem | |
@@ -39,7 +39,7 @@ Notas:
 - Nenhuma fonte do corpus fixa o TR de **bueiro sob canal de irrigação** ou de **estrada de serviço de projeto de irrigação**.
   Isso é decisão do projeto, registrada no parecer com o risco (J) e a consequência de falha.
 
-## 2. Prática dos projetos do acervo (`casos/drenagem_dissipadores/`)
+## 2. Prática dos projetos do acervo (`casos/drenagem/`)
 
 | Projeto e obra | TR (anos) | Fonte do número | Ancoragem |
 |---|---|---|---|
@@ -57,17 +57,19 @@ Padrão das obras maiores (CSB, Salitre, Xingó): bueiro de travessia sob canal 
 Iuiu): **TR 25** em estrada e **TR 50** sob o canal. Os valores seguem um critério de risco que o projeto explicita; nenhum
 cita DAEE ou DNIT como origem do número.
 
-## 3. Recomendação operativa para o agente (anteprojeto, quando o usuário não definir o TR)
+## 3. Padrão provisório para o anteprojeto (decisão F7), quando o usuário não definir o TR
+
+**Ponto aberto da F7:** TR de bueiro de perímetro irrigado. Alternativas com fonte: USBR 5 a 15 anos (página a confirmar no corpus do Hidráulico) × prática do acervo 25 (estrada) e 50 a 100 (sob canal) × DNIT 10 a 20 com verificação 20 a 25 [DNIT-HIDRO p. 23-24] × DAEE-SP 25 rural [DAEE-IT-DPO11 p. 1]. A tabela abaixo é o padrão provisório (prática do acervo), não regra do pacote: declarar a alternativa e o risco J no parecer.
 
 Registrar como **premissa adotada** (e delegar a decisão final):
 
 | Obra | TR sugerido | Base |
 |---|---|---|
 | Valeta de proteção, canal de drenagem de pequena bacia, sarjeta | 10 (sarjeta) a 25 (valeta que protege canal) | DNIT-DREN p. 171; HEC-15 p. 33; prática Baixio (drenos TR 5) e Iuiu (drenos TR 10) |
-| Bueiro de estrada de serviço (A < poucas dezenas de ha) | 25 | `hidraulica-fundamentos` §2; DNIT 10-20 + verificação 25; Baixio, Iuiu |
+| Bueiro de estrada de serviço (A < poucas dezenas de ha) | 25 | `drenagem-fundamentos` §2; DNIT 10-20 + verificação 25; Baixio, Iuiu |
 | Bueiro sob canal de irrigação principal ou adutor | 50 a 100, com verificação HW para 100 | CSB, Salitre, Xingó (100); Baixio, Iuiu (50) |
 | Verificação de nível a montante | uma classe acima: TR 50 se projetou com 25; TR 100 se projetou com 50 | DNIT-HIDRO p. 24 (10 projeto, 20-25 verifica); Baixio (25 e 50) |
 | Obra em zona urbana ou de expansão | 100 | DAEE p. 1; PMSP p. 30 |
 
 Sempre declarar TR de projeto e TR de verificação, J na vida útil, e que a vazão de cada um vem da hidrologia. Mudar o TR
-muda Q: devolver ao Climatologista/hidrólogo (`[DELEGAR: climatologia]`) e não "corrigir" Q por fator.
+muda Q: devolver à `hidrologia-de-projeto-para-drenagem` e ao Clima (`[DELEGAR: clima]`) e não "corrigir" Q por fator.

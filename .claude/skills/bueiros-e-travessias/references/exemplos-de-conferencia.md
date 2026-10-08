@@ -2,7 +2,7 @@
 
 Uso: validar a calculadora e treinar o agente. Todos os comandos rodam na raiz do pacote
 (`python -m tools.dren.bueiros --json '{...}'`). Data da conferência: 2026-10-01. Valores "calc." foram obtidos com
-`tools/dren/bueiros.py` v0.1.0. Marca: **[prim.]** = número do primário; **[calc.]** = saída da calculadora; **[hip.]** = entrada
+`tools/dren/bueiros.py` (v0.1.0 a 0.3.0; as constantes de entrada não mudaram). Marca: **[prim.]** = número do primário; **[calc.]** = saída da calculadora; **[hip.]** = entrada
 hipotética do avaliador (não é gabarito do projeto).
 
 ## 1. HDS-5, Design Guideline 1 (exemplos resolvidos pelo FHWA)
@@ -64,13 +64,9 @@ tabela do DNIT para tubular é ≈ 7 % **contra a segurança** na vazão crític
 Sugestão de teste novo: `BSCC 2,0 x 2,0 → 9,64 m³/s` e `BSCC 3,0 x 3,0 → 26,58` com tolerância 0,5 % (DNIT-DREN p. 56). O
 coeficiente "1,638" do texto não deve ser usado em teste (§ SKILL.md armadilha 8).
 
-## 3. HEC-22, sarjeta triangular (Izzard) [FHWA-HEC22 p. 80, Exemplo 5.1]
+## 3. HEC-22, sarjeta triangular (Izzard)
 
-S_L = 0,010; Sx = 0,020; n = 0,016; Ku = 0,376 (SI).
-- Q = 0,051 m³/s → T = [Q n/(Ku Sx^1,67 S_L^0,5)]^0,375 = **2,76 m** (manual: 2,7 m / 9,0 ft).
-- T = 2,5 m → Q = (Ku/n) Sx^1,67 S_L^0,5 T^2,67 = **0,0395 m³/s** (manual: 0,040 m³/s / 1,4 ft³/s).
-
-Não há função de sarjeta em `tools/dren/` (lacuna). Calcular com a fórmula e registrar o comando.
+Movida para `drenagem-de-estradas-e-plataformas` (função `bueiros.sarjeta_triangular_izzard`; Ex. 5.1 conferido: 2,755 m e 0,03947 m³/s).
 
 ## 4. Legado do acervo x HDS-5 (de `DIVERGENCIAS.md`)
 
@@ -107,3 +103,11 @@ Q = 2,44 m³/s (doc) ou 2 x 1,27 = 2,54 m³/s; 2 células 1,5 x 1,5 m; L = 90 m;
 htotal = hen + hf + hs; hf = (19,63 n² L/R^1,33) V²/2g; V = 0,564 m/s com 1,27 m³/s por célula; hf = 0,024 m (doc 0,02);
 perda total 0,048 m (Ke = 0,5 e saída com V²/2g inteira) e **NA de montante 480,138 m** [calc.] contra 480,13 m do doc (tolerância 0,01 m); o doc soma 0,04 m com ke e kex não impressos. Teste existente: `tests/dren/test_bueiros.py` (Jaíba, listado em
 `DIVERGENCIAS.md` como reproduz). A divergência Q = 2,44 x 2,54 fica no caso.
+
+## 7. Tubo parcialmente cheio e regime crítico (v0.3.0)
+
+- **Delmiro BUC-2 a BUC-5** (acervo 1493:282-285, sem ✓h; Manning n = 0,015): `tubo_parcialmente_cheio` reproduz y, V e Fr dos 8 casos (TR 20 e 50) dentro de 1 %. Ex.: D 0,80, S 0,005, Q 0,499 -> y 0,454 m, V 1,70 m/s, Fr 0,89 (A/T). BUC-5 em TR 50 chega a y/D = 79 %: passa do limite provisório de 75 % (aviso, decisão F7).
+- **HDS-3 Ex. 10 a 17** [FHWA-HDS3 p. 53-55]: conferidos a 0,4-1,3 %; Ex. 12, 15 e 17 são leitura de gráfico (1,3 a 2,3 %), usar com 5 %.
+- **Regime crítico do tubular** (`regime_critico_tubular_ime`, [LOC-IME p. 151-152]): θc = 4,0335 rad, A_c = 0,601 D², Vc = 2,56 D^0,5, Qc = 1,538 D^2,5 (impresso 1,533). Vazão crítica exata de Ec = D é ~7 % menor (`vazao_critica_exata`).
+- **HDS-5 p. 280** (caixa 1,524 m, Q50 8,495 m³/s, S 0,02): V de saída 6,47 m/s (SI do texto); o CU do mesmo texto dá 6,34 e o HY-8 5,98. A calculadora com n = 0,012 dá 6,45; com n = 0,013, 6,07 (-6 %): **o gabarito depende de n**, que o texto não informa.
+- **Xingó (legado)** Q = 33,5 D^2,67 i^0,5 equivale a n = 0,0093; com n de projeto 0,012-0,013 a capacidade cai 22 a 28 %.

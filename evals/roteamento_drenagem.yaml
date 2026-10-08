@@ -7,7 +7,7 @@
   - drenagem-subsuperficial
   - pocos-tubulares
   - estacoes-elevatorias-e-bombas
-  nota: 'Tc com formula e faixa (V8). bueiros-e-drenagem-superficial toleravel; a IDF, se faltar, vira [DELEGAR: climatologia] sem reprovar.'
+  nota: 'Tc com formula e faixa (V8). bueiros-e-travessias toleravel; a IDF, se faltar, vira [DELEGAR: climatologia] sem reprovar.'
 - id: hid-02
   prompt: Para uma bacia de 120 ha, uso o método racional ou o SCS? Qual TR para um bueiro de estrada vicinal e qual para um extravasor de reservatório? C de 0,35 e i de 78 mm/h já informados.
   esperado:
@@ -27,7 +27,7 @@
 - id: bue-01
   prompt: Bueiro celular duplo 2,5 × 2,5 m sob o canal, Q = 62 m³/s (já definida), declividade 0,005, comprimento 40 m, tailwater 1,8 m. Verifique controle de entrada e de saída e dê o HW.
   esperado:
-  - bueiros-e-drenagem-superficial
+  - bueiros-e-travessias
   nao_esperado:
   - drenagem-subsuperficial
   - pocos-tubulares
@@ -37,7 +37,7 @@
   prompt: Uma bacia de 14 km² corta o traçado do canal. Estime a vazão de TR 100 e depois dimensione o bueiro celular para passar essa vazão (vai dar algo perto de 350 m³/s para o evento maior).
   esperado:
   - hidrologia-de-projeto-para-drenagem
-  - bueiros-e-drenagem-superficial
+  - bueiros-e-travessias
   nao_esperado:
   - drenagem-subsuperficial
   - pocos-tubulares
@@ -45,7 +45,7 @@
 - id: bue-03
   prompt: Dimensione a descida d'água em degraus e a sarjeta triangular do talude de aterro do canal, para o escoamento de uma faixa de 60 m de pista de serviço.
   esperado:
-  - bueiros-e-drenagem-superficial
+  - bueiros-e-travessias
   nao_esperado:
   - drenagem-subsuperficial
   - pocos-tubulares
@@ -53,7 +53,7 @@
 - id: bue-04
   prompt: No meu bueiro o controle de entrada dá HW de 4,8 m e o de saída 3,4 m. Qual governa? E por que o método legado de Manning a seção plena me deu 4,5 m?
   esperado:
-  - bueiros-e-drenagem-superficial
+  - bueiros-e-travessias
   nao_esperado:
   - drenagem-subsuperficial
   - estacoes-elevatorias-e-bombas
@@ -65,7 +65,7 @@
   nao_esperado:
   - canais-abertos
   - hidrologia-de-projeto-para-drenagem
-  - bueiros-e-drenagem-superficial
+  - bueiros-e-travessias
   nota: 'So a skill (Hooghoudt, profundidade equivalente). K real e profundidade da camada sao dados da geotecnia/pedologia: premissa a registrar.'
 - id: dsub-02
   prompt: 'O canal em geomembrana passa em corte com lençol freático alto. Preciso do dreno de fundo para aliviar a subpressão com o canal vazio: vazão por furo na geomembrana, 2 tubos DN200 e a carga admissível.'
@@ -88,8 +88,8 @@
   prompt: Os coletores de 600 ha de drenos agrícolas deságuam num canal de drenagem aberto. Dimensione os coletores e o canal coletor para q de projeto de 1,2 L/s/ha.
   esperado:
   - drenagem-subsuperficial
-  - bueiros-e-drenagem-superficial
+  - bueiros-e-travessias
   nao_esperado:
   - pocos-tubulares
   - estacoes-elevatorias-e-bombas
-  nota: 'Combinacao: drenos e coletores (subsuperficial) mais canal de drenagem (bueiros-e-drenagem-superficial); canais-abertos toleravel para a seçao.'
+  nota: 'Combinacao: drenos e coletores (subsuperficial) mais canal de drenagem (bueiros-e-travessias); canais-abertos toleravel para a seçao.'

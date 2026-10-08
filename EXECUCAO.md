@@ -67,3 +67,17 @@ ou de manutenção.
   HEC-13 Tab. 1 p. 100; Picking com unidade conferida (IME p. 29); fator 1,16 de Glover-Dumm fecha em exemplo
   (Maniçoba p. 2–3); Ernst com exemplo (WATERLOG-ENDRAIN p. 10, divergência 3,5 %); Dooge, Giandotti, DNOS e o
   1,5× da Kirpich modificada não estão no corpus próprio.
+
+## 2026-10-08 — F5 · calculadoras e F6 · skills
+
+- F5: 5 Sonnet em paralelo (`tools/briefs/BRIEF_F5.md`): hidrologia 0.3.0, bueiros 0.3.0, drenos 0.2.0, novos
+  `tubos.py` 0.1.0, `estradas.py` 0.1.1, `canais_drenagem.py` 0.1.1. pytest `tests/dren`: **269 passed, 14 xfailed**
+  (partida 127/11). Revisão de fórmula por 1 Opus: 19 itens amostrados, 16 conferidos no primário, 2 avisos corrigidos
+  (grelha HEC-12 p. 87; seção composta EM-1601 p. 60), 3 pendentes F7; nenhuma fórmula alterada. Registro em
+  `tools/dren/DIVERGENCIAS.md` (seções F5 e "Revisão de fórmula F5"). Tokens: Sonnet ~1,0 milhão; Opus ~208 mil.
+- F6: 8 Sonnet (núcleo primeiro, depois 7 em paralelo; `tools/briefs/BRIEF_F6.md`). Skills: `drenagem-fundamentos`
+  (25,6 KB), `hidrologia-de-projeto-para-drenagem` (25,2), `bueiros-e-travessias` (25,5; renomeada de
+  `bueiros-e-drenagem-superficial`, D4), `drenagem-de-estradas-e-plataformas` (17,8), `canais-de-drenagem-e-macrodrenagem`
+  (19,5), `drenagem-subsuperficial` (22,4), `drenagem-normas-e-manuais` (21,1), `drenagem-casos-de-referencia` (16,4);
+  35 references. Conferente de forma (script): 8/8 com `name` = pasta, description ≤ 1.024 com "Use quando" e
+  "Não use", SKILL.md ≤ 25,6 KB. Tokens ~1,8 milhão (Sonnet).
