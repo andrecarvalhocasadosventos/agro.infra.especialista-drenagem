@@ -14,14 +14,19 @@ Fontes (corpus local, referencias/_texto/):
 - FHWA-HEC11 (1989): Eq. 6, 7, 8, 9 p. 48-49 (PDF; expoente de C_sf conferido na imagem: 1,5), Exemplo 1 p. 78
   (D50 = 0,43 ft), Eq. 20 p. 166 (n = 0,0395 D50^(1/6), D em ft), faixa de Froude instavel 0,89-1,13 p. 38.
 - DNIT-DREN (IPR-724) Tab. 31 p. 131: importada de tools.dren.bueiros (limite_velocidade).
+- Secao composta (revisao F5): USACE-EM1110-2-1601 Sec. 5-6d, Eq. 5-24, p. 60 (conveccao por subsecoes).
 NAO implementado: D30 do EM-1601 Eq. 3-3 (Sf, Cs, CV, CT nao ficam todos impressos); dissipador de saida de
 bueiro (D3 do Hidraulico); velocidade admissivel por tensao (HEC-15) por falta de pagina confirmada.
+
+CHANGELOG
+0.1.1 (2026-10-08, revisao de formula F5): manning_composto passa a citar EM-1601 Eq. 5-24 (p. 60) e avisa na
+faixa 1,0 < y/h_main < 1,4; teste de livro HEC-11 Ex. 2 (C = 1,6). Formulas inalteradas.
 """
 import math
 
 from tools.dren import bueiros as _bue
 
-VERSAO = "0.1.0"
+VERSAO = "0.1.1"
 G = 9.81
 FT = 0.3048  # m por ft
 
@@ -134,8 +139,12 @@ def manning_composto(y, b, z, n, S, h_main, b_berma, z_berma, n_berma):
     h_main, n) + duas bermas planas de largura b_berma com talude externo z_berma e rugosidade n_berma.
     Acima de h_main o fluxo se divide por linhas verticais sobre os topos dos taludes do canal (linha de
     interface NAO entra no perimetro molhado). Q = soma de Qi, Qi = Ai Ri^(2/3) S^(1/2)/ni.
-    Fr = V/sqrt(g A/T) sobre a secao inteira. Metodo corrente (Chow, cap. 6); sem teste de livro: verificacao
-    por consistencia. Aviso se y <= h_main (bermas secas)."""
+    Fr = V/sqrt(g A/T) sobre a secao inteira (indicativo: o Froude de secao composta nao e unico).
+    Fonte (revisao F5): metodo da conveccao por subsecoes canal/bermas, K_i = A_i R_i^(2/3)/n_i (SI; 1,486 em
+    ft), K = soma K_i [USACE-EM1110-2-1601 Sec. 5-6d, Eq. 5-24, p. 60 do _texto]; a mesma pagina cita James e
+    Brown (1977): Manning nao preve bem a relacao cota-vazao com lamina rasa na berma (1,0 < y/h_main < 1,4)
+    sem ajuste -> aviso nessa faixa. Sem exemplo numerico de livro: verificacao por consistencia.
+    Aviso se y <= h_main (bermas secas)."""
     _pos(n=n, S=S, n_berma=n_berma, h_main=h_main)
     if y <= 0 or b_berma <= 0 or z_berma < 0:
         raise ValueError("y > 0, b_berma > 0, z_berma >= 0")
@@ -153,6 +162,9 @@ def manning_composto(y, b, z, n, S, h_main, b_berma, z_berma, n_berma):
         A += 2 * Ab
         Q += 2 * Qb
         T = T1 + 2 * (b_berma + z_berma * d)
+        if y / h_main < 1.4:
+            av.append("1,0 < y/h_main < 1,4: lamina rasa na berma; Manning por subsecoes impreciso sem ajuste "
+                      "(James e Brown 1977, apud USACE-EM1110-2-1601 p. 60)")
     else:
         av.append("y <= h_main: bermas secas; equivale a canal trapezoidal simples")
     V = Q / A

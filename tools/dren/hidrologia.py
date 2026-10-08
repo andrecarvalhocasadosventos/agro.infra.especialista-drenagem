@@ -307,7 +307,8 @@ def picking(L_km, I):
     horas": divergencia de unidade. A unidade correta e MINUTO: o exemplo IME so fecha em minutos e a
     tabela de velocidades do proprio DNIT (V = 1,132 H^0,333 km/h, p. 97) so e coerente com
     minutos (L 5 km, H 300 m -> 7,6 km/h = 5 km/40 min). DNIT: velocidade media 5,4 km/h nas bacias
-    pequenas e 8,6 nas maiores, "nao indicada" para as maiores.
+    pequenas e 8,6 nas maiores, "nao indicada" para as maiores. Revisao F5: essas velocidades, impressas na
+    mesma p. 88, so sao possiveis com Tc em minutos (em horas o exemplo do IME daria 0,13 km/h).
     """
     _positivo(L_km=L_km, I=I)
     return 5.3 * (L_km ** 2 / I) ** (1.0 / 3.0)
@@ -343,6 +344,9 @@ def bransby_williams(L_km, A_km2, J_pct, coef=0.615):
     coef = 0,615 reproduz o Tc do caso Delmiro Gouveia (BHD1: L 13,21 km, A 36,34 km2, J 0,2422 % ->
     7,53 h; doc 1494:31). A constante NAO foi conferida no primario (nao esta no corpus); a forma
     classica de Bransby-Williams usa outra constante (21,3 min). Usar so para reproduzir o projeto.
+    Revisao F5: a forma SI usual na literatura (Tc = 58 L/(A^0,1 S^0,2) min, S em m/km; Pilgrim e Cordery,
+    FORA do corpus) da 58/60/10^0,2 = 0,610 com J em %: 0,615 fica 0,8 % acima. Coerente, mas sem pagina
+    primaria no corpus: continua "nao conferida" (pendente F7).
     """
     _positivo(L_km=L_km, A_km2=A_km2, J_pct=J_pct, coef=coef)
     return coef * L_km / (A_km2 ** 0.1 * J_pct ** 0.2)
@@ -356,6 +360,9 @@ def tc_onda_cinematica(n, L_m, S, i_mm_h, coef=0.938):
     coef=0,933 para reproduzi-las (divergencia 2 do mapa; decisao F7). Aqui L em m e i em mm/h
     (convertidos). Limites: n*L/sqrt(S) <= ~100 (McCuen e Spiess) e L <= 100 ft (NEH); a funcao
     retorna float: use tc_escoamento_aviso_lamina para checar o limite.
+    Revisao F5: 0,938 e a constante exata da deducao (Manning 1,49 com R = i t; 720^0,4/89,4^0,6 = 0,9378);
+    FHWA-HDS2 3a ed. Eq. 3.6 (p. 70 do _texto do Hidraulico) imprime 0,93 (CU) e 6,9 (SI); 0,933 e
+    arredondamento publicado (HEC-22 2a ed., fora do corpus). Diferenca 0,5 % no Tt, sem efeito pratico.
     """
     _positivo(n=n, L_m=L_m, S=S, i_mm_h=i_mm_h, coef=coef)
     L_ft = L_m / FT

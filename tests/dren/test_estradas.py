@@ -100,6 +100,18 @@ def test_caixa_coletora_grelha_hec12_p86():
     assert inv["d_necessario_m"] == pytest.approx(0.1, rel=1e-6)
 
 
+def test_caixa_coletora_grelha_aviso_transicao_hec12_p87():
+    # Revisao F5: HEC-12 p. 87: na transicao vertedor-orificio a capacidade e menor que as duas equacoes
+    P, A = 2.0, 0.5
+    d_int = (0.67 * A * math.sqrt(2 * 9.81) / (1.66 * P)) ** 2
+    perto = E.caixa_coletora_grelha(P=P, A=A, d=d_int)
+    longe = E.caixa_coletora_grelha(P=P, A=A, d=0.2 * d_int)
+    assert any("p. 87" in a and "MENOR" in a for a in perto["avisos"])
+    assert not any("faixa de transicao" in a for a in longe["avisos"])
+    inv = E.caixa_coletora_grelha(P=P, A=A, Q=perto["saidas"]["Q_capacidade_m3s"])
+    assert any("faixa de transicao" in a for a in inv["avisos"])
+
+
 def test_folga_ime():
     assert E.folga_valeta(0.5, Q=0.1)["saidas"]["folga_m"] == pytest.approx(0.1)
     assert E.folga_valeta(0.5, Q=0.3, revestimento="concreto")["saidas"]["folga_m"] == 0.13

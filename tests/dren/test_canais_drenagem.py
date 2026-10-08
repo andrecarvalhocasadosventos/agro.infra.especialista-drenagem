@@ -47,6 +47,19 @@ def test_hec11_exemplo1_d50():
     assert r["D50"] / FT == pytest.approx(0.43, abs=0.005)
 
 
+def test_hec11_exemplo2_d50_com_correcao_c16():
+    # Revisao F5 (livro, leitura de grafico, 5 %): HEC-11 Ex. 2 (p. 84-85 do _texto): Va 12,6 ft/s, d 12,0 ft,
+    # K1 0,73 -> D50 0,9 ft (Chart 1); Ss 2,60, SF 1,6 -> C = 1,6 (Chart 2) -> D50 = 1,44 ft (0,44 m).
+    # Recalculo exato: D50 base 0,926 ft, C 1,613, D50 1,493 ft (+3,7 %, leitura dos graficos).
+    r = C.d50_riprap_hec11(12.6 * FT, 12.0 * FT, Ss=2.60, SF=1.6, K1=0.73)
+    assert r["C"] == pytest.approx(1.6, rel=0.01)
+    # Chart 2 (p. 79): C = 1,61 SF^1,5/(Ss-1)^1,5 e a mesma coisa que Csg*Csf (Eq. 8 x Eq. 9)
+    assert r["C"] == pytest.approx(1.61 * 1.6 ** 1.5 / 1.6 ** 1.5, rel=0.002)
+    assert r["D50_base_m"] / FT == pytest.approx(0.9, rel=0.05)
+    assert r["D50"] / FT == pytest.approx(1.44, rel=0.05)
+    assert r["D50"] == pytest.approx(0.44, rel=0.05)
+
+
 def test_hec11_k1_eq7_talude_2h1v_phi41():
     # p. 78: talude 2:1, phi ~ 41 graus -> K1 = 0,73
     r = C.d50_riprap_hec11(3.0, 3.0, z=2, phi=41)
@@ -219,6 +232,14 @@ def test_composto_com_berma_aumenta_capacidade_e_inverte():
     assert r["Fr"] == pytest.approx(r["V"] / math.sqrt(9.81 * r["A"] / r["T"]), rel=1e-12)
     y = C.profundidade_normal_composta(r["Q"], 2.0, 1.5, 0.03, 0.002, h, 3.0, 2.0, 0.05)
     assert y == pytest.approx(1.5, rel=1e-5)
+
+
+def test_composto_aviso_lamina_rasa_na_berma_em1601_p60():
+    # Revisao F5: EM-1601 p. 60 (James e Brown 1977): 1,0 < y/h_main < 1,4 -> Manning impreciso sem ajuste
+    raso = C.manning_composto(1.2, 2.0, 1.5, 0.03, 0.002, 1.0, 3.0, 2.0, 0.05)
+    fundo = C.manning_composto(1.6, 2.0, 1.5, 0.03, 0.002, 1.0, 3.0, 2.0, 0.05)
+    assert any("James e Brown" in a for a in raso["avisos"])
+    assert not any("James e Brown" in a for a in fundo["avisos"])
 
 
 def test_velocidade_admissivel_dnit_e_em1601_divergem():

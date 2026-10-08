@@ -16,6 +16,10 @@ Fontes (corpus local, referencias/_texto/; paginas = marcador `<!-- p. N -->` do
 Decisoes abertas (D-n): TR e Tc minimo entram como ARGUMENTOS com padrao provisorio (TR 10 anos, Tc 5 min;
 IPR726 p. 258, WSDOT p. 102, H14). Divergentes: 6 min (Album p. 214) e 10 min (IS-239, IPR726 p. 463).
 Padrao provisorio, decisao F7.
+
+CHANGELOG
+0.1.1 (2026-10-08, revisao de formula F5): caixa_coletora_grelha avisa que na transicao vertedor-orificio a
+capacidade real e menor que as duas equacoes (HEC-12 p. 87); formulas inalteradas.
 """
 from __future__ import annotations
 
@@ -24,7 +28,7 @@ import math
 from tools.dren import _cli
 from tools.dren.bueiros import sarjeta_triangular_izzard, KU_IZZARD_SI
 
-VERSAO = "0.1.0"
+VERSAO = "0.1.1"
 G = 9.81
 TC_MIN_PADRAO = 5.0     # min, provisorio (decisao F7)
 TR_PADRAO = 10          # anos, provisorio (decisao F7)
@@ -257,15 +261,23 @@ def caixa_coletora_grelha(P, A, d=None, Q=None, Cw=1.66, Co=0.67):
     """Grelha/caixa coletora em ponto baixo (sag), HEC-12 p. 86 (eqs. 17 e 18), SI:
       vertedor: Qi = Cw P d^1,5,        Cw = 1,66 (3,0 ingles); P = perimetro da grelha sem barras e sem o lado do meio-fio [m]
       orificio: Qi = Co A (2 g d)^0,5,  Co = 0,67;              A = area livre de abertura [m2]
-    Dar d -> capacidade = menor dos dois (conservador; transicao nao modelada). Dar Q -> carga d necessaria
-    (maior das duas). Unidades: m, m2, m3/s. Colmatacao nao incluida; HEC-12 p. 86 desaconselha grelha isolada em sag."""
+    Dar d -> capacidade = menor dos dois; Dar Q -> carga d necessaria (maior das duas). Unidades: m, m2, m3/s.
+    ATENCAO (revisao F5): na transicao vertedor-orificio a capacidade real e MENOR que a das duas equacoes
+    (HEC-12 p. 87; Chart 11, p. 88, curva desenhada entre as retas). O "menor dos dois" so e conservador longe
+    da intersecao d* = [Co A sqrt(2g)/(Cw P)]^2; perto dela (aqui: 0,5 d* a 2 d*) a funcao emite aviso.
+    Colmatacao nao incluida (HEC-12 Ex. 14, p. 87, adota 50 %); HEC-12 p. 86 desaconselha grelha isolada em sag."""
     _pos(P=P, A=A, Cw=Cw, Co=Co)
     if (d is None) == (Q is None):
         raise ValueError("informar exatamente um entre d e Q")
-    av = ["sem fator de colmatacao (HEC-12 p. 86 desaconselha grelha isolada em sag)",
+    av = ["sem fator de colmatacao (HEC-12 p. 86 desaconselha grelha isolada em sag; Ex. 14 p. 87 usa 50 %)",
           "transicao vertedor-orificio nao modelada: adotado o menor (capacidade) ou o maior (carga)"]
+    d_int = (Co * A * math.sqrt(2 * G) / (Cw * P)) ** 2  # carga em que vertedor = orificio
+    aviso_trans = ("carga na faixa de transicao (0,5-2 x d* = %.3f m): capacidade real MENOR que as duas equacoes "
+                   "(HEC-12 p. 87); usar Chart 11 ou ensaio" % d_int)
     if Q is None:
         _pos(d=d)
+        if 0.5 * d_int <= d <= 2.0 * d_int:
+            av.append(aviso_trans)
         qw = Cw * P * d ** 1.5
         qo = Co * A * math.sqrt(2 * G * d)
         return _res({"d": d, "P": P, "A": A},
@@ -274,6 +286,8 @@ def caixa_coletora_grelha(P, A, d=None, Q=None, Cw=1.66, Co=0.67):
     _pos(Q=Q)
     dw = (Q / (Cw * P)) ** (2 / 3)
     do = (Q / (Co * A)) ** 2 / (2 * G)
+    if 0.5 * d_int <= max(dw, do) <= 2.0 * d_int:
+        av.append(aviso_trans)
     return _res({"Q": Q, "P": P, "A": A},
                 {"d_vertedor_m": dw, "d_orificio_m": do, "d_necessario_m": max(dw, do),
                  "controle": "vertedor" if dw >= do else "orificio"}, "HEC-12 p. 86 eqs. 17-18 invertidas", av)
