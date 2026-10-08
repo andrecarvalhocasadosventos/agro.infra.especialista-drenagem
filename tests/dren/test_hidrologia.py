@@ -424,9 +424,9 @@ def test_cli_v02_funcoes_novas():
                              cwd=RAIZ, stdin=subprocess.DEVNULL).stdout
         return json.loads(out)
 
-    assert h.VERSAO == "0.2.0"
+    assert h.VERSAO == "0.3.0"
     d = run({"funcao": "risco_hidrologico", "TR": 25, "vida_util": 50})
-    assert d["saidas"]["J"] == pytest.approx(0.8701, rel=1e-3) and d["versao"] == "0.2.0"
+    assert d["saidas"]["J"] == pytest.approx(0.8701, rel=1e-3) and d["versao"] == "0.3.0"
     d = run({"funcao": "chuva_efetiva", "P": 100, "CN": 80, "lam": 0.05})
     assert d["saidas"]["CN_usado"] == pytest.approx(72.38, abs=0.05) and d["avisos"]
     d = run({"funcao": "gumbel", "serie_maximos_anuais": SERIE10, "TR": 25, "n": 10})
@@ -434,3 +434,272 @@ def test_cli_v02_funcoes_novas():
     d = run({"funcao": "blocos_alternados", "TR": 5, "duracao_total": 100, "dt": 10,
              "a": 57.71 * 60, "b": 0.172, "c": 22, "d": 1.025})
     assert d["saidas"]["P_total_mm"] == pytest.approx(55.3, rel=0.01)
+
+
+# ====================== v0.3.0 (F5/M1): conferencia no primario e gabaritos G1 ======================
+FT = 0.3048
+POL = 25.4
+CFS = 0.0283168
+
+
+def _run_cli(req):
+    env = dict(os.environ, PYTHONIOENCODING="utf-8")
+    out = subprocess.run([sys.executable, "-m", "tools.dren.hidrologia", "--json", json.dumps(req)],
+                         capture_output=True, text=True, encoding="utf-8", env=env,
+                         cwd=RAIZ, stdin=subprocess.DEVNULL).stdout
+    return json.loads(out)
+
+
+# ---- livro: formulas de Tc conferidas no primario (tolerancia 1 %)
+def test_kirpich_equivale_as_formas_do_pmsp_e_do_mccuen():
+    # PMSP-DRENURB-V2 p. 56 Eq. 1.28: 3,989 L^0,77 S^-0,385 (L km); McCuen Eq. 3-55: 0,0078 L^0,77 S^-0,385 (L ft)
+    L_m, S = 1000.0, 0.01
+    assert h.kirpich(L_m, S) == pytest.approx(3.989 * 1.0 ** 0.77 * S ** -0.385, rel=0.01)
+    assert h.kirpich(L_m, S) == pytest.approx(0.0078 * (L_m / FT) ** 0.77 * S ** -0.385, rel=0.01)
+    # California Culverts (Kirpich com S = H/L) = DNIT-HIDRO p. 88 (0,95 h) = 57 min
+    assert h.california_culverts(1.0, 10.0) == pytest.approx(h.kirpich(1000.0, 10.0 / 1000.0), rel=0.01)
+    assert 0.95 * 60 == pytest.approx(57.0)
+
+
+def test_kirpich_aviso_L_maior_que_10_km():
+    r = h.kirpich(12000, 0.05, detalhado=True)
+    assert any("10 km" in a for a in r["avisos"])
+    assert not any("10 km" in a for a in h.kirpich(9000, 0.05, detalhado=True)["avisos"])
+
+
+def test_ime_p29_exemplo_picking_chow_california():
+    # IME p. 29: L 5 km, I 0,06 (H 300 m): California 41 min, Ven Te Chow 39,8 min (I 6 %), Picking 40 min
+    # (valores impressos arredondados; tolerancia = arredondamento do livro)
+    assert h.california_culverts(5.0, 300.0) == pytest.approx(41.0, abs=0.8)
+    assert h.ven_te_chow(5.0, 6.0) == pytest.approx(39.8, abs=0.1)
+    assert h.picking(5.0, 0.06) == pytest.approx(40.0, abs=0.5)
+    with pytest.raises(ValueError):
+        h.picking(5.0, 0.0)
+    with pytest.raises(ValueError):
+        h.ven_te_chow(0.0, 6.0)
+
+
+def test_picking_e_chow_coerentes_com_tabela_de_velocidades_do_dnit():
+    # DNIT-HIDRO p. 97 (forma unificada, V = L/Tc em km/h): Picking V = 1,1320 H^0,333;
+    # Ven Te Chow V = 1,1396 L^0,04 H^0,320. A comparacao so fecha com Picking em MINUTOS (o DNIT
+    # imprime "horas" na p. 88: divergencia de unidade).
+    L, H = 5.0, 300.0
+    I = H / (L * 1000)
+    assert L / (h.picking(L, I) / 60) == pytest.approx(1.1320 * H ** 0.333, rel=0.01)
+    assert L / (h.ven_te_chow(L, 100 * I) / 60) == pytest.approx(1.1396 * L ** 0.04 * H ** 0.320, rel=0.01)
+    # Kirpich do DNIT (0,95 h): V = 1,0526 L^-0,155 H^0,385
+    tc_kirp_min = h.california_culverts(L, H)
+    assert L / (tc_kirp_min / 60) == pytest.approx(1.0526 * L ** -0.155 * H ** 0.385, rel=0.01)
+
+
+def test_dooge_forma_pmsp_p57_unidades_e_faixa():
+    # PMSP-DRENURB-V2 p. 57 Eq. 1.34: tc[min] = 21,88 A^0,41 S^-0,17 (A km2, S m/m; 140 a 930 km2)
+    assert h.dooge(500.0, 0.001) == pytest.approx(21.88 * 500 ** 0.41 * 0.001 ** -0.17, rel=1e-12)
+    r = h.tc_com_avisos("dooge", A=500.0, S=0.001)
+    assert r["saidas"]["tc_min"] == pytest.approx(h.dooge(500.0, 0.001))
+    assert not any("fora de 140-930" in a for a in r["avisos"])
+    assert any("fora de 140-930" in a for a in h.tc_com_avisos("dooge", A=5.0, S=0.01)["avisos"])
+
+
+def test_giandotti_forma_dnit_e_aviso_de_faixa():
+    # DNIT-HIDRO p. 91-92: TC[h] = (4 raiz(A) + 1,5 L)/(0,8 raiz(H)); sem faixa de area no corpus
+    assert h.giandotti(36.0, 10.0, 100.0) == pytest.approx((24 + 15) / 8.0, rel=1e-12)
+    r = h.tc_com_avisos("giandotti", A=36.0, L=10.0, Hm=100.0)
+    assert r["saidas"]["tc_min"] == pytest.approx(39 / 8.0 * 60)
+    assert any("170" in a and "nao consta" in a for a in r["avisos"])
+    r2 = h.tc_com_avisos("giandotti", A=500.0, L=40.0, Hm=300.0)
+    assert not any("170" in a for a in r2["avisos"])
+
+
+def test_dnos_tabela_K_por_terreno_dnit_p89():
+    assert set(h.DNOS_K_TERRENO.values()) == {2.0, 3.0, 4.0, 4.5, 5.0, 5.5}
+    for terreno, k in h.DNOS_K_TERRENO.items():
+        assert h.dnos(100, 2000, 1.0, terreno=terreno) == pytest.approx(
+            10 / k * 100 ** 0.3 * 2000 ** 0.2, rel=1e-12)
+
+
+def test_kirpich_modificada_fator_142_dnit_p90():
+    # DNIT-HIDRO p. 90: TC = 1,42 (L^3/H)^0,385 h = 1,5 x 0,95 (1,425; diferenca 0,35 %)
+    assert h.kirpich_modificada_dnit(2.9, 12.0) == pytest.approx(
+        1.42 * 60 * (2.9 ** 3 / 12.0) ** 0.385, rel=1e-12)
+    assert 1.42 / (1.5 * 0.95) == pytest.approx(1.0, abs=0.004)
+
+
+def test_kerby_mccuen_eq_3_53_equivalencia_5pct():
+    # McCuen Eq. 3-53: 0,83 (nL/S^0,5)^0,47 min (L ft) x forma em m (1,44, expoente 0,467): ate ~3 %
+    n, L_m, S = 0.4, 100.0, 0.01
+    assert h.kerby(L_m, n, S) == pytest.approx(0.83 * (n * L_m / FT / math.sqrt(S)) ** 0.47, rel=0.05)
+
+
+# ---- livro: McCuen cap. 3 e NEH-630 cap. 15
+def test_mccuen_ex_3_12_onda_cinematica_e_scs():
+    # McCuen Ex. 3-12 (p. 146 impressa): n 0,15, L 120 ft, S 0,002; i 8 -> 14,9; 5,1 -> 17,9; 4,7 -> 18,5; 4,6 -> 18,6 min
+    L = 120 * FT
+    for i, tt in [(8.0, 14.9), (5.1, 17.9), (4.7, 18.5), (4.6, 18.6)]:
+        assert h.tc_onda_cinematica(0.15, L, 0.002, i * POL) == pytest.approx(tt, rel=0.01)
+    # versao SCS (Eq. 3-48): P2 3,12 pol -> 28,8 min
+    assert h.tc_laminar_neh(0.15, L, 3.12 * POL, 0.002) * 60 == pytest.approx(28.8, rel=0.01)
+    # coeficiente 0,938 (livro) x 0,933 (planilhas): 0,5 %
+    assert h.tc_onda_cinematica(0.15, L, 0.002, 8 * POL, coef=0.933) == pytest.approx(
+        h.tc_onda_cinematica(0.15, L, 0.002, 8 * POL) * 0.933 / 0.938, rel=1e-12)
+
+
+def test_neh630_cap15_laminar_e_velocidade_p18_21():
+    # NEH-630 cap. 15 p. 18: lamina 100 ft, n 0,15, P2 3,6 pol, S 0,08 -> 0,09 h (calc. 0,089)
+    assert h.tc_laminar_neh(0.15, 100 * FT, 3.6 * POL, 0.08) == pytest.approx(0.089, rel=0.01)
+    # R-2: 6000 ft a 5,2 ft/s = 0,32 h
+    assert h.tempo_viagem_min(6000 * FT, 5.2 * FT) / 60 == pytest.approx(0.32, rel=0.01)
+    # Tc = R-1 + R-2 + R-3 = 1,00 + 0,32 + 0,43 = 1,75 h
+    assert 1.00 + h.tempo_viagem_min(6000 * FT, 5.2 * FT) / 60 + 0.43 == pytest.approx(1.75, rel=0.01)
+
+
+def test_neh630_tab_15_3_velocidade_escoamento_concentrado():
+    # Tab. 15-3: V = 20,328 S^0,5 ft/s (pavimento), k*0,3048 em m/s
+    assert h.velocidade_concentrado_neh("pavimento_ravinas", 0.02) / FT == pytest.approx(
+        20.328 * 0.02 ** 0.5, rel=1e-9)
+    assert h.velocidade_concentrado_neh("floresta_serapilheira_feno", 0.01) == pytest.approx(
+        2.516 * FT * 0.1, rel=1e-9)
+    assert set(h.VELOCIDADE_CONCENTRADO_NEH_K.values()) == {20.328, 16.135, 9.965, 8.762, 6.962, 5.032, 2.516}
+    with pytest.raises(ValueError):
+        h.velocidade_concentrado_neh("inexistente", 0.01)
+
+
+def test_mccuen_ex_3_13_metodo_da_velocidade():
+    # Ex. 3-13 (pos-desenvolvimento): tubo 15 pol, n 0,011, S 0,009, V a secao plena 5,9 ft/s
+    D = 15 * 0.0254
+    assert h.velocidade_manning(D / 4, 0.009, 0.011) / FT == pytest.approx(5.9, rel=0.01)
+    # antes: 140/0,25 + 260/1,40 + 480/2,1 = 975 s = 16,2 min
+    seg = [(140, 0.25), (260, 1.40), (480, 2.1)]
+    tc = sum(h.tempo_viagem_min(L * FT, V * FT) for L, V in seg)
+    assert tc == pytest.approx(16.2, rel=0.01)
+    # depois: 238 + 24 + 214 + 71 = 547 s = 9,1 min
+    assert (238 + 24 + 214 + 71) / 60 == pytest.approx(9.1, rel=0.01)
+
+
+def test_lag_scs_neh_p18_e_mccuen_ex_9_23():
+    # NEH-630 cap. 15 p. 18: L 3.865 ft, Y 4,79 %, CN 63 -> Tc 1,14 h
+    assert h.tc_lag_scs(3865 * FT, 63, 4.79) == pytest.approx(1.14, rel=0.01)
+    # McCuen Ex. 9-23: L 6.500 ft, S 1,3 %, CN 92 -> tc 1,34 h
+    assert h.tc_lag_scs(6500 * FT, 92, 1.3) == pytest.approx(1.34, rel=0.01)
+    # equivalencia com McCuen Eq. 3-56: tc[min] = 0,00526 L^0,8 (1000/CN - 9)^0,7 S^-0,5 (L ft, S ft/ft)
+    L_ft, CN, S = 4000.0, 75.0, 0.03
+    eq356 = 0.00526 * L_ft ** 0.8 * (1000 / CN - 9) ** 0.7 * S ** -0.5
+    assert h.tc_lag_scs(L_ft * FT, CN, S * 100) * 60 == pytest.approx(eq356, rel=0.01)
+    with pytest.raises(ValueError):
+        h.tc_lag_scs(1000, 120, 1.0)
+    r = h.tc_com_avisos("lag_scs", L=1000.0, CN=40, Y=2.0)
+    assert any("CN fora" in a for a in r["avisos"])
+
+
+def test_mccuen_ex_9_23_hut_triangular_726():
+    # A = 300 ac, tc 1,34 h, D = 0,133 tc: tp 0,893 h; tb 2,38 h; qp = 254 cfs (726 A/tc; 484 A/tp)
+    hu = h.hidrograma_unitario_triangular(300 / 640 * 2.58999, 1.34, 0.133 * 1.34)
+    assert hu["tp_h"] == pytest.approx(0.893, rel=0.01)
+    assert hu["tb_h"] == pytest.approx(2.381, rel=0.01)
+    assert hu["qp_m3s_por_mm"] * POL / CFS == pytest.approx(254.0, rel=0.01)
+
+
+def test_mccuen_racional_ex_7_9_e_7_11():
+    # Ex. 7-9: A 2,4 ac, C 0,95, i 8,6 pol/h -> 19,6 ft3/s (1 ac.pol/h = 1,0083 cfs)
+    q = h.racional(0.95, 8.6 * POL, 2.4 * 0.00404686) / CFS
+    assert q == pytest.approx(19.6, rel=0.01)
+    # Ex. 7-11: C = 0,2/0,4/0,6 em 5,3/7,2/6,4 ac -> 0,412; i 4,8 pol/h, 18,9 ac -> 37,4 ft3/s
+    C = h.c_ponderado([0.2, 0.4, 0.6], [5.3, 7.2, 6.4])
+    assert C == pytest.approx(0.412, rel=0.01)
+    assert h.racional(C, 4.8 * POL, 18.9 * 0.00404686) / CFS == pytest.approx(37.4, rel=0.01)
+    with pytest.raises(ValueError):
+        h.c_ponderado([0.2], [1.0, 2.0])
+
+
+def test_mccuen_scs_ex_7_15_a_7_18_e_ponderacao_do_escoamento():
+    # Ex. 7-15: P 7 pol, CN 75 -> S 3,333; Ia 0,667; Q 4,15 pol. Ex. 7-18: CN 55/70/83 -> 2,12/3,62/5,03 pol
+    P = 7 * POL
+    assert h.retencao_S(75) / POL == pytest.approx(3.333, rel=0.001)
+    for cn, q in [(75, 4.15), (55, 2.12), (70, 3.62), (83, 5.03)]:
+        assert h.chuva_efetiva(P, cn) / POL == pytest.approx(q, rel=0.01)
+    # pondera-se o escoamento, nao o CN: CN 55 e 83 em areas iguais
+    q_pond = h.escoamento_ponderado(P, [55, 83], [1.0, 1.0])
+    assert q_pond / POL == pytest.approx((2.12 + 5.03) / 2, rel=0.01)
+    assert q_pond > h.chuva_efetiva(P, 69)  # o CN medio subestima o escoamento
+
+
+# ---- planilhas internas (escoamento plano; aba "FAA": onda cinematica com coef 0,933)
+def test_planilhas_escoamento_plano_001_e_redencao():
+    # planilha-001: n 0,13; L 150 m; i 186 mm/h; S 0,15 -> Tti 9,0114 min; Vti 0,27743 m/s
+    t1 = h.tc_onda_cinematica(0.13, 150.0, 0.15, 186.0, coef=0.933)
+    assert t1 == pytest.approx(9.0114, rel=0.001)
+    assert 150.0 / (t1 * 60) == pytest.approx(0.27743, rel=0.001)
+    # Redencao: n 0,011; L 141,86 m; S 0,0097 -> 4,5032 min; 0,52503 m/s
+    t2 = h.tc_onda_cinematica(0.011, 141.86, 0.0097, 186.0, coef=0.933)
+    assert t2 == pytest.approx(4.5032, rel=0.001)
+    assert 141.86 / (t2 * 60) == pytest.approx(0.52503, rel=0.001)
+    # IDF da aba (T 5 anos, t 7 min): i = 8460,202 T^0,177/(t+41,05)^1,092 = 163,94 mm/h
+    assert h.idf_potencial(5, 7, 8460.202, 0.177, 41.05, 1.092) == pytest.approx(163.94, rel=0.001)
+    # a planilha viola o limite de lamina (L > 100 ft; n L/raiz(S) > 100): o aviso tem de aparecer
+    assert len(h.tc_escoamento_aviso_lamina(0.13, 150.0, 0.15)) == 2
+
+
+def test_aviso_limite_de_lamina_neh_100_ft():
+    assert h.tc_escoamento_aviso_lamina(0.15, 25.0, 0.05) == []  # 82 ft; nL/raiz(S) = 55
+    av = h.tc_escoamento_aviso_lamina(0.15, 40.0, 0.002)
+    assert any("100 ft" in a for a in av) and any("McCuen e Spiess" in a for a in av)
+    r = h.tc_com_avisos("onda_cinematica", n=0.15, L=40.0, S=0.002, i=100.0)
+    assert r["avisos"] and r["saidas"]["tc_min"] > 0
+
+
+# ---- acervo (sem marca humana): Delmiro Gouveia BHD1 TR 50 (tolerancia 5 %)
+def test_delmiro_bhd1_cadeia_tc_s_pe_hut():
+    J = 32.0 / 13210 * 100
+    tc = h.bransby_williams(13.21, 36.34, J)
+    assert tc == pytest.approx(7.53, rel=0.05)
+    assert h.retencao_S(75.2) == pytest.approx(83.77, rel=0.001)
+    assert h.chuva_efetiva(112.40, 75.2) == pytest.approx(50.99, rel=0.01)
+    hu = h.hidrograma_unitario_triangular(36.34, tc, 0.941)
+    assert hu["tp_h"] == pytest.approx(4.990, rel=0.01)
+    assert hu["tb_h"] == pytest.approx(13.32, rel=0.01)
+    # o projeto imprime 15,149 "m3/s por mm" com Qp = 2,08 A/ta: isso e por 10 mm (1 cm); por mm = 0,208 A/ta
+    assert 10 * hu["qp_m3s_por_mm"] == pytest.approx(15.149, rel=0.01)
+
+
+def test_delmiro_bhd1_tempo_do_pico_com_chuva_uniforme():
+    hu = h.hidrograma_unitario_triangular(36.34, 7.53, 0.941)
+    pe = h.hietograma_para_efetiva([112.40 / 8] * 8, 75.2)
+    r = h.convolucao_hu(pe, hu)
+    assert r["tp_pico_h"] == pytest.approx(10.36, rel=0.05)
+
+
+@pytest.mark.xfail(strict=True, reason="Delmiro BHD1 TR 50 (1494:64): pico 58,71 m3/s depende do hietograma "
+                                       "(polinomio cubico por faixa, Quadro 3.3, nao recuperavel). Com chuva "
+                                       "uniforme em 8 blocos o pico sai 61,8 m3/s (+5,3 %); divergencia > 5 % "
+                                       "registrada em DIVERGENCIAS (sessao interativa pendente)")
+def test_delmiro_bhd1_pico_58_71():
+    hu = h.hidrograma_unitario_triangular(36.34, 7.53, 0.941)
+    pe = h.hietograma_para_efetiva([112.40 / 8] * 8, 75.2)
+    assert h.convolucao_hu(pe, hu)["Qp_m3s"] == pytest.approx(58.71, rel=0.05)
+
+
+def test_delmiro_nerc_x_kirpich_rotulo_e_velocidade():
+    # caso delmiro_gouveia_tc_rotulos: NERC 7,65 h (impresso como "Kirpich"); Kirpich de livro 4,92 h
+    L_km, H = 13.21, 32.0
+    assert h.nerc(L_km, H) == pytest.approx(7.65, rel=0.01)
+    tc_kirpich = h.kirpich(L_km * 1000, H / (L_km * 1000)) / 60
+    assert tc_kirpich == pytest.approx(4.92, rel=0.05)
+    assert h.nerc(L_km, H) > 1.5 * tc_kirpich
+    # velocidade em m/s abaixo do minimo de 0,5 m/s do memorial (1492:155): 0,48 e 0,49
+    assert L_km * 1000 / (h.nerc(L_km, H) * 3600) == pytest.approx(0.48, rel=0.02)
+    J = H / (L_km * 1000) * 100
+    tc_bw = h.bransby_williams(L_km, 36.34, J)
+    v_bw = L_km * 1000 / (tc_bw * 3600)
+    assert v_bw == pytest.approx(0.49, rel=0.02)
+    assert v_bw < 0.5
+
+
+def test_cli_v03_metodos_novos_de_tc():
+    d = _run_cli({"funcao": "tc", "metodo": "picking", "L": 5.0, "I": 0.06})
+    assert d["saidas"]["tc_min"] == pytest.approx(39.6, rel=0.01) and d["avisos"] and d["versao"] == "0.3.0"
+    d = _run_cli({"funcao": "tc", "metodo": "lag_scs", "L": 3865 * FT, "CN": 63, "Y": 4.79})
+    assert d["saidas"]["tc_min"] == pytest.approx(1.14 * 60, rel=0.01)
+    d = _run_cli({"funcao": "tc", "metodo": "ven_te_chow", "L": 5.0, "I": 6.0})
+    assert d["saidas"]["tc_min"] == pytest.approx(39.8, rel=0.01)
+    d = _run_cli({"funcao": "tc", "metodo": "nerc", "L": 13.21, "H": 32.0})
+    assert d["saidas"]["tc_min"] == pytest.approx(7.65 * 60, rel=0.01)

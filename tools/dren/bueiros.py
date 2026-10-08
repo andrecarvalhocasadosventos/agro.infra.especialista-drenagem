@@ -20,6 +20,17 @@ de entrada/saida e a transicao entre regimes).
 CLI: python -m tools.dren.bueiros --json '{"funcao": "controle_de_entrada", ...}'
 
 CHANGELOG
+0.3.0 (2026-10-08), fase F5:
+- tubo_parcialmente_cheio: Manning circular por geometria exata (segmento circular), com y/D,
+  Fr = V/sqrt(g A/T) (profundidade hidraulica, nunca y) e limite y/D como argumento
+  (padrao provisorio 0,75, criterio do acervo Delmiro 1492:164; decisao F7). Reproduz
+  BUC-2..5 do caso Delmiro (TR 20 e TR 50) sem ajuste.
+- regime_critico_tubular_ime: regime critico do tubular com Ec = D (IME p. 151-152,
+  theta_c = 4,0335 rad, A_c = 0,601 D2, Vc = 2,56 D^0,5, Ic = 32,82 n2/D^(1/3)). A_c = 0,60 D2
+  do legado DNIT deixa de ser "ajuste proprio": e a formula impressa do IME arredondada
+  (0,2 %); valor numerico de vazao_critica_legado_dnit mantido.
+- Testes novos: V de saida do HDS-5 p. 280 (6,47 m/s), HDS-3 Ex. 10-17 (circular parcial),
+  Delmiro, Xingo legado = n 0,0093 (caso negativo). Classe de tubo: ver tubos.py.
 0.2.0 (2026-10-01), conforme achados da skill bueiros-e-drenagem-superficial:
 - dissipador_necessario passa a usar a Tabela 31 do DNIT-DREN (IPR-724, p. 131)
   por padrao (LIMITE_VELOCIDADE_DNIT, faixas min-max; criterio "min" = conservador);
@@ -46,7 +57,7 @@ import json
 import math
 import sys
 
-VERSAO = "0.2.0"
+VERSAO = "0.3.0"
 G = 9.81
 KU_SI = 1.811  # HDS-5 Eq. A.1-A.3 (conversao para SI)
 KU_ATRITO_SI = 19.63  # HDS-5 Eq. 3.4b (29 em unidades inglesas)
@@ -571,7 +582,8 @@ def comparar_legado_hds5(Q, forma, dim, tipo_de_entrada, n, L, S0, TW, n_celulas
 
 # Legado DNIT: vazao critica (IPR-724, DNIT-DREN p. 54-56, Tabelas 1 e 2)
 COEF_VC_DNIT = 2.56  # Vc = 2,56 H^0,5 (celular: velocidade critica do retangulo, E = H)
-A_CRIT_TUBO_SOBRE_D2 = 0.60  # area molhada critica ~ 0,60 D^2 (Tabela 1, p. 55; ajuste a tabela)
+A_CRIT_TUBO_SOBRE_D2 = 0.60  # arredondamento de 0,601 (IME p. 151-152, theta_c = 4,0335); reproduz a Tabela 1 (p. 55)
+THETA_CRITICO_IME = 4.0335  # rad: raiz de (3/2) A/T = D no circular (IME Anexo II, p. 152)
 
 
 def vazao_critica_exata(forma, dim, n_celulas=1):
@@ -591,10 +603,13 @@ def vazao_critica_exata(forma, dim, n_celulas=1):
 def vazao_critica_legado_dnit(forma, dim, n_celulas=1, detalhado=False):
     """Vazao critica pelo metodo LEGADO do DNIT-DREN (IPR-724) p. 54-56 (bueiro 'como canal').
     Celular (BSCC...): Q = (2/3) 2,56 B H^1,5 por celula (= 1,705 B H^1,5; Tabela 2 p. 56:
-    2x2 = 9,64 e 3x3 = 26,58 m3/s). O coeficiente impresso 1,638 (p. 54-55) nao e usado
-    (armadilha 8 da skill). Tubular (BSTC...): Q = A_c 2,56 D^0,5 com A_c = 0,60 D^2
-    (Tabela 1 p. 55; ajuste proprio a coluna da tabela), que usa a velocidade critica do
-    retangular no circulo e fica ~7 % ACIMA da vazao critica exata (contra a seguranca).
+    2x2 = 9,64 e 3x3 = 26,58 m3/s; IME p. 152 imprime o mesmo 1,705). O coeficiente impresso
+    1,638 (p. 54-55) nao e usado (armadilha 8 da skill). Tubular (BSTC...): Q = A_c 2,56 D^0,5
+    com A_c = 0,60 D^2 (Tabela 1 p. 55). A origem e o IME p. 151-152: theta_c = 4,0335 rad
+    resolve Ec = D com Ec = (3/2) A/T (exato so no retangular) e da A_c = 0,601 D^2,
+    Vc = 2,56 D^0,5 (ver regime_critico_tubular_ime); 0,60 e o arredondamento (0,2 %). Como a
+    energia critica do circulo e dc + A/(2T), nao 3/2 A/T, o resultado fica ~7 % ACIMA da vazao
+    critica exata (contra a seguranca).
     Preferir o HDS-5. Retorna Q total [m3/s] (ou dict com a exata e o desvio)."""
     g = _geo(forma, dim)
     if forma == "retangular":
@@ -611,6 +626,74 @@ def vazao_critica_legado_dnit(forma, dim, n_celulas=1, detalhado=False):
                       {"Q_legado_dnit_m3s": q, "Q_exata_m3s": ex, "desvio_relativo": q / ex - 1},
                       "legado DNIT-DREN Tab. 1/2 p. 55-56 (Vc = 2,56 D^0,5)",
                       ["metodo legado: vazao critica do tubular ~7 % acima da exata; usar HDS-5"])
+
+
+# --------------------------------------------------------------------------
+# Tubo circular parcialmente cheio e regime critico do tubular (IME)
+# --------------------------------------------------------------------------
+LIMITE_Y_SOBRE_D_PROVISORIO = 0.75  # criterio do acervo (Delmiro 1492:164); padrao provisorio, decisao F7
+
+
+def tubo_parcialmente_cheio(Q, D, n, S0, n_celulas=1, limite_y_sobre_D=LIMITE_Y_SOBRE_D_PROVISORIO):
+    """Escoamento uniforme (Manning) em tubo circular parcialmente cheio, geometria exata.
+
+    A = D^2/8 (th - sen th), P = D th/2, T = D sen(th/2), th = 2 acos(1 - 2y/D);
+    V = R^(2/3) S0^(1/2)/n ; Fr = V / sqrt(g A/T) (profundidade hidraulica A/T, nunca y).
+    Q [m3/s] total, dividido em n_celulas linhas iguais; D [m]; S0 [m/m].
+    Fontes: HDS-3 Chart 55 [FHWA-HDS3 p. 76 do PDF] e Ex. 10-17 [p. 53-55] (conferidos
+    0,4 a 1,3 %); caso acervo Delmiro BUC-2 a BUC-5 (1493:282-285), sem ✓h.
+    Faixa: n 0,010-0,035; S0 > 0; y/D <= 0,82 no ramo normal (Q <= Q plena). Se Q > Q plena, o
+    tubo trabalha cheio/sob pressao: aviso e y = D. limite_y_sobre_D e padrao provisorio 0,75
+    (criterio de projeto do acervo, decisao F7): acima dele, aviso.
+    Retorna dict padrao (entradas, saidas, metodo, avisos, versao)."""
+    if min(Q, D, n, S0) <= 0 or n_celulas < 1:
+        raise ValueError("Q, D, n, S0 devem ser > 0 e n_celulas >= 1")
+    avisos = []
+    if not 0.010 <= n <= 0.035:
+        avisos.append("n fora de 0,010-0,035 (faixa de validade da tabela de Manning usada)")
+    Qc = Q / n_celulas
+    cheia = manning_cheia("circular", D, n, S0)
+    if Qc >= cheia["Q"]:
+        avisos.append("Q por linha >= capacidade plena de Manning: tubo cheio; yn = D (verificar carga/HW)")
+        y = D
+    else:
+        y = profundidade_normal(Qc, "circular", D, n, S0)
+    m = manning_lamina("circular", D, y, n, S0)
+    regime = "supercritico" if m["Fr"] > 1.0 else "subcritico"
+    if 0.9 <= m["Fr"] <= 1.1:
+        avisos.append("Fr entre 0,9 e 1,1: proximo do critico; lamina instavel, evitar projetar nessa faixa")
+    if y / D > limite_y_sobre_D:
+        avisos.append(f"y/D = {y / D:.3f} > {limite_y_sobre_D:g} (padrao provisorio, decisao F7)")
+    if S0 > 0.10:
+        avisos.append("S0 > 10 %: fora da faixa usual de Manning para bueiro")
+    return _resultado(
+        {"Q": Q, "D": D, "n": n, "S0": S0, "n_celulas": n_celulas, "limite_y_sobre_D": limite_y_sobre_D},
+        {"y_m": y, "y_sobre_D": y / D, "A_m2": m["A"], "P_m": m["P"], "R_m": m["R"], "V_m_s": m["V"],
+         "Fr": m["Fr"], "regime": regime, "Q_plena_m3s": cheia["Q"], "Q_sobre_Qplena": Qc / cheia["Q"]},
+        "Manning, segmento circular exato (HDS-3 Chart 55 / Ex. 10-17)", avisos)
+
+
+def regime_critico_tubular_ime(D, n=0.015):
+    """Regime critico do tubular com Ec = D, pelo IME (Anexo II, p. 151-152).
+
+    (3/2) A/T = D  =>  theta_c = 4,0335 rad (231,1 graus); d_c = 0,716 D;
+    A_c = D^2 (th - sen th)/8 = 0,601 D^2; Vc = sqrt(g A/T) = 2,56 D^0,5 (m/s);
+    Qc = A_c Vc = 1,538 D^2,5 (IME imprime 1,533; diferenca 0,3 % de arredondamento);
+    Ic = n^2 Vc^2/R^(4/3) = 32,82 n^2/D^(1/3) (m/m). D [m], n adim.
+    Nota: Ec = (3/2) A/T e exato so no retangular; no circulo a energia critica e
+    dc + A/(2T), e a vazao exata de Ec = D e ~7 % menor (vazao_critica_exata)."""
+    if D <= 0 or n <= 0:
+        raise ValueError("D e n devem ser > 0")
+    th = THETA_CRITICO_IME
+    A = D * D / 8 * (th - math.sin(th))
+    T = D * math.sin(th / 2)
+    Vc = math.sqrt(G * A / T)
+    R = A / (D * th / 2)
+    return _resultado({"D": D, "n": n},
+                      {"theta_c_rad": th, "dc_m": D / 2 * (1 - math.cos(th / 2)), "A_c_m2": A,
+                       "A_c_sobre_D2": A / D ** 2, "Vc_m_s": Vc, "Qc_m3s": A * Vc, "Ic": (n * Vc) ** 2 / R ** (4 / 3)},
+                      "IME Anexo II p. 151-152 (Ec = D)",
+                      ["criterio Ec = (3/2) A/T aproximado no circulo (~7 % acima da vazao critica exata)"])
 
 
 # --------------------------------------------------------------------------
@@ -690,7 +773,9 @@ def _f_vc(**k):
     return vazao_critica_legado_dnit(detalhado=True, **k)
 
 
-_FUNCOES = {"vazao_critica_legado_dnit": _f_vc, "sarjeta_triangular_izzard": sarjeta_triangular_izzard,
+_FUNCOES = {"tubo_parcialmente_cheio": tubo_parcialmente_cheio,
+            "regime_critico_tubular_ime": regime_critico_tubular_ime,
+            "vazao_critica_legado_dnit": _f_vc, "sarjeta_triangular_izzard": sarjeta_triangular_izzard,
             "controle_de_entrada": _f_entrada, "controle_de_saida": _f_saida,
             "dimensionar_bueiro": _f_dim, "velocidade_de_saida": _f_vel,
             "orificio": _f_orificio, "comparar_legado_hds5": _f_comp}

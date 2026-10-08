@@ -348,8 +348,8 @@ def test_xingo_lamina_normal_vs_doc(nome, B, i, Q, cel, y_doc, V_doc):
 
 
 # ===================== v0.2.0: achados da skill bueiros-e-drenagem-superficial =====================
-def test_versao_020():
-    assert b.VERSAO == "0.2.0"
+def test_versao_030():
+    assert b.VERSAO == "0.3.0"
 
 
 # --- HDS-5 DG 1 (tolerancia 2 %) -------------------------------------------------------------
@@ -480,3 +480,139 @@ def test_arco_projetante_usa_Y_da_tabela_A2_nao_do_exemplo():
     hw = b.controle_de_entrada(Q, "arco", (2.0, 1.5), "arco_corrugado_projetante", S0)
     assert X > 4
     assert hw == pytest.approx((0.0496 * X ** 2 + 0.57 - 0.5 * S0) * D, rel=1e-9)
+
+
+# ===================== v0.3.0 (F5): V de saida HDS-5, tubo parcialmente cheio, IME =====================
+FT, CFS = 0.3048, 0.0283168466
+
+
+def test_hds5_p280_velocidade_de_saida_caixa_1524():
+    """HDS-5 DG 1.4 Step 7 [p. 280 do PDF]: caixa 5x5 ft (1524 mm), Q50 = 300 cfs (8,495 m3/s),
+    S = 0,02, TW = 1,219 m; Vo = 20,8 ft/s = 6,47 m/s (nomograma). O texto nao diz o n:
+    adotado 0,012 (concreto liso, caixa RCB). Livro: tolerancia 1 % (obtido 6,45 m/s, -0,3 %).
+    Sensivel a n: n = 0,013 daria 6,07 m/s (-6 %), ver DIVERGENCIAS."""
+    v = b.velocidade_de_saida(8.495, "retangular", (1.524, 1.524), 0.012, 0.02, TW=1.219, controle="entrada")
+    assert v["V_m_s"] == pytest.approx(6.47, rel=0.01)
+    assert v["Fr"] > 1  # supercritico: lamina normal (yn < dc)
+    assert 20.8 * FT == pytest.approx(6.34, rel=0.001)  # 20,8 ft/s impresso (6,34 m/s); 6,47 m/s do SI e o do texto
+    # HY-8 do mesmo problema: 19,61 ft/s (nao atinge a profundidade normal no fim do bueiro), abaixo do nomograma
+    assert 19.61 * FT < v["V_m_s"]
+
+
+# --- tubo circular parcialmente cheio: HDS-3 Ex. 10-17 (livro; leitura de grafico) -------------
+def test_hds3_ex10_circular_30in():
+    r = b.tubo_parcialmente_cheio(25 * CFS, 2.5 * FT, 0.015, 0.005)["saidas"]
+    assert r["y_m"] / FT == pytest.approx(2.05, rel=0.01)   # impresso 2,05 ft; recalculo 2,037
+    assert r["V_m_s"] / FT == pytest.approx(5.8, rel=0.01)  # impresso 5,8 fps
+    dc = b.profundidade_critica(25 * CFS, "circular", 2.5 * FT)
+    assert dc / FT == pytest.approx(1.7, rel=0.01)           # impresso 1,7 ft
+
+
+def test_hds3_ex12_14_capacidade():
+    m = b.manning_lamina("circular", 6 * FT, 3.0 * FT, 0.030, 0.003)
+    assert m["Q"] / CFS == pytest.approx(50.0, rel=0.01)       # Ex. 12: 50 cfs
+    assert m["V"] / FT == pytest.approx(3.5, rel=0.05)         # leitura de grafico (+1,6 %)
+    c = b.manning_cheia("circular", 4 * FT, 0.011, 0.005)["Q"] / CFS
+    assert c == pytest.approx(120.0, rel=0.01)                 # Ex. 14: Qfull = 120
+    q = b.manning_lamina("circular", 4 * FT, 3.0 * FT, 0.011, 0.005)["Q"] / CFS
+    assert q == pytest.approx(109.0, rel=0.01)                 # Ex. 14: 109 cfs (Q/Qfull 0,91)
+
+
+def test_hds3_ex15_16_17():
+    r = b.tubo_parcialmente_cheio(315 * CFS, 10 * FT, 0.012, 0.0006)["saidas"]
+    assert r["y_sobre_D"] == pytest.approx(0.63, rel=0.01) and r["y_m"] / FT == pytest.approx(6.3, rel=0.01)
+    assert r["V_m_s"] / FT == pytest.approx(6.0, rel=0.05)     # impresso 6,0; exato 6,08 (leitura de grafico)
+    # Ex. 16: Sf = 0,0058 para Q = 600 cfs, d = 7,5 ft, n = 0,025
+    D = 10 * FT
+    m = b.manning_lamina("circular", D, 7.5 * FT, 0.025, 1.0)
+    assert (600 * CFS / m["Q"]) ** 2 == pytest.approx(0.0058, rel=0.01)
+    # Ex. 17: dc = 5,9 ft; Sc = 0,0026; Hc = 8,4 ft (n = 0,012)
+    dc = b.profundidade_critica(600 * CFS, "circular", D)
+    assert dc / FT == pytest.approx(5.9, rel=0.01)
+    mc = b.manning_lamina("circular", D, dc, 0.012, 1.0)
+    assert (600 * CFS / mc["Q"]) ** 2 == pytest.approx(0.0026, rel=0.05)   # 0,00266 (grafico, +2,2 %)
+    A, _, T = b._secao(b._geo("circular", D), dc)
+    assert (dc + (600 * CFS / A) ** 2 / 19.62) / FT == pytest.approx(8.4, rel=0.05)  # 8,30 (grafico, -1,1 %)
+
+
+# --- Delmiro Gouveia, BUC-2 a BUC-5 (acervo, sem ✓h: tolerancia 5 %) ---------------------------
+@pytest.mark.parametrize("Q,D,S,y,V,Fr", [
+    (0.499, 0.80, 0.005, 0.454, 1.70, 0.89),   # BUC-2 TR 20 (gabarito proposto: y 0,454, Fr 0,89)
+    (1.716, 1.20, 0.005, 0.753, 2.30, 0.91),   # BUC-3 (2 linhas)
+    (0.557, 0.80, 0.005, 0.487, 1.74, 0.87),   # BUC-4
+    (0.777, 0.80, 0.007, 0.546, 2.12, 0.97),   # BUC-5
+    (0.593, 0.80, 0.005, 0.508, 1.76, 0.85),   # BUC-2 TR 50
+    (2.039, 1.20, 0.005, 0.853, 2.37, 0.85),   # BUC-3 TR 50
+    (0.662, 0.80, 0.005, 0.550, 1.80, 0.81),   # BUC-4 TR 50
+    (0.923, 0.80, 0.007, 0.630, 2.17, 0.86),   # BUC-5 TR 50 (y/D = 79 %)
+])
+def test_delmiro_tubo_parcialmente_cheio(Q, D, S, y, V, Fr):
+    r = b.tubo_parcialmente_cheio(Q, D, 0.015, S)["saidas"]
+    assert r["y_m"] == pytest.approx(y, rel=0.05)
+    assert r["V_m_s"] == pytest.approx(V, rel=0.05)
+    assert r["Fr"] == pytest.approx(Fr, rel=0.05)
+
+
+def test_tubo_parcialmente_cheio_froude_com_profundidade_hidraulica_e_avisos():
+    r = b.tubo_parcialmente_cheio(0.499, 0.80, 0.015, 0.005)
+    s = r["saidas"]
+    assert s["A_m2"] == pytest.approx(0.294, rel=0.005)
+    assert s["Fr"] == pytest.approx(s["V_m_s"] / math.sqrt(9.81 * 0.294 / 0.79), rel=0.01)  # A/T, T = 0,79
+    assert s["Fr"] != pytest.approx(s["V_m_s"] / math.sqrt(9.81 * s["y_m"]), rel=0.02)  # nao e Fr com y
+    assert s["regime"] == "subcritico" and r["avisos"] == []
+    # TR 50 de BUC-5: y/D = 79 % > 75 % (padrao provisorio) gera aviso; limite como argumento
+    a = b.tubo_parcialmente_cheio(0.923, 0.80, 0.015, 0.007)
+    assert any("padrao provisorio" in x for x in a["avisos"])
+    assert not any("padrao provisorio" in x for x in
+                   b.tubo_parcialmente_cheio(0.923, 0.80, 0.015, 0.007, limite_y_sobre_D=0.85)["avisos"])
+    # Q acima da capacidade plena: aviso e y = D; entrada invalida: erro
+    c = b.tubo_parcialmente_cheio(2.0, 0.80, 0.015, 0.005)
+    assert c["saidas"]["y_sobre_D"] == 1.0 and any("cheio" in x for x in c["avisos"])
+    with pytest.raises(ValueError):
+        b.tubo_parcialmente_cheio(0.5, 0.8, 0.0, 0.005)
+    # supercritico em declividade forte
+    assert b.tubo_parcialmente_cheio(0.5, 0.8, 0.015, 0.05)["saidas"]["regime"] == "supercritico"
+
+
+def test_tubo_parcialmente_cheio_cli():
+    r = subprocess.run([sys.executable, "-m", "tools.dren.bueiros", "--json", json.dumps(
+        {"funcao": "tubo_parcialmente_cheio", "Q": 0.499, "D": 0.8, "n": 0.015, "S0": 0.005})],
+        cwd=RAIZ, capture_output=True, text=True, encoding="utf-8",
+        env={**os.environ, "PYTHONIOENCODING": "utf-8"}, stdin=subprocess.DEVNULL)
+    assert r.returncode == 0 and json.loads(r.stdout)["saidas"]["y_m"] == pytest.approx(0.454, rel=0.01)
+
+
+# --- IME p. 151-152: regime critico do tubular (A_c = 0,601 D2) --------------------------------
+def test_ime_regime_critico_tubular():
+    r = b.regime_critico_tubular_ime(1.0, 0.015)["saidas"]
+    th = r["theta_c_rad"]
+    assert th == pytest.approx(math.radians(231 + 6 / 60 + 9 / 3600), rel=1e-4)   # 231 graus 06' 09"
+    A, _, T = b._secao(b._geo("circular", 1.0), r["dc_m"])
+    assert 1.5 * A / T == pytest.approx(1.0, rel=1e-3)           # Ec = (3/2) A/T = D
+    assert r["dc_m"] == pytest.approx(0.716, rel=0.002)          # dc = 0,716 D (impresso)
+    assert r["A_c_sobre_D2"] == pytest.approx(0.601, rel=0.002)  # A_c = 0,601 D2 (recalculo; mapa G1 12)
+    assert r["Vc_m_s"] == pytest.approx(2.56, rel=0.002)         # Vc = 2,56 D^0,5 (impresso)
+    assert r["Qc_m3s"] == pytest.approx(1.533, rel=0.005)        # Qc = 1,533 D^2,5 (impresso; 1,538 recalc.)
+    assert r["Ic"] == pytest.approx(32.82 * 0.015 ** 2, rel=0.001)  # Ic = 32,82 n2 / D^(1/3)
+    r2 = b.regime_critico_tubular_ime(2.0, 0.013)["saidas"]
+    assert r2["Qc_m3s"] == pytest.approx(r["Qc_m3s"] * 2 ** 2.5, rel=1e-9)
+    assert r2["Ic"] == pytest.approx(32.82 * 0.013 ** 2 / 2 ** (1 / 3), rel=0.001)
+    # o 0,60 D2 do legado DNIT e o arredondamento do 0,601 do IME (0,2 %)
+    assert b.A_CRIT_TUBO_SOBRE_D2 == pytest.approx(r["A_c_sobre_D2"], rel=0.003)
+    # celular: Qc = 1,705 B H^1,5 (IME p. 152) = legado DNIT
+    assert b.vazao_critica_legado_dnit("retangular", (1.0, 1.0)) == pytest.approx(1.705, rel=0.001)
+    with pytest.raises(ValueError):
+        b.regime_critico_tubular_ime(0.0)
+
+
+# --- Xingo legado: 33,5 D^2,67 i^0,5 equivale a n = 0,0093 (caso negativo, mapa G2 pendencias) ---
+def test_xingo_legado_equivale_a_n_0093_abaixo_do_n_de_projeto():
+    D, i = 1.2, 0.01
+    q_legado = 33.5 * D ** 2.67 * i ** 0.5
+    n_eq = 0.3117 / 33.5   # Q plena = (pi/4 (1/4)^(2/3)/n) D^(8/3) i^0,5 = (0,3117/n) D^(8/3) i^0,5
+    assert n_eq == pytest.approx(0.0093, rel=0.01)
+    assert b.manning_cheia("circular", D, n_eq, i)["Q"] == pytest.approx(q_legado, rel=0.005)
+    # com n de projeto da ABTC (0,012 drenagem; 0,013 esgoto) a capacidade cai ~22 a 28 %: o legado superestima
+    for n_proj in (0.012, 0.013):
+        queda = b.manning_cheia("circular", D, n_proj, i)["Q"] / q_legado - 1
+        assert -0.30 < queda < -0.20

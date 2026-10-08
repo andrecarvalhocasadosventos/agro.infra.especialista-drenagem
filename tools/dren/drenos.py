@@ -6,17 +6,24 @@ Unidades SI: m, m/d (recarga q e condutividade K, como em ILRI/USBR), m3/s para 
 tempo em dias. Apenas stdlib. CLI: python -m tools.dren.drenos --json '{"funcao":
 "hooghoudt_espacamento", "q": 0.002, "K": 1.0, "h": 0.6, "D": 5.0, "r": 0.1}'
 
-Fontes (corpus local, referencias/):
+Fontes (corpus; PDF = pagina fisica, marcador `<!-- p. N -->` do _texto; impressa = PDF - 2 no ILRI-16):
 - USBR, Drainage Manual (1993), cap. V: secao 5-5 (profundidade equivalente de Hooghoudt, forma de
   Moody, p. 154-155 do livro, PDF 173-174), 5-8 (exemplo transiente, p. 168), 5-11 (Donnan, p. 169-170).
-- ILRI Pub. 16 (Drainage Principles and Applications) NAO esta no corpus: Ernst e a forma de
-  Glover-Dumm com fator 1,16 estao declarados "a confirmar" nas docstrings.
-- FAO Irrig. & Drainage Paper 38 NAO esta no corpus: tabelas indicativas marcadas "a confirmar".
-Gabaritos dos casos: casos/drenagem_dissipadores (CSB doc 1341, Xingo doc 1419, Iuiu doc 1051).
+- ILRI Pub. 16 (Drainage Principles and Applications), corpus do Hidraulico
+  (../Especialista Hidraulica/referencias/_texto/ILRI-DPA16.md): d_e exato Eq. 8.9-8.13 (PDF 268),
+  Tab. 8.1 (PDF 267), Ernst Eq. 8.17-8.23 e Tab. 8.2 (PDF 270-275), Exemplos 8.1-8.4 (PDF 276-281),
+  Glover-Dumm Eq. 8.28-8.33 com o fator 1,16 (PDF 283-284; impr. 285-286).
+- ILRI Pub. 56 (Envelope Design, 2000): necessidade de envoltorio (Fig. 7, PDF 47), pontos de controle do
+  envoltorio granular (PDF 66-68), Tab. 14 de K por textura (PDF 175), coeficientes tipicos (PDF 42).
+- NRCS NEH 624 cap. 4 (PDF 63-66): equacao da elipse (Eq. 4-8) e Exemplo 1 (202 ft).
+- Embrapa Manicoba (1988) p. 2-3 (Hooghoudt d=0 e Glover-Dumm 1,16); WATERLOG-ENDRAIN p. 7-10 (exemplos de
+  Ritzema, ILRI-16 cap. 8).
+- FAO Irrig. & Drainage Paper 38 NAO esta no corpus: tabelas indicativas antigas marcadas "a confirmar".
+Gabaritos dos casos: casos/drenagem (CSB doc 1341, Xingo doc 1419, Iuiu doc 1051, Delmiro doc 1492).
 """
 import math
 
-VERSAO = "0.1.0"
+VERSAO = "0.2.0"
 G = 9.81
 
 # ==========================================================================
@@ -48,7 +55,36 @@ def d_equivalente_hooghoudt(d, L, r):
     return min(de, d)
 
 
-def hooghoudt_espacamento(q, h, D, r, K=None, K_acima=None, K_abaixo=None, tol=1e-6, itmax=200):
+def d_equivalente_serie(D, L, r0):
+    """Profundidade equivalente d [m] pela solucao exata (van der Molen e Wesseling, 1991), ILRI-16.
+
+    d = (pi L / 8) / (ln(L/(pi r0)) + F(x)),   x = 2 pi D / L
+    F(x) = 2 sum_{n>=1} ln coth(n x)  (= sum_{n=1,3,5..} 4 e^{-2nx}/(n (1 - e^{-2nx})), x > 0,5)
+    F(x) = pi^2/(4x) + ln(x/(2 pi))   (aproximacao de Dagan, x <= 0,5).
+    D = profundidade da barreira abaixo do dreno [m]; L = espacamento [m]; r0 = raio equivalente [m]
+    (r0 = u/pi, u = perimetro molhado; Eq. 8.14). Fonte: ILRI-DPA16 Eq. 8.9-8.13, PDF p. 268 (impr. 270);
+    Exemplo 8.2 (D=4,8, L=72, r0=0,61 -> d=4,16 m, PDF 278). Validade: drenos paralelos acima de camada
+    impermeavel, solo homogeneo. Fica 2-3 % abaixo da Tab. 8.1 de Hooghoudt (r0=0,1) e 0,2 % de Ex. 8.2.
+    """
+    if D <= 0:
+        return 0.0
+    if L <= 0 or r0 <= 0:
+        raise ValueError("L e r0 devem ser positivos")
+    x = 2.0 * math.pi * D / L
+    if x <= 0.5:
+        F = math.pi ** 2 / (4.0 * x) + math.log(x / (2.0 * math.pi))
+    else:
+        F = 0.0
+        for n in range(1, 400, 2):
+            e = math.exp(-2.0 * n * x)
+            if e < 1e-18:
+                break
+            F += 4.0 * e / (n * (1.0 - e))
+    return min((math.pi * L / 8.0) / (math.log(L / (math.pi * r0)) + F), D)
+
+
+def hooghoudt_espacamento(q, h, D, r, K=None, K_acima=None, K_abaixo=None, tol=1e-6, itmax=200,
+                          metodo_de="moody"):
     """Espacamento de drenos L [m] por Hooghoudt (regime permanente), com d_e iterativo.
 
     q = recarga (descarga especifica) [m/d]; h = carga no meio-vao acima do nivel do dreno [m];
@@ -59,9 +95,18 @@ def hooghoudt_espacamento(q, h, D, r, K=None, K_acima=None, K_abaixo=None, tol=1
     d_e (Moody) vem de d_equivalente_hooghoudt e depende de L: iteracao de ponto fixo ate variacao
     relativa < tol. Fonte: Hooghoudt (1940); USBR Drainage Manual (1993) 5-5 e 5-11 (Donnan com d
     trocado por d_e); d_e pela forma de Moody (USBR p.155). Alternativa: tabelas do ILRI (nao no corpus).
+    metodo_de = "moody" (padrao, USBR) ou "serie" (ILRI-16 Eq. 8.9-8.13, d_equivalente_serie).
+    Exemplos ILRI-DPA16 (PDF 276-279): Ex. 8.1 (q=0,001, h=1,0, D=4,8, r0=0,10, K=0,14 -> 65 m; serie 64 m);
+    Ex. 8.3 (duas camadas, interface no dreno, K_acima=0,06, K_abaixo=0,30 -> 95 m); Ex. 8.2 (vala, r0=0,61 ->
+    72 m com a serie). Hooghoudt vale com dreno na interface das camadas; dreno dentro da camada superior pede
+    Ernst (ILRI-16 8.2.3). O termo (Di-Dd) da nota WATERLOG-DRAINAGE-EQUATION p. 2 e inconsistente: nao usado.
     Validade: drenos paralelos equidistantes, solo com K constante por camada, regime permanente
-    (recarga constante). Espacamentos muito pequenos (< ~10 m) invalidam a hipotese permanente.
+    (recarga constante). Espacamentos muito pequenos (< ~10 m) invalidam a hipotese permanente. Vies de campo:
+    Hooghoudt superestima L (Embrapa Manicoba, 13-35 %) e em laboratorio subestima (Embrapa 1990, -21 %).
     """
+    if metodo_de not in ("moody", "serie"):
+        raise ValueError("metodo_de: 'moody' ou 'serie'")
+    _de = d_equivalente_hooghoudt if metodo_de == "moody" else d_equivalente_serie
     if K is not None:
         K1 = K2 = K
     else:
@@ -74,7 +119,7 @@ def hooghoudt_espacamento(q, h, D, r, K=None, K_acima=None, K_abaixo=None, tol=1
     de = D
     it = 0
     for it in range(1, itmax + 1):
-        de = d_equivalente_hooghoudt(D, L, r) if D > 0 else 0.0
+        de = _de(D, L, r) if D > 0 else 0.0
         Ln = math.sqrt((8.0 * K2 * de * h + 4.0 * K1 * h * h) / q)
         if abs(Ln - L) <= tol * L:
             L = Ln
@@ -87,7 +132,8 @@ def hooghoudt_espacamento(q, h, D, r, K=None, K_acima=None, K_abaixo=None, tol=1
         avisos.append("d_e << D: dreno pouco eficiente em camada espessa; confira r e D")
     avisos.append("regime permanente: recarga q constante (ver glover_dumm_* para nao permanente)")
     return {"L": L, "d_e": de, "iteracoes": it, "q": q, "h": h, "D": D,
-            "metodo": "Hooghoudt L^2=(8 K2 d_e h+4 K1 h^2)/q, d_e Moody (USBR Drainage Manual 5-5)",
+            "metodo": "Hooghoudt L^2=(8 K2 d_e h+4 K1 h^2)/q, d_e %s" % (
+                "Moody (USBR Drainage Manual 5-5)" if metodo_de == "moody" else "serie (ILRI-16 8.9-8.13)"),
             "avisos": avisos}
 
 
@@ -108,21 +154,97 @@ def donnan_espacamento(K, a, b, q, dreno_na_barreira=False):
             "avisos": ["sem correcao de convergencia; usar d_e (Hooghoudt) no lugar de a para dreno acima da barreira"]}
 
 
-def ernst_espacamento(q, h, Dv, Kv, KD_h, Dr, Kr, r, a=1.0, L_max=2000.0):
+def elipse_espacamento(K, m, a, q):
+    """Equacao da elipse (NRCS NEH 624, Eq. 4-8): S = sqrt(4 K (m^2 + 2 a m) / q)  [mesma unidade de m, a].
+
+    K = condutividade media; q = coeficiente de drenagem (K e q na MESMA unidade, ex. pol/h); m = carga
+    no meio-vao acima do dreno; a = profundidade da barreira abaixo do dreno. Equivale a Donnan com
+    b = a + m (4 K (b^2 - a^2) / q). Fonte: NRCS-NEH624-CH04 PDF p. 63-65; Exemplo 1 (K=2 pol/h, q=0,01 pol/h,
+    a=7 ft, m=3 ft -> S = 202 ft; grafico 203 ft; PDF 65-66). Validade: fluxo essencialmente horizontal,
+    barreira a profundidade <= 2x a do dreno, dreno com envoltorio de brita ou vala (pouca convergencia);
+    senao usar Hooghoudt/Ernst. O exemplo 2 do NEH (196 ft) e solucao grafica da elipse modificada
+    (Fig. 4-29), nao implementada.
+    """
+    if min(K, q) <= 0 or m <= 0 or a < 0:
+        raise ValueError("K, q, m > 0 e a >= 0")
+    S = math.sqrt(4.0 * K * (m * m + 2.0 * a * m) / q)
+    av = ["elipse: so para fluxo horizontal (barreira rasa, vala ou envoltorio de brita); NEH 624 admite ajuste de 5 %"]
+    if a > 8.0 * m:
+        av.append("a >> m: barreira profunda; elipse nao considera convergencia radial")
+    return {"S": S, "metodo": "elipse S=sqrt(4K(m^2+2am)/q) (NEH 624 Eq. 4-8)", "avisos": av}
+
+
+# Tabela 8.2 do ILRI-16 (PDF 272, impr. 274): fator geometrico a da resistencia radial de Ernst, dreno na camada
+# superior. Linhas: Kb/Kt; colunas: Db/Dt.
+_ERNST_A_COLS = (1.0, 2.0, 4.0, 8.0, 16.0, 32.0)
+_ERNST_A_ROWS = (1.0, 2.0, 3.0, 5.0, 10.0, 20.0, 50.0)
+_ERNST_A_TAB = (
+    (2.0, 3.0, 5.0, 9.0, 15.0, 30.0),
+    (2.4, 3.2, 4.6, 6.2, 8.0, 10.0),
+    (2.6, 3.3, 4.5, 5.5, 6.8, 8.0),
+    (2.8, 3.5, 4.4, 4.8, 5.6, 6.2),
+    (3.2, 3.6, 4.2, 4.5, 4.8, 5.0),
+    (3.6, 3.7, 4.0, 4.2, 4.4, 4.6),
+    (3.8, 4.0, 4.0, 4.0, 4.2, 4.6),
+)
+
+
+def _interp1(x, xs, ys):
+    if x <= xs[0]:
+        return ys[0]
+    if x >= xs[-1]:
+        return ys[-1]
+    for i in range(len(xs) - 1):
+        if xs[i] <= x <= xs[i + 1]:
+            return ys[i] + (ys[i + 1] - ys[i]) * (x - xs[i]) / (xs[i + 1] - xs[i])
+
+
+def fator_geometrico_ernst(Kb_Kt, Db_Dt):
+    """Fator geometrico a de Ernst (dreno na camada SUPERIOR), ILRI-16 Tab. 8.2 (PDF 272), interpolacao bilinear.
+
+    Kb/Kt < 0,1 -> a = 1 (camada inferior tratada como impermeavel); Kb/Kt > 50 -> a = 4; entre 0,1 e 50 usa a
+    tabela (Kb/Kt: 1-50; Db/Dt: 1-32; fora da grade fixa no limite, com aviso). Para Kb/Kt entre 0,1 e 1 a
+    tabela nao fornece valor: usa-se a linha Kb/Kt = 1 (aviso). Dreno na camada inferior: a = 1.
+    Exemplo 8.4 (ILRI-16 PDF 281): Kb/Kt = 4, Db/Dt = 2,96 -> a = 3,9 (media simples dos 4 vizinhos; bilinear 3,90).
+    """
+    if Kb_Kt <= 0 or Db_Dt <= 0:
+        raise ValueError("Kb/Kt e Db/Dt devem ser positivos")
+    av = []
+    if Kb_Kt < 0.1:
+        return {"a": 1.0, "metodo": "Ernst Tab. 8.2: Kb/Kt<0,1 -> a=1", "avisos": av}
+    if Kb_Kt > 50.0:
+        return {"a": 4.0, "metodo": "Ernst Tab. 8.2: Kb/Kt>50 -> a=4", "avisos": av}
+    if Kb_Kt < 1.0:
+        av.append("0,1 < Kb/Kt < 1: fora da grade da Tab. 8.2; usada a linha Kb/Kt=1")
+    if Db_Dt < 1.0 or Db_Dt > 32.0:
+        av.append("Db/Dt fora de 1-32: valor da borda da tabela")
+    col = [_interp1(Kb_Kt, _ERNST_A_ROWS, [row[j] for row in _ERNST_A_TAB]) for j in range(len(_ERNST_A_COLS))]
+    a = _interp1(Db_Dt, _ERNST_A_COLS, col)
+    return {"a": a, "metodo": "Ernst Tab. 8.2 (interpolacao bilinear)", "avisos": av}
+
+
+def ernst_espacamento(q, h, Dv, Kv, KD_h, Dr, Kr, r, a=1.0, L_max=2000.0, u=None):
     """Espacamento L [m] de Ernst (1962) para solo estratificado, por bisseccao em
-        h = q Dv/Kv + q L^2/(8 KD_h) + q L W_r/(pi Kr),   W_r = ln(a Dr / u),  u = 2 pi r.
+        h = q Dv/Kv + q L^2/(8 KD_h) + q L ln(a Dr / u) / (pi Kr)            (ILRI-16 Eq. 8.17-8.21)
 
     Resistencias vertical (Dv espessura onde o fluxo e vertical, Kv media vertical [m/d]), horizontal
-    (KD_h = soma K_i D_i das camadas que transmitem fluxo horizontal [m2/d]) e radial (Dr espessura da
-    zona radial [m]; Kr [m/d]; a = fator geometrico, 1 para solo homogeneo; u = perimetro molhado [m]).
-    h = carga no meio-vao acima do nivel do dreno [m]; q em m/d. Fonte: Ernst (1962), conforme ILRI
-    Pub. 16 (cap. de drenagem de solos estratificados) -- A CONFIRMAR: ILRI 16 nao esta no corpus;
-    forma conferida por equivalencia com o termo radial de Hooghoudt (h_r ~ q L ln(L/(pi r))/(pi K)).
-    Validade: drenos paralelos, regime permanente; para varios solos o fator a vem de tabela do ILRI.
+    (KD_h = soma K_i D_i das camadas que transmitem fluxo horizontal [m2/d], com D_i <= L/4) e radial
+    (Dr espessura da zona radial [m], Kr [m/d], a = fator geometrico: 1 em solo homogeneo ou dreno na camada
+    inferior; Tab. 8.2 com dreno na superior, ver fator_geometrico_ernst; u = perimetro molhado do dreno [m]).
+    u padrao = pi r (semicirculo, dreno meio cheio e sem resistencia de entrada, ILRI-16 Eq. 8.14, PDF 268;
+    a versao 0.1.0 usava 2 pi r, o que subestimava a resistencia radial: corrigido contra o Exemplo 8.4).
+    h = carga no meio-vao acima do nivel do dreno [m]; q em m/d.
+    Fonte: ILRI-DPA16 Eq. 8.17-8.21 PDF p. 270-272 (impr. 272-274). Exemplo 8.4 (PDF 280-281, dreno na camada
+    superior, q=0,007, h=0,70, Kt=0,5, Kb=2,0, Do=1,0, Db=4,0, r0=0,05): L = 38 m com a = 3,9 (use
+    ernst_duas_camadas_dreno_no_topo). Na nota WATERLOG-ENDRAIN p. 10 (51,8 m) o fator a foi omitido (a=1).
+    Validade: drenos paralelos, regime permanente; D_i < L/4 (verificado: aviso).
     """
     if min(q, h, Kv, KD_h, Kr, r, Dr) <= 0 or Dv < 0:
         raise ValueError("parametros positivos")
-    u = 2.0 * math.pi * r
+    if u is None:
+        u = math.pi * r
+    if u <= 0:
+        raise ValueError("u deve ser positivo")
     Wr = math.log(a * Dr / u)
     if Wr <= 0:
         raise ValueError("a*Dr/u <= 1: resistencia radial nao positiva; revise Dr, r")
@@ -142,54 +264,93 @@ def ernst_espacamento(q, h, Dv, Kv, KD_h, Dr, Kr, r, a=1.0, L_max=2000.0):
         else:
             hi = mid
     L = 0.5 * (lo + hi)
+    av = ["regime permanente; Kirkham nao implementado (usar Hooghoudt/Ernst)"]
+    if Dr > L / 4.0:
+        av.append("Dr > L/4: ILRI-16 limita a espessura de fluxo radial a L/4; revise Dr")
     return {"L": L, "h_vertical": q * Dv / Kv, "h_horizontal": q * L * L / (8.0 * KD_h),
-            "h_radial": q * L * Wr / (math.pi * Kr), "W_r": Wr,
-            "metodo": "Ernst h = h_v + h_h + h_r (a confirmar em ILRI 16)",
-            "avisos": ["Ernst: fonte primaria (ILRI 16) fora do corpus; a confirmar",
-                       "regime permanente; Kirkham nao implementado (usar Hooghoudt/Ernst)"]}
+            "h_radial": q * L * Wr / (math.pi * Kr), "W_r": Wr, "u": u,
+            "metodo": "Ernst h = h_v + h_h + h_r (ILRI-16 Eq. 8.21)",
+            "avisos": av}
+
+
+def ernst_duas_camadas_dreno_no_topo(q, h, Kt, Kb, Do, Db, r, u=None):
+    """Ernst com dreno na camada SUPERIOR de perfil de duas camadas (ILRI-16 Eq. 8.23, PDF 275).
+
+    Kt, Kb [m/d] = K das camadas superior e inferior; Do [m] = espessura da camada superior abaixo do dreno;
+    Db [m] = espessura da camada inferior; h [m] = carga no meio-vao. Hipoteses do ILRI-16: Dv = h (nao ha
+    fluxo vertical na camada inferior); Dr = Do; sum(KD) = Kb Db + Kt (Do + h/2); Kv = Kr = Kt; a pela Tab. 8.2
+    com Kb/Kt e Db/(Do + h/2). Exemplo 8.4 (PDF 280-281): q=0,007, h=0,70, Kt=0,5, Kb=2,0, Do=1,0, Db=4,0,
+    r0=0,05 -> sum(KD)=8,68, u=0,157, a=3,9, L = 38 m (h_v=0,01, h_h=0,15, h_r=0,54 m). Validade: Do, Db < L/4.
+    """
+    Dt = Do + 0.5 * h
+    fa = fator_geometrico_ernst(Kb / Kt, Db / Dt)
+    res = ernst_espacamento(q=q, h=h, Dv=h, Kv=Kt, KD_h=Kb * Db + Kt * Dt, Dr=Do, Kr=Kt, r=r, a=fa["a"], u=u)
+    res["a"] = fa["a"]
+    res["avisos"] = list(res["avisos"]) + fa["avisos"]
+    if Db > res["L"] / 4.0:
+        res["avisos"].append("Db > L/4: ILRI-16 restringe a espessura de fluxo horizontal a L/4")
+    res["metodo"] = "Ernst dreno na camada superior (ILRI-16 Eq. 8.23)"
+    return res
 
 
 # ==========================================================================
 # Glover-Dumm (nao permanente)
 # ==========================================================================
-def glover_dumm_altura(t, h0, K, d_med, mu, L):
+def d_medio_glover_dumm(d_e, h0, ht, criterio="usbr"):
+    """Profundidade media de fluxo D usada em Glover-Dumm [m], por criterio:
+      "ilri"     D = d_e                          (ILRI-16 Eq. 8.29, PDF 284: d = profundidade equivalente);
+      "usbr"     D = d_e + h0/2                   (USBR Drainage Manual 5-10 ex. 1, p. 168; padrao);
+      "manicoba" D = d_e + (h0 + ht)/4            (Embrapa Manicoba 1988 p. 3: D0 + (h0+ht)/4, com D0 = d_e).
+    Os tres dao tempos/espacamentos diferentes (ver DIVERGENCIAS); declare o criterio no parecer."""
+    c = criterio.lower()
+    if c == "ilri":
+        return d_e
+    if c == "usbr":
+        return d_e + h0 / 2.0
+    if c == "manicoba":
+        return d_e + (h0 + ht) / 4.0
+    raise ValueError("criterio: 'ilri', 'usbr' ou 'manicoba'")
+
+
+def glover_dumm_altura(t, h0, K, d_med, mu, L, fator=1.16):
     """Altura do freatico no meio-vao no instante t [m] (Glover-Dumm, 1o termo):
-        h_t = 1,16 h0 exp(-t/j),  j = mu L^2 / (pi^2 K d_med).
-    h0 = carga inicial [m]; K [m/d]; d_med = profundidade media de fluxo [m] (d_e + h0/2 conforme
-    USBR, ou d_e do Hooghoudt); mu = porosidade drenavel (rendimento especifico); L [m]; t [d].
-    Fonte: Glover (em Dumm, 1954); fator 1,16 conforme a forma usual do ILRI (A CONFIRMAR); o
-    manual do USBR (Drainage Manual 5-10, p. 168) usa a curva equivalente KD't/(S L^2)=0,096
-    para y/y0=0,444 (pi^2*0,096 = 0,95 ~ ln(1,16/0,444) = 0,96). Validade: t/j > ~0,2; drenos
-    paralelos acima de barreira; recarga nula no periodo."""
+        h_t = fator h0 exp(-alfa t),  alfa = pi^2 K d / (mu L^2)  (j = 1/alfa = mu L^2 / (pi^2 K d_med)).
+    fator = 1,16 (freatico inicial em parabola de 4o grau, Dumm 1960; ILRI-16 Eq. 8.32, PDF 284, impr. 286)
+    ou 4/pi = 1,27 (freatico inicial horizontal; ILRI-16 Eq. 8.31). h0 = carga inicial [m]; K [m/d];
+    d_med = profundidade media de fluxo [m] (ver d_medio_glover_dumm); mu = porosidade drenavel; L [m]; t [d].
+    O manual do USBR (Drainage Manual 5-10, p. 168) usa a curva equivalente KD't/(S L^2)=0,096
+    para y/y0=0,444 (pi^2*0,096 = 0,95 ~ ln(1,16/0,444) = 0,96). Validade: alfa t > 0,2 (ILRI-16 Eq. 8.31);
+    drenos paralelos acima de barreira; recarga nula no periodo; solo homogeneo."""
     if min(K, d_med, mu, L, h0) <= 0:
         raise ValueError("parametros positivos")
     j = mu * L * L / (math.pi ** 2 * K * d_med)
-    return 1.16 * h0 * math.exp(-t / j)
+    return fator * h0 * math.exp(-t / j)
 
 
-def glover_dumm_tempo(h0, ht, K, d_med, mu, L):
+def glover_dumm_tempo(h0, ht, K, d_med, mu, L, fator=1.16):
     """Tempo de rebaixamento t [d] para o freatico no meio-vao ir de h0 a ht (inverso de
-    glover_dumm_altura): t = j ln(1,16 h0/ht). Exemplo USBR (5-10, ex.1): K=0,305, d_e=4,4 m, h0=2,7 m
+    glover_dumm_altura): t = j ln(fator h0/ht). Exemplo USBR (5-10, ex.1): K=0,305, d_e=4,4 m, h0=2,7 m
     (D'=d_e+h0/2=5,75 m), mu=0,07, L=91 m, ht=1,2 m -> t = 32 d (manual 31,8 d)."""
-    if ht >= 1.16 * h0:
-        return {"t": 0.0, "avisos": ["ht >= 1,16 h0: sem rebaixamento"], "metodo": "Glover-Dumm"}
+    if ht >= fator * h0:
+        return {"t": 0.0, "avisos": ["ht >= fator*h0: sem rebaixamento"], "metodo": "Glover-Dumm"}
     j = mu * L * L / (math.pi ** 2 * K * d_med)
-    t = j * math.log(1.16 * h0 / ht)
+    t = j * math.log(fator * h0 / ht)
     av = []
     if t / j < 0.2:
         av.append("t/j < 0,2: fora da validade do 1o termo da serie")
-    return {"t": t, "j": j, "metodo": "Glover-Dumm h_t=1,16 h0 exp(-t/j) (1o termo; a confirmar em ILRI 16)",
+    return {"t": t, "j": j, "metodo": "Glover-Dumm h_t=%.2f h0 exp(-t/j) (1o termo; ILRI-16 Eq. 8.32, PDF 284)" % fator,
             "avisos": av}
 
 
-def glover_dumm_espacamento(h0, ht, t, K, d_med, mu):
-    """Espacamento L [m] que rebaixa o freatico de h0 a ht em t dias (Glover-Dumm):
-    L = pi sqrt(K d_med t / (mu ln(1,16 h0/ht))). d_med = d_e + h0/2 (aproximacao; d_e depende de L,
-    use d_equivalente_hooghoudt para iterar). Mesma validade de glover_dumm_altura."""
-    if ht >= 1.16 * h0:
-        raise ValueError("ht >= 1,16 h0")
-    L = math.pi * math.sqrt(K * d_med * t / (mu * math.log(1.16 * h0 / ht)))
-    return {"L": L, "metodo": "Glover-Dumm (1o termo)",
+def glover_dumm_espacamento(h0, ht, t, K, d_med, mu, fator=1.16):
+    """Espacamento L [m] que rebaixa o freatico de h0 a ht em t dias (Glover-Dumm, ILRI-16 Eq. 8.33):
+    L = pi sqrt(K d_med t / (mu ln(fator h0/ht))). Fator 1,16 conferido: ILRI-16 PDF 284 e Embrapa Manicoba
+    p. 2-3 (exemplo K=2,3, mu=0,15, h0=0,8, ht=0,4, t=3 d, D=0,3 -> L=12,72 m). d_med: ver d_medio_glover_dumm
+    (d_e depende de L: iterar com d_equivalente_hooghoudt). Mesma validade de glover_dumm_altura."""
+    if ht >= fator * h0:
+        raise ValueError("ht >= fator*h0")
+    L = math.pi * math.sqrt(K * d_med * t / (mu * math.log(fator * h0 / ht)))
+    return {"L": L, "metodo": "Glover-Dumm (1o termo, ILRI-16 Eq. 8.33)",
             "avisos": ["d_med fixo: iterar com d_equivalente_hooghoudt se d_e variar com L"]}
 
 
@@ -231,7 +392,7 @@ def capacidade_tubo_dreno(D, S, n=0.016, formula="manning"):
         raise ValueError("D e S positivos")
     if f == "manning":
         Q = _manning_cheio(D, S, n)
-        av = ["Manning pleno; para drenos agricolas ILRI/USBR usam fracao do cheio e perdas de entrada"]
+        av = ["Manning pleno; USBR mediu ate 1,2x o pleno com carga sobre o tubo (ILRI-56 PDF 46); ver capacidade_tubo_parcial"]
     elif f == "xingo":
         Q = 33.5 * D ** 2.67 * math.sqrt(S)
         n_imp = 0.31169 * D ** (8.0 / 3.0) * math.sqrt(S) / Q
@@ -258,6 +419,56 @@ def diametro_minimo_dreno(Q, S, n=0.016, formula="manning", comerciais=(0.05, 0.
     av = [] if com else ["acima do maior diametro comercial listado: use tubos em paralelo"]
     return {"D_minimo": Dm, "D_comercial": com, "metodo": "inversao de capacidade_tubo_dreno (%s)" % formula,
             "avisos": av}
+
+
+def capacidade_tubo_parcial(D, S, n=0.016, y_D=0.5):
+    """Vazao Q [m3/s] e velocidade V [m/s] de tubo circular parcialmente cheio por Manning, geometria exata.
+
+    theta = 2 acos(1 - 2 y/D);  A = D^2 (theta - sen theta)/8;  P = D theta/2;  Q = (1/n) A (A/P)^(2/3) S^(1/2).
+    D [m], S [m/m], n adim., y_D = y/D em (0, 1]. Meia secao (y/D = 0,5): Q = Q_pleno/2 (R = D/4). Caso Delmiro
+    (doc 1492:105, dreno de fundo, PEAD n=0,016, S=0,0003, meia secao): D=0,149 -> 1,05e-3 m3/s; o memorial
+    declara 1,518e-4 (6,9x menor; ver DIVERGENCIAS). USBR mediu ate 1,2x o Manning pleno com carga sobre o
+    tubo (ILRI-56 PDF 46, nota 3). Validade: tubo reto, S constante, regime uniforme, sem entrada de ar.
+    """
+    if D <= 0 or S <= 0 or n <= 0:
+        raise ValueError("D, S, n positivos")
+    if not 0.0 < y_D <= 1.0:
+        raise ValueError("y/D em (0, 1]")
+    th = 2.0 * math.acos(1.0 - 2.0 * y_D)
+    A = D * D * (th - math.sin(th)) / 8.0
+    P = D * th / 2.0
+    Q = A * (A / P) ** (2.0 / 3.0) * math.sqrt(S) / n
+    return {"Q": Q, "V": Q / A, "A": A, "R": A / P, "y_D": y_D,
+            "metodo": "Manning, circular parcialmente cheio (geometria exata)",
+            "avisos": ["y/D > 0,82: Q passa por maximo em y/D ~ 0,94; nao extrapolar Manning para quase cheio"
+                       if y_D > 0.82 else "uniforme, S constante"]}
+
+
+def vazao_unitaria_darcy_dreno_fundo(K, H, X, lados=2):
+    """Vazao unitaria afluente a dreno de fundo de canal (Darcy), qd = lados K H^2 / (2 X)  [m3/(s m)].
+
+    K [m/s]; H [m] = carga do plano do tubo ate a superficie potencial do lencol; X [m] = distancia horizontal
+    (metade da largura de raspagem). Forma RECONSTITUIDA do caso Delmiro (doc 1492:105; a equacao do PDF esta
+    em imagem): dois lados -> K H^2 / X; K=1e-6 m/s, H=1,26, X=4,06 -> 3,91e-7 m3/(s m) (memorial 3,910e-7).
+    Validade: rastro C no caso (forma exata nao legivel); so ordem de grandeza.
+    """
+    if min(K, H, X) <= 0 or lados not in (1, 2):
+        raise ValueError("K, H, X positivos; lados 1 ou 2")
+    qd = lados * K * H * H / (2.0 * X)
+    return {"qd": qd, "metodo": "Darcy qd = lados K H^2/(2X) (reconstituido do caso Delmiro 1492:105)",
+            "avisos": ["forma da equacao reconstituida (rastro C); K de ensaio nao citado no memorial"]}
+
+
+def comprimento_maximo_dreno_fundo(Q_capacidade, qd, limite_manutencao=250.0):
+    """Comprimento maximo de dreno de fundo Lmax = Q_capacidade / qd [m] e trecho adotado (limite de limpeza).
+
+    Delmiro (doc 1492:105-106): Q = 1,518e-4 e 4,929e-4 m3/s, qd = 3,910e-7 -> Lmax = 388 e 1260 m;
+    trechos de ate 250 m com poco de inspecao (limite de manutencao 200-300 m, texto do memorial)."""
+    if Q_capacidade <= 0 or qd <= 0:
+        raise ValueError("Q e qd positivos")
+    Lmax = Q_capacidade / qd
+    return {"L_max": Lmax, "L_trecho": min(Lmax, limite_manutencao), "metodo": "Lmax = Q/qd",
+            "avisos": ["limite de manutencao governa" if Lmax > limite_manutencao else "capacidade governa"]}
 
 
 # ==========================================================================
@@ -342,7 +553,8 @@ def criterio_de_filtro_hidraulico(D15_filtro, D85_solo, D15_solo, fator=4.0):
     """Criterio de filtro de Terzaghi (granulometrico, hidraulico):
         retencao: D15f / D85s <= fator (4 a 5);   permeabilidade: D15f / D15s >= fator (4 a 5).
     fator = 4 (conservador) ou 5. Fonte: Terzaghi & Peck; USBR Drainage Manual (envoltorios) -- a
-    confirmar a pagina. Adicional USBR: D15f/D15s <= 40 (nao entupir/segregar). So avalia razoes de
+    confirmar a pagina (ILRI-56 PDF 63-64: D15 do envoltorio equivale a O85-O95 dos poros; ponte permite razao 4-7;
+    ver envoltorio_granular_pontos_controle para os pontos de controle do ILRI-56). Adicional USBR: D15f/D15s <= 40 (nao entupir/segregar). So avalia razoes de
     D15/D85; nao substitui verificacao de D50, uniformidade, segregacao nem de solos dispersivos/
     argilosos. Envoltorio de geotextil: [DELEGAR: geotecnia]."""
     ret = D15_filtro / D85_solo
@@ -357,15 +569,84 @@ def criterio_de_filtro_hidraulico(D15_filtro, D85_solo, D15_solo, fator=4.0):
             "metodo": "Terzaghi D15f<=%g D85s e D15f>=%g D15s" % (fator, fator), "avisos": av}
 
 
+def necessidade_envoltorio_ilri56(argila_pct, PI, Ks, q1max, Ap, SAR=None, Cu=None):
+    """Necessidade de envoltorio, fluxograma da Fig. 7 do ILRI-56 (PDF 47, impr. 27).
+
+    1) argila > 40 %: sem risco de assoreamento (so conferir HFG); 2) SAR > 8-12: possivel dispersao, segue HFG;
+    3) argila > 25-30 %, ou PI > 12, ou Cu > 15: sem envoltorio filtrante (conferir HFG); 4) demais: metodo HFG.
+    HFG = exp(0,332 - 0,132 K + 1,07 ln PI), K = Ks [m/d]; i_x = q1max/(Ks Apu), Apu = Ap/2 (agua entra so
+    pela metade inferior do tubo). Ks [m/d]; q1max [m3/d por m de dreno] (equacao de espacamento com freatico
+    na superficie); Ap [m2/m] = area de perfuracao por metro. i_x > HFG: envoltorio (ou volumoso, para reduzir
+    resistencia de entrada) necessario. Limiares 25-30 % e 8-12 sao faixas do fluxograma: devolvidos como
+    'indicadores', sem decisao dura. Fronteira com Geotecnia (D-86 do CDV): parecer indicativo.
+    """
+    if min(Ks, q1max, Ap) <= 0 or PI <= 0:
+        raise ValueError("Ks, q1max, Ap, PI positivos")
+    HFG = math.exp(0.332 - 0.132 * Ks + 1.07 * math.log(PI))
+    ix = q1max / (Ks * 0.5 * Ap)
+    ind = []
+    if argila_pct > 40.0:
+        ind.append("argila > 40 %: envoltorio nao requerido para evitar assoreamento")
+    if SAR is not None and SAR > 8.0:
+        ind.append("SAR > 8-12: dispersao possivel; envoltorio pode ser desejavel (experiencia local)")
+    if 25.0 < argila_pct <= 40.0:
+        ind.append("argila 25-30 a 40 %: criterio de argila indica nao requerido (confirmar por HFG)")
+    if PI > 12.0 or (Cu is not None and Cu > 15.0):
+        ind.append("PI > 12 ou Cu > 15: criterios de PI/Cu indicam nao requerido (confirmar por HFG)")
+    return {"HFG": HFG, "i_x": ix, "envoltorio_necessario_por_HFG": ix > HFG, "indicadores": ind,
+            "metodo": "ILRI-56 Fig. 7 (HFG = exp(0,332-0,132 K+1,07 ln PI); i_x = q1max/(Ks Ap/2))",
+            "avisos": ["indicativo; K em m/d na formula do HFG; fronteira com Geotecnia (D-86)"]}
+
+
+def envoltorio_granular_pontos_controle(d15_grosso, d85_fino, D15c_adotado=None, abertura_tubo=None):
+    """Pontos de controle da faixa granulometrica de envoltorio granular, ILRI-56 (PDF 66-68, impr. 46-48).
+
+    d15_grosso = d15 da fronteira GROSSA do solo-base; d85_fino = d85 da fronteira FINA do solo-base [mm].
+      1  D15c <= 7 d85f (retencao)                  2  D50c = 5 D15c (guia de gradacao, Cu = 6)
+      3  D100c <= 9,5 mm (segregacao)               4a D15f >= 4 d15c (hidraulico)
+      4b D15f = D15c/5 (guia de faixa; se 4b > 4a usa 4b)       5  D5f > 0,074 mm (hidraulico)
+      6  D60f = D60c/5 (guia de faixa)             7  D85 > abertura do tubo (retencao/ponte)
+    D15c_adotado [mm]: se omitido, usa o maximo do ponto 1. O ILRI-56 chama 2, 4b e 6 de GUIAS, nao de criterios;
+    a decisao final e do projetista (conflitos 1 x 4a: ponto 4a > ponto 1 => faixa impraticavel).
+    Sem exemplo numerico completo no livro (so Figs. 11-12): teste = consistencia aritmetica.
+    """
+    if min(d15_grosso, d85_fino) <= 0:
+        raise ValueError("d15 e d85 positivos")
+    D15c_max = 7.0 * d85_fino
+    D15c = D15c_max if D15c_adotado is None else D15c_adotado
+    if D15c > D15c_max + 1e-12:
+        raise ValueError("D15c adotado excede 7 d85f (ponto 1)")
+    D15f_hid = 4.0 * d15_grosso
+    D15f_guia = D15c / 5.0
+    D15f = max(D15f_hid, D15f_guia)
+    av = []
+    if D15f_hid > D15c:
+        av.append("ponto 4a > ponto 1: sem faixa viavel em D15; relaxar um criterio (ILRI-56 p. 44-45)")
+    if D15f_guia < D15f_hid:
+        av.append("4b < 4a: usar 4a se a faixa for praticavel e Cu > 2; senao algo entre 4b e 4a")
+    if d15_grosso > 0.09:
+        av.append("d15c > 0,09 mm: o ponto 4a funciona mal (ILRI-56 p. 47); prescrever D15f por faixa praticavel")
+    res = {"D15c_max": D15c_max, "D15c": D15c, "D50c": 5.0 * D15c, "D100c_max": 9.5,
+           "D15f_4a": D15f_hid, "D15f_4b": D15f_guia, "D15f": D15f, "D5f_min": 0.074,
+           "metodo": "ILRI-56 pontos de controle 1-7 (envoltorio granular)", "avisos": av}
+    if abertura_tubo is not None:
+        res["D85_min"] = abertura_tubo
+    return res
+
+
 # ==========================================================================
 # Tabelas indicativas
 # ==========================================================================
-# Porosidade drenavel mu (rendimento especifico), faixas indicativas. A CONFIRMAR (USBR Drainage Manual
-# Fig. 2-4 relaciona mu a K; valores abaixo sao ordens de grandeza usuais).
+# Porosidade drenavel mu (rendimento especifico), faixas indicativas POR TEXTURA SEM PAGINA (ordens de grandeza
+# usuais). Unico ancoramento no corpus: ILRI-DPA16 PDF p. 44 (glossario): "menos de 5 % para materiais argilosos
+# a 35 % para areias grossas e areias com cascalho"; mu depende da profundidade do freatico (ILRI-16 cap. 3 e
+# 11.3.5, PDF 400-401; Exemplo 11.1: mu = 0,04). Embrapa Manicoba p. 3: mu = 0,15 (areia, de K); Fig. 2-4 do USBR
+# nao foi conferida.
 POROSIDADE_DRENAVEL = {"areia": (0.15, 0.30), "areia_franca": (0.10, 0.20), "franco": (0.05, 0.12),
                        "franco_argiloso": (0.03, 0.08), "argila": (0.01, 0.05)}
 
-# Profundidade e espacamento indicativos por classe de K [m/d] (ordem de grandeza FAO 38/ILRI; A CONFIRMAR).
+# Profundidade e espacamento indicativos por classe de K [m/d] (ordem de grandeza; SEM PAGINA: FAO 38 fora do
+# corpus; a funcao coeficiente_drenagem_tipico traz os valores paginados do ILRI-56 p. 42).
 # (K_min, K_max, profundidade_dreno_m, espacamento_m)
 RECOMENDACAO_INDICATIVA = [
     (0.0, 0.1, (1.0, 1.5), (10.0, 20.0)),
@@ -375,23 +656,61 @@ RECOMENDACAO_INDICATIVA = [
 ]
 
 
+# ILRI-56 Tab. 14 (PDF 175, impr. 154; Vlotman et al. 1992, Smedema e Rycroft 1983): K [m/d] por textura.
+K_POR_TEXTURA = {
+    "cascalho_brita": (1500.0, 3500.0), "cascalho_natural": (100.0, 1500.0), "areia_cascalho": (5.0, 100.0),
+    "areia_grossa_cascalhenta": (10.0, 50.0), "areia_media": (1.0, 5.0), "franco_arenoso_areia_fina": (1.0, 3.0),
+    "franco_argila_bem_estruturada": (0.5, 2.0), "franco_arenoso_muito_fino": (0.2, 0.5),
+    "argila_mal_estruturada": (0.002, 0.2), "argila_densa": (0.0, 0.002),
+}
+
+# ILRI-56 (PDF 42, impr. 22): coeficiente de drenagem de projeto q [mm/d] por clima.
+COEF_DRENAGEM_TIPICO = {"umido": (7.0, 14.0), "moderado": (4.0, 7.0), "irrigado_com_alguma_chuva": (2.0, 4.0),
+                        "irrigado_arido": (1.0, 2.0)}
+
+
+def faixa_K_por_textura(textura):
+    """Faixa de K [m/d] por classe textural, ILRI-56 Tab. 14 (PDF 175). Indicativo: medir K in situ (media geometrica
+    das medidas e o valor de projeto, ILRI-56 p. 43)."""
+    t = textura.lower()
+    if t not in K_POR_TEXTURA:
+        raise ValueError("textura: %s" % ", ".join(sorted(K_POR_TEXTURA)))
+    lo, hi = K_POR_TEXTURA[t]
+    return {"K_min": lo, "K_max": hi, "metodo": "ILRI-56 Tab. 14 (PDF 175)",
+            "avisos": ["faixa de classe textural; usar K medido (furo de trado) no projeto"]}
+
+
+def coeficiente_drenagem_tipico(clima):
+    """Coeficiente de drenagem de projeto q [mm/d] e [m/d] por clima, ILRI-56 (PDF 42): umido 7-14, moderado 4-7,
+    irrigado com alguma chuva 2-4, irrigado arido 1-2. O proprio texto chama as faixas de 'muito amplas'; exemplos
+    de projeto brasileiros: Manicoba 8 mm/d (Embrapa 1988 p. 3), Bebedouro 3,6 mm/d medio (Embrapa 1986 p. 5)."""
+    t = clima.lower()
+    if t not in COEF_DRENAGEM_TIPICO:
+        raise ValueError("clima: %s" % ", ".join(sorted(COEF_DRENAGEM_TIPICO)))
+    lo, hi = COEF_DRENAGEM_TIPICO[t]
+    return {"q_mm_d": (lo, hi), "q_m_d": (lo / 1000.0, hi / 1000.0), "metodo": "ILRI-56 PDF 42",
+            "avisos": ["faixas muito amplas (ILRI-56): conferir experiencia local"]}
+
+
 def porosidade_drenavel(textura):
-    """Faixa indicativa (min, max) de porosidade drenavel por textura. TABELA INDICATIVA, a confirmar."""
+    """Faixa indicativa (min, max) de porosidade drenavel por textura. TABELA INDICATIVA sem pagina por textura
+    (ver comentario acima; ILRI-DPA16 PDF 44: <5 % argila a 35 % areia grossa). Medir in situ."""
     t = textura.lower()
     if t not in POROSIDADE_DRENAVEL:
         raise ValueError("textura: %s" % ", ".join(sorted(POROSIDADE_DRENAVEL)))
     lo, hi = POROSIDADE_DRENAVEL[t]
     return {"mu_min": lo, "mu_max": hi, "mu_medio": 0.5 * (lo + hi), "metodo": "tabela indicativa",
-            "avisos": ["indicativo; medir in situ (USBR Drainage Manual cap. II) -- fonte a confirmar"]}
+            "avisos": ["indicativo; medir in situ (ILRI-16 cap. 11.3.5); valores por textura sem pagina no corpus"]}
 
 
 def recomendacao_indicativa(K):
-    """Profundidade do dreno e espacamento tipicos por K [m/d]. SO INDICATIVO (FAO 38/ILRI, a confirmar):
+    """Profundidade do dreno e espacamento tipicos por K [m/d]. SO INDICATIVO, SEM PAGINA (FAO 38 fora do corpus;
+    ILRI-56 Tab. 14 e p. 42 trazem K por textura e q tipico, ver faixa_K_por_textura e coeficiente_drenagem_tipico):
     nao substitui dimensionamento por Hooghoudt/Ernst com recarga e carga de projeto."""
     for lo, hi, prof, esp in RECOMENDACAO_INDICATIVA:
         if lo <= K < hi:
             return {"profundidade_m": prof, "espacamento_m": esp, "metodo": "tabela indicativa por K",
-                    "avisos": ["INDICATIVO: nao usar em projeto; FAO 38 fora do corpus (a confirmar)"]}
+                    "avisos": ["INDICATIVO: nao usar em projeto; sem pagina (FAO 38 fora do corpus)"]}
     raise ValueError("K fora de 0-10 m/d")
 
 
@@ -416,16 +735,31 @@ FUNCOES = {
     "hooghoudt_espacamento": hooghoudt_espacamento,
     "d_equivalente_hooghoudt": lambda d, L, r: {"d_e": d_equivalente_hooghoudt(d, L, r),
                                                "metodo": "Moody (USBR 5-5)", "avisos": []},
+    "d_equivalente_serie": lambda D, L, r0: {"d_e": d_equivalente_serie(D, L, r0),
+                                             "metodo": "serie ILRI-16 8.9-8.13", "avisos": []},
     "donnan_espacamento": donnan_espacamento,
+    "elipse_espacamento": elipse_espacamento,
+    "fator_geometrico_ernst": fator_geometrico_ernst,
     "ernst_espacamento": ernst_espacamento,
-    "glover_dumm_altura": lambda t, h0, K, d_med, mu, L: {"h_t": glover_dumm_altura(t, h0, K, d_med, mu, L),
-                                                         "metodo": "Glover-Dumm", "avisos": []},
+    "ernst_duas_camadas_dreno_no_topo": ernst_duas_camadas_dreno_no_topo,
+    "d_medio_glover_dumm": lambda d_e, h0, ht, criterio="usbr": {
+        "d_med": d_medio_glover_dumm(d_e, h0, ht, criterio), "metodo": "D medio Glover-Dumm (%s)" % criterio,
+        "avisos": []},
+    "glover_dumm_altura": lambda t, h0, K, d_med, mu, L, fator=1.16: {
+        "h_t": glover_dumm_altura(t, h0, K, d_med, mu, L, fator), "metodo": "Glover-Dumm", "avisos": []},
     "glover_dumm_tempo": glover_dumm_tempo,
     "glover_dumm_espacamento": glover_dumm_espacamento,
     "tempo_de_drenagem": tempo_de_drenagem,
     "vazao_de_dreno": vazao_de_dreno,
     "capacidade_tubo_dreno": capacidade_tubo_dreno,
     "diametro_minimo_dreno": diametro_minimo_dreno,
+    "capacidade_tubo_parcial": capacidade_tubo_parcial,
+    "vazao_unitaria_darcy_dreno_fundo": vazao_unitaria_darcy_dreno_fundo,
+    "comprimento_maximo_dreno_fundo": comprimento_maximo_dreno_fundo,
+    "necessidade_envoltorio_ilri56": necessidade_envoltorio_ilri56,
+    "envoltorio_granular_pontos_controle": envoltorio_granular_pontos_controle,
+    "faixa_K_por_textura": faixa_K_por_textura,
+    "coeficiente_drenagem_tipico": coeficiente_drenagem_tipico,
     "dreno_de_fundo_de_canal_revestido": dreno_de_fundo_de_canal_revestido,
     "vazao_por_furo_geomembrana": vazao_por_furo_geomembrana,
     "vazao_infiltracao_geomembrana": vazao_infiltracao_geomembrana,

@@ -5,4 +5,4 @@ declarado, kg/m3); nomes em portugues sem acento; docstring com formula, fonte
 e faixa de validade; CLI `python -m tools.dren.<modulo> --json '<entradas>'`.
 """
 
-VERSAO_PACOTE = "0.1.0"
+VERSAO_PACOTE = "0.2.0"

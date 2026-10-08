@@ -17,6 +17,17 @@ seguranca):
 CLI: python -m tools.dren.hidrologia --json '{"funcao": "racional", "args": {...}}'
 
 CHANGELOG
+0.3.0 (F5/M1: conferencia no primario das formulas de Tc; paginas = marcador fisico do PDF):
+  - Conferidas por renderizacao do PDF: Kirpich, Picking, Ven Te Chow, DNOS, Kirpich modificada e
+    Giandotti [DNIT-HIDRO p. 88-92], Dooge e Kirpich [PMSP-DRENURB-V2 p. 56-57], McCuen Eq. 3-47,
+    3-48, 3-53 a 3-56 [McCuen p. 165, 172-173]. Unidade de S do Dooge confirmada (m/m, A km2, min).
+  - Novas: picking, ven_te_chow, nerc, bransby_williams, tc_onda_cinematica (McCuen 3-47; coef 0,938 ou
+    0,933 das planilhas), tc_laminar_neh (NEH-630 cap. 15 Eq. 15-8 / McCuen 3-48), tc_lag_scs
+    (NEH Eq. 15-4b / McCuen 3-56), velocidade_concentrado_neh (Tab. 15-3), velocidade_manning,
+    tempo_viagem_min, c_ponderado, escoamento_ponderado.
+  - avisos: Kirpich com L > 10 km (PMSP p. 56), Giandotti em bacia pequena (DNIT p. 92), Dooge fora de
+    140-930 km2, DNIT-HIDRO marca Picking em "horas" (divergencia: o exemplo IME e a tabela de
+    velocidades do proprio DNIT exigem minutos).
 0.2.0 (achados da redacao da skill hidrologia-de-projeto-para-drenagem; paginas = marcador
       fisico do PDF em referencias/_texto):
   - dnos: agora a forma do DNIT, Tc = (10/K)*A^0,3*L^0,2/I^0,4 (A ha, L m, I %), tabela de K
@@ -40,7 +51,7 @@ import math
 import sys
 import warnings
 
-VERSAO = "0.2.0"
+VERSAO = "0.3.0"
 
 # Limites de area do metodo racional adotados em projetos do acervo (divergencia
 # de criterios, documentada em racional()).
@@ -162,17 +173,21 @@ def kirpich(L, S, detalhado=False):
     """Tc [min] = 0,0195 * L**0,77 * S**-0,385 (L em m, S em m/m).
 
     Equivalente a 0,0195*K**0,77, K=(L^3/H)^0,5 (forma do Iuiu, doc 1051:316).
-    Fonte: Kirpich (1940); DNIT IPR-715; Silveira (2005).
-    Validade: pequenas bacias agricolas do Tennessee, 0,0051 a 0,45 km2 e
-    declividades 3 a 10 %. Fora disso emite aviso (superestima/subestima Tc).
+    Conferida: PMSP-DRENURB-V2 p. 56 (Eq. 1.28: 3,989 L^0,77 S^-0,385, L em km) e McCuen Eq. 3-55
+    (p. 172 fisica: 0,0078 L^0,77 S^-0,385, L em ft, Tennessee; 0,0078*3,28084^0,77 = 0,01946);
+    DNIT-HIDRO p. 88 (0,95 (L^3/H)^0,385 h, L km, H m) reproduz o mesmo coeficiente (57/60 = 0,95; California Culverts).
+    Validade: 7 bacias agricolas do Tennessee, ate 0,5 km2 (PMSP p. 56; McCuen: 1 a 112 acres; o DNIT
+    diz < 0,8 km2) e declividades 3 a 10 %; com L > 10 km a formula subestima Tc (PMSP p. 56).
+    Fora disso emite aviso. McCuen: multiplicar por 0,4 (superficie de concreto/asfalto) ou 0,2 (canal
+    revestido); a variante Pensilvania (0,0013 L^0,77 S^-0,5) nao esta implementada.
     """
     _positivo(L=L, S=S)
     tc = 0.0195 * L ** 0.77 * S ** -0.385
     avisos = []
     if S < 0.03 or S > 0.10:
         avisos.append("Kirpich: declividade fora de 3-10 % (faixa de ajuste original)")
-    if L > 8000:
-        avisos.append("Kirpich: L muito grande; formula calibrada para bacias < 0,5 km2")
+    if L > 10000:
+        avisos.append("Kirpich: L > 10 km, a formula subestima Tc (PMSP-DRENURB-V2 p. 56)")
     avisos.append("Kirpich: valido para bacias < 0,5 km2 (area nao verificada aqui)")
     return tc if not detalhado else _resultado({"L_m": L, "S": S}, {"tc_min": tc}, "Kirpich", avisos)
 
@@ -180,7 +195,7 @@ def kirpich(L, S, detalhado=False):
 def kirpich_modificada_dnit(L_km, H):
     """Tc [min] = 60 * 1,42 * (L**3 / H)**0,385 (L em km, H em m).
 
-    Conferida em DNIT-HIDRO p. 90 (marcador fisico; p. 86 impressa): "tempos de
+    Conferida (imagem do PDF) em DNIT-HIDRO p. 90 (marcador fisico; p. 86 impressa): "tempos de
     concentracao 50 % maiores" que os de Kirpich, para o HU triangular do SCS
     reproduzir cheias observadas em bacias medias e grandes. Logo e
     1,5 x Kirpich (0,95 x 1,5 = 1,425; o manual imprime 1,42, diferenca de 0,35 %).
@@ -196,7 +211,8 @@ def california_culverts(L, H):
     """Tc [min] = 57 * (L**3 / H)**0,385 (L em km, H em m de desnivel).
 
     California Culverts Practice (1942), forma adotada pelo DNIT/DER para
-    bacias pequenas. Faixa: bacias pequenas de montanha; aviso nao emitido.
+    bacias pequenas; e Kirpich com S = H/L: 57 L^1,155 H^-0,385 [PMSP-DRENURB-V2 p. 56, Eq. 1.29;
+    IME p. 29, Eq. 3.6: L 5 km, H 300 m -> 41 min]. Mesma faixa de validade do Kirpich.
     """
     _positivo(L=L, H=H)
     return 57.0 * (L ** 3 / H) ** 0.385
@@ -206,9 +222,12 @@ def giandotti(A, L, Hm):
     """Tc [h] = (4*sqrt(A) + 1,5*L) / (0,8*sqrt(Hm)).
 
     A em km2, L em km (talvegue), Hm em m = altitude media da bacia menos a
-    altitude da secao de saida. Fonte: Giandotti (1934), via Tucci/DAEE.
-    Validade: bacias de 170 a 70.000 km2 (original italiano); usar com cautela
-    em bacias menores. Retorna horas.
+    altitude da secao de saida. Forma conferida na imagem do PDF [DNIT-HIDRO p. 91-92 (impressas
+    87-88): TC = (4 raiz(A) + 1,5 L)/(0,8 raiz(H)), TC em horas, H = desnivel maximo].
+    Validade: o DNIT NAO da faixa de area; so diz que a velocidade media resultante (2,1 km/h nas bacias
+    pequenas, 5,0 nas maiores) fica abaixo da media das outras formulas, "pouco recomendavel" para
+    bacias pequenas (p. 92). A faixa de 170 a 70.000 km2 (original italiano, via Tucci) NAO consta do
+    corpus: nao conferida; tc_com_avisos emite aviso. Retorna horas.
     """
     _positivo(A=A, L=L, Hm=Hm)
     return (4.0 * math.sqrt(A) + 1.5 * L) / (0.8 * math.sqrt(Hm))
@@ -217,8 +236,9 @@ def giandotti(A, L, Hm):
 def dooge(A, S):
     """Tc [min] = 21,88 * A**0,41 * S**-0,17 (A em km2, S em m/m).
 
-    Forma de Dooge (1956) conforme tabela de Silveira (2005). A unidade de S
-    (m/m) foi ADOTADA aqui e deve ser conferida na fonte antes de uso em projeto.
+    Conferida: PMSP-DRENURB-V2 p. 57 (impressa 55), Eq. 1.34, com a legenda da p. 56: tc em min,
+    A em km2, S declividade do talvegue em m/m. Calibrada com 10 bacias rurais da Irlanda de 140 a
+    930 km2 (bacias medias, escoamento em canais); fora disso tc_com_avisos emite aviso.
     """
     _positivo(A=A, S=S)
     return 21.88 * A ** 0.41 * S ** -0.17
@@ -243,7 +263,7 @@ def dnos(A, L, I, K=4.0, terreno=None):
     vegetacao intensa; 3,0 comum; 4,0 argiloso com vegetacao (condicao media, "aceitavel
     para qualquer tamanho de bacia"); 4,5; 5,0 rocha; 5,5 rochoso, vegetacao rala.
     `terreno` (chave de DNOS_K_TERRENO) sobrescreve K. Forma conferida contra a forma
-    unificada do manual (p. 97). Caso: A=100 ha, L=2000 m, I=1 %, K=4 -> 45,5 min
+    unificada do manual (p. 97) e na imagem do PDF (p. 89). Caso: A=100 ha, L=2000 m, I=1 %, K=4 -> 45,5 min
     (a forma antiga, dnos_legado, daria 19,3 min com A=1 km2, L=2 km).
     """
     if terreno is not None:
@@ -275,6 +295,152 @@ def kerby(L, n, S):
     return 1.44 * (L * n / math.sqrt(S)) ** 0.467
 
 
+FT = 0.3048  # m por ft
+POL = 25.4  # mm por pol
+
+
+def picking(L_km, I):
+    """Tc [min] = 5,3 * (L**2 / I)**(1/3)  (L em km, I declividade media em m/m).
+
+    Fonte: IME (Drenagem Urbana em Rodovias) p. 29, Eq. 3.5 e exemplo Eq. 3.8 (L 5 km, I 0,06 ->
+    40 min; calculada 39,6). DNIT-HIDRO p. 88 (impressa 84) imprime a mesma expressao com TC "em
+    horas": divergencia de unidade. A unidade correta e MINUTO: o exemplo IME so fecha em minutos e a
+    tabela de velocidades do proprio DNIT (V = 1,132 H^0,333 km/h, p. 97) so e coerente com
+    minutos (L 5 km, H 300 m -> 7,6 km/h = 5 km/40 min). DNIT: velocidade media 5,4 km/h nas bacias
+    pequenas e 8,6 nas maiores, "nao indicada" para as maiores.
+    """
+    _positivo(L_km=L_km, I=I)
+    return 5.3 * (L_km ** 2 / I) ** (1.0 / 3.0)
+
+
+def ven_te_chow(L_km, I_pct):
+    """Tc [min] = 25,2 * (L / sqrt(I))**0,64  (L em km, I declividade em %).
+
+    Conferida na imagem do DNIT-HIDRO p. 89 (impressa 85; o _texto perde a raiz) e pelo exemplo IME
+    p. 29, Eq. 3.4/3.7 (L 5 km, I 6 % -> 39,8 min). DNIT: velocidade media 4,9 km/h nas bacias
+    pequenas e 9,4 nas maiores, "nao recomendada" para as maiores.
+    """
+    _positivo(L_km=L_km, I_pct=I_pct)
+    return 25.2 * (L_km / math.sqrt(I_pct)) ** 0.64
+
+
+def nerc(L_km, H_m):
+    """Tc [h] = 2,8 * (L / sqrt(H/L))**0,47  (L em km, H/L em m/km).
+
+    Forma do NERC (1975, apud Watkins e Fiddes, 1984), conforme o caso do acervo Delmiro Gouveia
+    (memorial doc 1492:155; planilha 1494:64: L 13,21 km, desnivel 32 m -> 7,650 h). NAO conferida no
+    primario (nao ha NERC no corpus); o rotulo "Kirpich" da planilha do projeto esta errado (Kirpich
+    daria 4,92 h). Fonte: caso 2026-10-08_delmiro_gouveia_tc_rotulos_velocidade_declividade (sem
+    marca humana).
+    """
+    _positivo(L_km=L_km, H_m=H_m)
+    return 2.8 * (L_km / math.sqrt(H_m / L_km)) ** 0.47
+
+
+def bransby_williams(L_km, A_km2, J_pct, coef=0.615):
+    """Tc [h] = coef * L / (A**0,1 * J**0,2)  (L em km, A em km2, J declividade em %).
+
+    coef = 0,615 reproduz o Tc do caso Delmiro Gouveia (BHD1: L 13,21 km, A 36,34 km2, J 0,2422 % ->
+    7,53 h; doc 1494:31). A constante NAO foi conferida no primario (nao esta no corpus); a forma
+    classica de Bransby-Williams usa outra constante (21,3 min). Usar so para reproduzir o projeto.
+    """
+    _positivo(L_km=L_km, A_km2=A_km2, J_pct=J_pct, coef=coef)
+    return coef * L_km / (A_km2 ** 0.1 * J_pct ** 0.2)
+
+
+def tc_onda_cinematica(n, L_m, S, i_mm_h, coef=0.938):
+    """Tempo de percurso em lamina [min] = coef * (n*L/sqrt(S))**0,6 / i**0,4  (L em ft, i em pol/h).
+
+    McCuen Eq. 3-47 (p. 146 impressa, 165 fisica; Ex. 3-12): coef = 0,938. As planilhas internas
+    (LOC-PLANILHA-ESCOAMENTO-PLANO-001/-REDENCAO, aba "FAA") usam 0,933 (0,5 % menor): passe
+    coef=0,933 para reproduzi-las (divergencia 2 do mapa; decisao F7). Aqui L em m e i em mm/h
+    (convertidos). Limites: n*L/sqrt(S) <= ~100 (McCuen e Spiess) e L <= 100 ft (NEH); a funcao
+    retorna float: use tc_escoamento_aviso_lamina para checar o limite.
+    """
+    _positivo(n=n, L_m=L_m, S=S, i_mm_h=i_mm_h, coef=coef)
+    L_ft = L_m / FT
+    return coef * (n * L_ft / math.sqrt(S)) ** 0.6 / (i_mm_h / POL) ** 0.4
+
+
+def tc_escoamento_aviso_lamina(n, L_m, S):
+    """Avisos do escoamento em lamina: L > 100 ft (30,48 m; NEH-630 cap. 15 p. 12) e n*L/sqrt(S) > 100
+    com L em ft (McCuen e Spiess, McCuen p. 146; NEH Eq. 15-9: L_max = 100 sqrt(S)/n)."""
+    _positivo(n=n, L_m=L_m, S=S)
+    L_ft = L_m / FT
+    av = []
+    if L_ft > 100:
+        av.append(f"escoamento em lamina com L = {L_ft:.0f} ft > 100 ft (NEH-630 cap. 15 p. 12)")
+    if n * L_ft / math.sqrt(S) > 100:
+        av.append(f"n*L/sqrt(S) = {n * L_ft / math.sqrt(S):.0f} > 100: limite de McCuen e Spiess; "
+                  f"L maximo = {100 * math.sqrt(S) / n * FT:.1f} m")
+    return av
+
+
+def tc_laminar_neh(n, L_m, P2_mm, S):
+    """Tempo de percurso em lamina [h] = 0,007 * (n*L)**0,8 / (P2**0,5 * S**0,4)  (L em ft, P2 em pol).
+
+    NEH-630 cap. 15 Eq. 15-8 (p. 12 fisica), Welle e Woodward (1986); equivale a McCuen Eq. 3-48
+    (0,42 min). n da Tab. 15-1 (liso 0,011; relva curta 0,15; relva densa 0,24; bosque 0,40-0,80).
+    P2 = chuva de 2 anos e 24 h. Aqui L em m, P2 em mm (convertidos). Limite L <= 100 ft (use
+    tc_escoamento_aviso_lamina). Retorna horas. Caso NEH p. 18: n 0,15, 100 ft, P2 3,6 pol, S 0,08
+    -> 0,09 h; McCuen Ex. 3-12: n 0,15, 120 ft, P2 3,12 pol, S 0,002 -> 28,8 min.
+    """
+    _positivo(n=n, L_m=L_m, P2_mm=P2_mm, S=S)
+    return 0.007 * (n * L_m / FT) ** 0.8 / ((P2_mm / POL) ** 0.5 * S ** 0.4)
+
+
+def tc_lag_scs(L_m, CN, Y_pct):
+    """Tc [h] = L_ft**0,8 * (1000/CN - 9)**0,7 / (1140 * Y**0,5)  (L em ft, Y declividade em %).
+
+    Metodo do lag do NRCS: lag = L^0,8 (S+1)^0,7 / (1900 Y^0,5) [NEH-630 cap. 15 Eq. 15-4a, p. 11
+    fisica], S = 1000/CN - 10 (pol), Tc = lag/0,6 (Eq. 15-4b; McCuen Eq. 3-56 usa tc = 1,67 lag e
+    S em ft/ft: tc[min] = 0,00526 L^0,8 (1000/CN - 9)^0,7 S^-0,5). Aqui L em m. Faixa: CN de 50 a 95;
+    bacias de 1,3 acres a 9,2 mi2 (maioria < 2.000 acres = 8 km2; ate ~19 mi2 = 49 km2 segundo Folmar e
+    Miller); McCuen: ate 4.000 acres. Retorna horas. Caso NEH p. 18: L 3.865 ft, Y 4,79 %, CN 63 ->
+    1,14 h; McCuen Ex. 9-23: L 6.500 ft, S 1,3 %, CN 92 -> 1,34 h.
+    """
+    _positivo(L_m=L_m, Y_pct=Y_pct)
+    if not (0 < CN <= 100):
+        raise ValueError("CN deve estar em (0, 100]")
+    L_ft = L_m / FT
+    return L_ft ** 0.8 * (1000.0 / CN - 9.0) ** 0.7 / (1140.0 * math.sqrt(Y_pct))
+
+
+# k de V = k * S**0,5 (V em ft/s, S em ft/ft) [NEH-630 cap. 15 Tab. 15-3, p. 14 fisica]
+VELOCIDADE_CONCENTRADO_NEH_K = {
+    "pavimento_ravinas": 20.328,
+    "canal_gramado": 16.135,
+    "solo_nu_leque_aluvial": 9.965,
+    "cultivo_linhas_retas": 8.762,
+    "pastagem_curta": 6.962,
+    "cultivo_minimo_bosque": 5.032,
+    "floresta_serapilheira_feno": 2.516,
+}
+
+
+def velocidade_concentrado_neh(tipo, S):
+    """Velocidade [m/s] do escoamento raso concentrado, V = k*S**0,5 (Tab. 15-3, k em ft/s), k*0,3048.
+
+    S em m/m. Tab. 15-3 vale para S < 0,005 e como equacao da Fig. 15-4 nas demais declividades.
+    """
+    if tipo not in VELOCIDADE_CONCENTRADO_NEH_K:
+        raise ValueError(f"tipo desconhecido: {tipo!r}; use {list(VELOCIDADE_CONCENTRADO_NEH_K)}")
+    _positivo(S=S)
+    return VELOCIDADE_CONCENTRADO_NEH_K[tipo] * FT * math.sqrt(S)
+
+
+def velocidade_manning(R, S, n):
+    """V [m/s] = R**(2/3) * S**0,5 / n (SI; NEH Eq. 15-10 e McCuen em ft usam 1,49)."""
+    _positivo(R=R, S=S, n=n)
+    return R ** (2.0 / 3.0) * math.sqrt(S) / n
+
+
+def tempo_viagem_min(L_m, V_ms):
+    """Tempo de percurso [min] = L / (60 V) (NEH Eq. 15-1; metodo da velocidade, Tc = soma dos trechos)."""
+    _positivo(L_m=L_m, V_ms=V_ms)
+    return L_m / (60.0 * V_ms)
+
+
 def tc_com_avisos(metodo, **kw):
     """Tc [min] com dict padrao (entradas, saidas, metodo, avisos, versao)."""
     avisos = []
@@ -288,10 +454,43 @@ def tc_com_avisos(metodo, **kw):
         avisos.append("Kirpich modificada DNIT = 1,5 x Kirpich (DNIT-HIDRO p. 90); L em km")
     elif metodo == "giandotti":
         tc = giandotti(kw["A"], kw["L"], kw["Hm"]) * 60.0
-        avisos.append("Giandotti: calibrado para bacias grandes (>170 km2)")
+        avisos.append("Giandotti (DNIT-HIDRO p. 91-92): TC em h convertido para min; velocidade media baixa "
+                      "em bacia pequena, 'pouco recomendavel' ali")
+        if kw["A"] < 170:
+            avisos.append("Giandotti: A < 170 km2; a faixa de 170 a 70.000 km2 da literatura nao consta do "
+                          "corpus (nao conferida)")
     elif metodo == "dooge":
         tc = dooge(kw["A"], kw["S"])
-        avisos.append("Dooge: unidade de S (m/m) a confirmar na fonte")
+        avisos.append("Dooge [PMSP-DRENURB-V2 p. 57]: A km2, S m/m, tc em min")
+        if not (140 <= kw["A"] <= 930):
+            avisos.append("Dooge: A fora de 140-930 km2 (10 bacias da Irlanda)")
+    elif metodo == "picking":
+        tc = picking(kw["L"], kw["I"])
+        avisos.append("Picking: L km, I m/m, tc em min (IME p. 29); o DNIT-HIDRO p. 88 imprime 'horas' "
+                      "(divergencia)")
+    elif metodo == "ven_te_chow":
+        tc = ven_te_chow(kw["L"], kw["I"])
+        avisos.append("Ven Te Chow: L km, I em %, tc em min (DNIT-HIDRO p. 89; IME p. 29)")
+    elif metodo == "nerc":
+        tc = nerc(kw["L"], kw["H"]) * 60.0
+        avisos.append("NERC: forma do caso Delmiro Gouveia, nao conferida no primario; L km, H m")
+    elif metodo == "bransby_williams":
+        tc = bransby_williams(kw["L"], kw["A"], kw["J"], kw.get("coef", 0.615)) * 60.0
+        avisos.append("Bransby-Williams: constante 0,615 do caso Delmiro Gouveia, nao conferida no primario")
+    elif metodo == "onda_cinematica":
+        tc = tc_onda_cinematica(kw["n"], kw["L"], kw["S"], kw["i"], kw.get("coef", 0.938))
+        avisos.extend(tc_escoamento_aviso_lamina(kw["n"], kw["L"], kw["S"]))
+        avisos.append("Onda cinematica (McCuen Eq. 3-47): L m, i mm/h (depende de tc: iterar); "
+                      "coef 0,938 (livro) ou 0,933 (planilhas)")
+    elif metodo == "laminar_neh":
+        tc = tc_laminar_neh(kw["n"], kw["L"], kw["P2"], kw["S"]) * 60.0
+        avisos.extend(tc_escoamento_aviso_lamina(kw["n"], kw["L"], kw["S"]))
+        avisos.append("Laminar NEH-630 Eq. 15-8: L m, P2 mm (2 anos, 24 h)")
+    elif metodo == "lag_scs":
+        tc = tc_lag_scs(kw["L"], kw["CN"], kw["Y"]) * 60.0
+        if not (50 <= kw["CN"] <= 95):
+            avisos.append("Lag SCS: CN fora de 50-95 (NEH-630 cap. 15 p. 12)")
+        avisos.append("Lag SCS: L m, Y em %; bacias ate ~8 km2 (McCuen ate 16 km2)")
     elif metodo == "dnos":
         tc = dnos(kw["A"], kw["L"], kw["I"], kw.get("K", 4.0), kw.get("terreno"))
         avisos.append("DNOS (DNIT-HIDRO p. 89): A em ha, L em m, I em %; K maior da Tc menor")
@@ -408,6 +607,25 @@ def retencao_S(CN):
     if not (0 < CN <= 100):
         raise ValueError("CN deve estar em (0, 100]")
     return 25400.0 / CN - 254.0
+
+
+def c_ponderado(C, A):
+    """C do racional ponderado por area: sum(C_k*A_k)/sum(A_k) [McCuen p. 397, Ex. 7-11:
+    0,2/0,4/0,6 em 5,3/7,2/6,4 ac -> 0,412]."""
+    if len(C) != len(A) or not C:
+        raise ValueError("C e A devem ter o mesmo tamanho (> 0)")
+    _positivo(**{f"A[{k}]": a for k, a in enumerate(A)})
+    return sum(c * a for c, a in zip(C, A)) / sum(A)
+
+
+def escoamento_ponderado(P, CN, A):
+    """Q [mm] ponderado por area: sum(Q(P, CN_k)*A_k)/sum(A_k) (pondera-se o ESCOAMENTO, nao o CN;
+    McCuen Ex. 7-17/7-18 p. 408-409: CN 55/70/75/83 com P = 7 pol -> 2,12/3,62/4,15/5,03 pol; o CN
+    medio da 0,28 pol contra 0,385 pol do Q medio no Ex. 7-17)."""
+    if len(CN) != len(A) or not CN:
+        raise ValueError("CN e A devem ter o mesmo tamanho (> 0)")
+    _positivo(**{f"A[{k}]": a for k, a in enumerate(A)})
+    return sum(chuva_efetiva(P, c) * a for c, a in zip(CN, A)) / sum(A)
 
 
 def cn_para_lambda_005(CN02):
