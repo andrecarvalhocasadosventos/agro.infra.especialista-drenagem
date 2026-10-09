@@ -19,7 +19,7 @@ Páginas = página física do PDF. TR é decisão de projeto: o corpus dá recom
 Observações:
 - O TR da obra e o TR da verificação são dois números (bueiro: dimensionar com um, verificar o nível a montante com o outro, "como canal" e "como orifício"). O parecer declara os dois.
 - A AASHTO (via HDS-2) está em AEP: 0,02 = 50 anos; 0,04 = 25; 0,1 = 10; 0,2 = 5 [FHWA-HDS2 p. 37].
-- Os valores do DNIT são de rodovia. O DAEE-SP é norma paulista de outorga (valores mínimos). Nenhum vale por si no perímetro: a escolha cabe ao projetista (D2) e ao contratante, com o critério de risco abaixo.
+- Os valores do DNIT são de rodovia. O DAEE-SP é norma paulista de outorga (valores mínimos). Nenhum vale por si no perímetro: a escolha cabe ao projetista (D2-Hid) e ao contratante, com o critério de risco abaixo.
 - **TR de bueiro de perímetro irrigado é ponto aberto para a F7 (padrão provisório, decisão F7):** USBR, drenos de superfície 5 a 15 anos [USBR-DRAINAGE p. 57] × acervo 25/50 (Baixio, Iuiu) e 100 (CSB, Salitre, CAC). Não decidir: mostrar as duas faixas e o risco J de cada uma.
 - Valores que o corpus não traz: TR de dreno parcelar em irrigação, de canal coletor de perímetro, de OAC sob canal em Codevasf. A prática do acervo (coluna da direita) é o rastro disponível; é preciso dado do contratante.
 

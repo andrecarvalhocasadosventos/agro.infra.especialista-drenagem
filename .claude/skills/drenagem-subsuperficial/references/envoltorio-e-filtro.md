@@ -26,10 +26,15 @@ DNIT-DREN p. 252-253 (Terzaghi, SCS, USBR; geotêxtil: método do Comitê Franc�
 - retenção: D15f ≤ 5 D85s; D15f ≤ 40 D15s; D50f ≤ 25 D50s;
 - tubo: D85f ≥ diâmetro do furo do tubo; uniformidade: 2 ≤ D60f/D10f ≤ 20.
 
-A calculadora usa fator 4 (conservador; razões 4 a 5) e avalia só D15f/D85s e D15f/D15s, mais o aviso para > 40. **Não**
-verifica D50, uniformidade nem o furo do tubo (lacuna). O ILRI-56 observa que o D15 do filtro é, na prática, um
-tamanho de poro O85-O95, e que a **ponte (bridging)** permite razões de 4 a 7 [ILRI-56 p. 63, Box 10]: o fator 4 não
-é "o certo", é o conservador.
+A calculadora usa **um só** fator (padrão 4) para as duas razões e avalia só D15f/D85s e D15f/D15s, mais um aviso
+(não reprovação) para D15f/D15s > 40. **Não** verifica D50, uniformidade nem o furo do tubo (lacuna). O ILRI-56 observa
+que o D15 do filtro é, na prática, um tamanho de poro O85-O95, e que a **ponte (bridging)** permite razões de 4 a 7
+[ILRI-56 p. 63, Box 10].
+
+**Atenção (revisão F7):** o fator 4 é conservador **só na retenção** (D15f ≤ 4 D85s é mais exigente que ≤ 5). Na
+**permeabilidade** ele é **menos** exigente que o DNIT: D15f ≥ 4 D15s aprova filtros com razão 4 a 5 que o DNIT
+reprova (D15f ≥ 5 D15s, p. 252). No parecer: rodar com `fator=5` para comparar com o DNIT, ou conferir a razão de
+permeabilidade à mão contra 5. Registrado em `tools/dren/DIVERGENCIAS.md` (F7, Lote B).
 
 ## 3. Pontos de controle do envoltório granular (`envoltorio_granular_pontos_controle`)
 

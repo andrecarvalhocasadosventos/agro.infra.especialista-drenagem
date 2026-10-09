@@ -69,9 +69,9 @@ rip-rap por HEC-11 com SF justificado, tensão do revestimento. Executivo: só c
 
 - Perfil com cotas de fundo e linha d'água: em subcrítico, y_n a jusante do trecho; transição gradual de 3 m ou mais, ou pelo menos 30° em diedro (Sertão); proteção contra erosão onde a profundidade aumenta no sentido do fluxo [CDV-MANUAL-IRRIG p. 518, §11.3.5.2].
 - **Rip-rap de canal (HEC-11):** D50 = C·0,001·V³/(d^0,5·K1^1,5) com V e d do canal principal, SF por curvatura, extensão 1,0 W a montante e 1,5 W a jusante da curva; n por EM-1601 ou HEC-11 (**divergem, sem conciliação, F7**); filtro é da Geotecnia.
-  Detalhe, gradação e exemplo (D50 = 0,43 ft [FHWA-HEC11 p. 78]) em `references/revestimento-riprap-gabiao.md` §2.
+  Detalhe, gradação e exemplo (D50 = 0,43 ft [FHWA-HEC11 p. 72]; formulário preenchido p. 78) em `references/revestimento-riprap-gabiao.md` §2.
 - **Gabião (HEC-15 Cap. 7):** n por D50 da pedra; τp = maior de F*·(γs − γ)·D50 (F* = 0,10) e 0,0091·(γs − γ)·(MT + 1,24); exemplo p. 115-117 em `references/revestimento-riprap-gabiao.md` §3. A calculadora **não** tem função de tensão.
-- Dreno com vazão contínua pequena e cheias intermitentes: canal piloto no eixo [CDV-MANUAL-IRRIG p. 514]. Dois estágios: NEH 654 Cap. 10 por referência do CPS 608 [NRCS-CPS608-2023 p. 2].
+- Dreno com vazão contínua pequena e cheias intermitentes: canal piloto no eixo [CDV-MANUAL-IRRIG p. 514]. Dois estágios: NEH 654 Cap. 10 por referência do CPS 608 [NRCS-CPS608-2023 p. 2]; o capítulo está no corpus do Hidráulico [NRCS-NEH654-CH10] (Two-Stage Channel Design), não lido nesta skill.
 - Grama: capacidade com a vegetação mais densa e alta, estabilidade com a menos densa [NRCS-NEH650-CH07 p. 11].
 - Bueiro sob o dreno ou a estrada: `bueiros-e-travessias`; dissipador: D3.
 
@@ -79,7 +79,7 @@ rip-rap por HEC-11 com SF justificado, tensão do revestimento. Executivo: só c
 
 ## 4. Calculadoras (mapa fórmula → função → teste)
 
-Módulo `tools/dren/canais_drenagem.py` v0.1.0 (stdlib). CLI: `python -m tools.dren.canais_drenagem --json '{"funcao": "...", ...}'`; `--listar` mostra as funções. Saída: `entradas`, `saidas`, `metodo`, `avisos`, `versao`.
+Módulo `tools/dren/canais_drenagem.py` v0.1.1 (stdlib). CLI: `python -m tools.dren.canais_drenagem --json '{"funcao": "...", ...}'`; `--listar` mostra as funções. Saída: `entradas`, `saidas`, `metodo`, `avisos`, `versao`.
 
 | Fórmula / cálculo | Função | Teste (`tests/dren/test_canais_drenagem.py`) | O que conferir nos `avisos` |
 |---|---|---|---|
@@ -139,7 +139,7 @@ Detalhe de cada fonte em `drenagem-normas-e-manuais`; aqui só a regra que cruza
 - EM 1110-2-1601 (1994) e HEC-11 (1989), HEC-15 (2005): manuais norte-americanos de **canal de controle de cheia, rip-rap e canal flexível**; critério de comparação, escala de rio (borda livre de 0,6 a 0,8 m).
 - NRCS CPS 608 (ago/2023, vigente): padrão para dreno principal ou lateral **agrícola**; V mínima 1,4 fps sem informação local, folga 0,5 ft, n envelhecido [NRCS-CPS608-2023 p. 2]; não dá V máxima numérica.
 - USBR, Manual de Irrigação (cap. 11, tradução Codevasf): referência de dreno de irrigação, TR 5, 25 e 100 conforme a obra; **tabela de V do cap. 11 ilegível na extração**.
-- Material `FORNECIDA-PELO-USUARIO` ou não aberto (CPS 582, NEH 654 Cap. 10, NBR 8890): citar obra e página, não transcrever. A tabela do DAEE vale como critério de outorga em SP; fora de SP é referência.
+- Material `FORNECIDA-PELO-USUARIO` ou não aberto (CPS 582, NBR 8890; NEH 654 Cap. 10 existe no corpus do Hidráulico, ainda não lido): citar obra e página, não transcrever. A tabela do DAEE vale como critério de outorga em SP; fora de SP é referência.
 - O número do projetista não é gabarito sem ✓h; o do método não vira "o certo" sem os dados que o projetista tinha.
 
 ## 8. Referências
@@ -147,7 +147,7 @@ Detalhe de cada fonte em `drenagem-normas-e-manuais`; aqui só a regra que cruza
 | ID | Uso | Páginas-chave |
 |---|---|---|
 | USACE-EM1601 (EM 1110-2-1601, Ch. 1, 1994) | V admissível, rip-rap, borda livre, n | Tab. 2-5 p. 25; borda livre p. 23; Eq. 3-2 p. 29; Cap. 3 p. 26-39; App. H p. 178-179 |
-| FHWA-HEC11 (1989) | rip-rap de revestimento | Froude p. 38; Eq. 6-9 p. 48-49; SF p. 49-50; extensão p. 42; Tab. 3 p. 55; Exemplo 1 p. 78; Eq. 20 p. 166 |
+| FHWA-HEC11 (1989) | rip-rap de revestimento | Froude p. 38; Eq. 6-9 p. 48-49; SF p. 49-50; extensão p. 42; Tab. 3 p. 55; Exemplo 1 p. 70-75 (D50 p. 72, formulário p. 78); Eq. 20 p. 166 |
 | FHWA-HEC15 (2005) | n por revestimento, tensão, gabião | Tab. 2.1-2.2 p. 29; τd p. 31; Tab. 2.3 p. 33; TR e folga p. 33-34; gabião p. 113-117 |
 | NRCS-CPS608-2023 | dreno agrícola principal e lateral | p. 1-3 |
 | NRCS-NEH650-CH09 (2009) e CH07 (2007) | desvio, TR e folga; canal gramado | Tab. 9-1 p. 16; saídas p. 15; CH07 p. 7, 11, 22 |
@@ -168,4 +168,11 @@ Detalhe de cada fonte em `drenagem-normas-e-manuais`; aqui só a regra que cruza
 
 ## Revisão técnica
 
-(Preenchida na fase F7: data, revisor, amostra conferida e correções.)
+2026-10-08, revisor Opus (F7). **21 itens amostrados; 18 conferidos sem mudança, 3 corrigidos, 3 pendentes.**
+
+- **Conferidos no primário:** CPS 608 V mín 1,4 fps e folga 0,5 ft [NRCS-CPS608-2023 p. 2]; Fr 0,89-1,13 [FHWA-HEC11 p. 38]; Eq. 6 (0,001 V³/(d^0,5 K1^1,5)) p. 48, Eq. 8 (2,12/(Ss−1)^1,5) p. 49, SF por R/W p. 50, extensão 1,0 W/1,5 W p. 42, Eq. 20 (0,0395 D50^(1/6)) p. 166; HEC-15 Tab. 2.1-2.2 p. 29, Tab. 2.3 p. 33, TR 5-10 p. 33, folga 0,15 m p. 34, gabião F* 0,10 e Eq. 7.2 (MTc 1,24 m) p. 113-114, exemplo τp 241 / τd 163 N/m² p. 117 [FHWA-HEC15]; EM-1601 Tab. 2-5 (os 14 valores do código) p. 25, Eq. 3-2 (K 0,034/0,036/0,038; S < 2 %) p. 29, borda livre 2-2,5 ft p. 23, Tab. H-1 p. 179 [USACE-EM1601]; DNIT Tab. 31 (areia fina 0,30-0,40) p. 131 e Tab. 34 p. 132-134 [DNIT-DREN]; b mín 1 m, talude 1,5:1-2:1 (até 3:1), canal piloto p. 514, transição ≥ 3 m p. 518, captação ≤ 10 % p. 316 [CDV-MANUAL-IRRIG]; PISF V 0,70/3,00/4,50/5,00 e borda livre USBR por log Q [SRHCE-GED-030 p. 20]; NEH 650-9 Tab. 9-1 [NRCS-NEH650-CH09 p. 16]; Embrapa V 0,5, Fr 0,89, folga 0,20 m [EMBRAPA-DREN-SUP p. 7].
+- **Calculadora:** as 16 funções do §4 existem com o nome e a assinatura citados; os 16 padrões de teste existem em `tests/dren/test_canais_drenagem.py` (33 passam); o exemplo do §4 reproduz (y_n 0,4316; V 0,962; Fr 0,576; folga 0,018 x 0,108).
+- **Corrigido:** (1) versão do módulo v0.1.0 → v0.1.1; (2) Exemplo 1 do HEC-11: o D50 = 0,43 ft está na p. 72 (p. 78 é o formulário), também em `references/revestimento-riprap-gabiao.md` §2; (3) NEH 654 Cap. 10 constava como "não aberto": está no corpus do Hidráulico [NRCS-NEH654-CH10].
+- **Pendentes:** tabela de V do USBR (p. 515) e de quedas (p. 518) ilegíveis no texto: conferir no PDF; HEC-11 Tab. 3 p. 55 não aberta; números do acervo (Salitre, Delmiro) seguem sem ✓h.
+- **Fronteiras:** D3 e matriz §3.3 coerentes com o §1; descriptions das skills irmãs apontam para esta sem colisão. Fora desta skill: `vertedouros-e-dissipadores` (Hidráulico), tabela de fronteiras, devolve "rip-rap e bacia de impacto na saída de bueiro" ao Drenagem, contra D3 e contra a própria description.
+- **Decisões do André** (não decididas aqui): (a) **V mínima de dreno**: sem padrão (código atual) x 0,43 m/s [NRCS-CPS608-2023 p. 2] x 0,30 m/s (Salitre [1584:105]); efeito: no Delmiro, o trecho de V 0,292 falha nos dois pisos e os demais dos 10 abaixo de 0,5 dependem do piso; recomendação: 0,43 m/s rotulado quando o projeto não declara. (b) **Folga** (F5, "folga de dreno"), dado novo: com max(0,25 y; 0,15 m), que soma o 25 % ao mínimo de CPS 608 p. 2 e HEC-15 p. 34, DS-1.1/C passa de 0,108 a 0,15 m (h mín 0,54 → 0,58 m) e Salitre DS-4.1/A fica em 0,373 m; recomendação: adotar o max.

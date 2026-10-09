@@ -23,7 +23,7 @@ description: >
 **Cobre:** dispositivos de superfície de estrada rodoviária ou de serviço (valeta de corte e de aterro, sarjeta,
 descida, entrada, saída, caixa coletora, bueiro de greide), dreno profundo longitudinal de plataforma e a escolha do
 dispositivo-tipo. Estrada de serviço de irrigação usa o critério rodoviário **por analogia declarada** (o corpus é
-rodoviário); exigência da Codevasf ou de concessionária é de `normas-e-manuais`.
+rodoviário); exigência da Codevasf ou de concessionária é de `drenagem-normas-e-manuais`.
 
 | Fronteira | Quem | O que acontece |
 |---|---|---|
@@ -61,7 +61,7 @@ como padrão provisório, decisão F7**: o parecer rotula e mostra a alternativa
 | TR 50 em ponto baixo (sag) | WSDOT | [WSDOT p. 104] |
 
 O Tc só pesa quando o calculado fica abaixo do mínimo (valeta curta). Passar de 5 para 10 min reduz I e aumenta o L
-crítico em dezenas de por cento no semiárido: **mostrar a sensibilidade** no parecer. Estrada de serviço sem exigência
+crítico em 10 a 20 % (IDF CSB grupo 1: +12 %; Wilken: +19 %; recalculado na F7): **mostrar a sensibilidade** no parecer. Estrada de serviço sem exigência
 do cliente: TR 10 e Tc 5 rotulados; TR maior só por decisão do usuário. Projeto do acervo com outro valor (Xingó
 10 min; ENGEFER 25 anos) **não é erro**: registrar e comparar.
 
@@ -77,9 +77,10 @@ do cliente: TR 10 e Tc 5 rotulados; TR maior só por decisão do usuário. Proje
   [DNIT-DREN p. 160-163; IME p. 54].
 - **Comprimento crítico: L = Q_Manning / q** [IME p. 84, eq. 4.19; método do Xingó, 1419:64-65]. Além de L: saída
   d'água, descida ou caixa. `hmax` padrão 0,8 h é regra **observada** no Xingó, não declarada: aviso da calculadora.
-- Folga: terra e Q ≤ 0,3 m³/s, f = 0,2 h; concreto, Tab. 4.2 (10 a 18 cm por faixa de Q até 2,8 m³/s) [IME p. 54-55];
-  WSDOT 0,5 ft (≈ 0,15 m) fixo, TR 10 [WSDOT p. 109]. Terra com 0,3 < Q ≤ 10 m³/s: equação do IME ilegível,
-  **não implementada** (`ValueError`); conferir na imagem do PDF.
+- Folga: terra e Q ≤ 0,3 m³/s, f = 0,2 h; revestida, Tab. 36 do DNIT = Tab. 4.2 do IME (10 a 18 cm até 2,80 m³/s;
+  20 cm acima) [DNIT-DREN p. 162-163; IME p. 54-55]; WSDOT 0,5 ft (≈ 0,15 m) fixo, TR 10 [WSDOT p. 109]. Terra com
+  0,3 < Q ≤ 10 m³/s: **f = √(46·h)**, f e h em cm [DNIT-DREN p. 162, imagem conferida na F7; o `_texto` perde o radical];
+  **não implementada** na calculadora (`ValueError`): calcular à parte e rotular.
 - Declividade excessiva (V > admissível): escalonar, S de trecho ≤ 2 %, E = 100 H/(α−β), E ≤ 50 m [DNIT-DREN p. 163-164].
 - Revestimento obrigatório em solo permeável; concreto fck mín. 20 MPa [DNIT-ES018-2023 p. 3] (DNIT-DREN p. 166-186:
   15 MPa; IME p. 47: 11 MPa; **divergência 1** do mapa G3). V admissível, n e tensão: ver
@@ -88,7 +89,8 @@ do cliente: TR 10 e Tc 5 rotulados; TR maior só por decisão do usuário. Proje
 ### 4.2 Sarjeta (corte, aterro, pavimentada)
 
 - **Triangular de Izzard:** Q = (Ku/n) Sx^1,67 S_L^0,5 T^2,67, **Ku = 0,376 (SI)**; 0,56 em unidades inglesas
-  [FHWA-HEC22 p. 79 eq. 5.2; FHWA-HEC12 p. 39 eq. 4]. T = [Q n /(Ku Sx^1,67 S_L^0,5)]^0,375. Validade: seção rasa
+  [FHWA-HEC22 p. 79 eq. 5.2]; o HEC-12 p. 39 eq. 4 imprime "K = 0.56 (0.016)" (imagem conferida na F7): o 0,016 SI é erro
+  de impressão; a conversão de 0,56 dá 0,377, que confirma o 0,376 do HEC-22. T = [Q n /(Ku Sx^1,67 S_L^0,5)]^0,375. Validade: seção rasa
   (T/y > 40), sem resistência do meio-fio. TR e espalhamento admissível: HEC-22 Tab. 5.1 [p. 70].
 - **Composta (depressão W, Sw):** Izzard integrado por trechos [HEC-12 p. 41-43]; Eo é **calculada**, não lida da Chart 4.
 - **Sarjeta de corte DNIT:** triangular 1:4 no lado do acostamento (25 % máx.) [DNIT-ES018-2023 p. 2]; L1 de 1,0 a
@@ -107,7 +109,8 @@ do cliente: TR 10 e Tc 5 rotulados; TR maior só por decisão do usuário. Proje
   calcular com `valeta_manning` e declarar. Dissipador: `hidraulica`.
 - Execução: concreto fck ≥ 20 MPa e CA-50, juntas em descida > 10 m [DNIT-ES021-2023 p. 2, 4]; [DERPR-ES-DR-03-23 p. 4-5].
 - **Caixa coletora com grelha** (`caixa_coletora_grelha`): vertedor Qi = Cw P d^1,5 (**Cw = 1,66 SI**); orifício
-  Qi = Co A √(2 g d) (**Co = 0,67**) [HEC-12 p. 86, eqs. 17-18]. Capacidade = menor; carga = maior; sem colmatação;
+  Qi = Co A √(2 g d) (**Co = 0,67**) [HEC-12 p. 86, eqs. 17-18]. Capacidade = menor; carga = maior; sem colmatação; perto da interseção d* a capacidade real fica **abaixo** das duas
+  equações [HEC-12 p. 87]: a v0.1.1 avisa entre 0,5 d* e 2 d*;
   HEC-12 desaconselha grelha isolada em sag: aplicar fator de obstrução rotulado.
 - Bueiro de greide: Q = soma dos dispositivos afluentes, sem carga a montante sempre que possível; com carga, guardar
   a cota máxima na caixa [DNIT-DREN p. 202]. Hidráulica do barril: `bueiros-e-travessias`.
@@ -121,7 +124,7 @@ está implementada (unidade ambígua). Material, filtro, boca e execução (ES 0
 ≥ 1 %, p. 7): `drenagem-subsuperficial`. Camada drenante e dreno do pavimento: `pavimentacao`; IS-210 exige drenagem do
 pavimento com chuva > 1.500 mm/ano e > 500 veículos comerciais [DNIT-IPR726 p. 307].
 
-## 5. Calculadora `tools/dren/estradas.py` (versão 0.1.0)
+## 5. Calculadora `tools/dren/estradas.py` (versão 0.1.1)
 
 CLI: `python -m tools.dren.estradas --json "{\"funcao\": \"...\", ...}"`; `--listar`. SI; I em mm/h (1 mm/min = 60).
 Testes: `python -m pytest tests/dren/test_estradas.py -q`.
@@ -198,7 +201,7 @@ sem ✓h), `2026-10-08_cac_castanhao_estrada_acesso_valas_chuva_como_intensidade
 **Lacunas:** sem exemplo numérico brasileiro de sarjeta, valeta ou espaçamento de descidas; sem V admissível e n por
 revestimento no corpus próprio (Tab. 27, 28, 31 e 34 do IPR-724 estão no corpus do Hidráulico); descida e dissipador só
 em desenho (Álbum p. 40-47, OCR); Álbum com 24 p. sem OCR e números a conferir na imagem; ES 019 e 030 fora do corpus
-próprio; EQ. 4.7 do IME (folga em terra, Q > 0,3 m³/s) ilegível; HEC-12 arquivado (absorvido pelo HEC-22), em unidades
+próprio; folga em terra com Q > 0,3 m³/s sem função (forma no DNIT-DREN p. 162); HEC-12 arquivado (absorvido pelo HEC-22), em unidades
 inglesas; WSDOT sem gabarito numérico. Pontos abertos para a F7: Tc mínimo (5, 6, 10), TR da superficial e declividade
 mínima (0,5 × 0,3 %): **padrão provisório, decisão F7**.
 
@@ -206,3 +209,16 @@ mínima (0,5 × 0,3 %): **padrão provisório, decisão F7**.
 0,9×1,00 + 0,7×8,00 + 0,3×10,00 = 9,5 m; (2) CAC VC2: A = 44.110 m², C 0,6, P 23,2 mm em 5 min: Q = 2,05 m³/s com
 I = 278,4 mm/h; (3) HEC-12 Ex. 8 (swale circular, p. 49): d 0,30 ft, T 2,37 ft; (4) HEC-12 Ex. 23 (p. 110): d e V da
 valeta; (5) Xingó com I = 1,789 mm/min: L(0,001) = 213,76 m (1419:98).
+
+## Revisão técnica
+
+2026-10-08, revisor Opus (F7, lote A). **16 itens amostrados: 10 conferidos, 6 corrigidos, 0 pendentes.** Conferidos:
+Ku = 0,376 SI [FHWA-HEC22 p. 79]; Cw 1,66 e Co 0,67 [FHWA-HEC12 p. 86]; sarjeta ≥ 0,3 % e 0,2 % [HEC-12 p. 19]; 0,5 %
+[DERPR-ES-DR-01-23 p. 10]; fck 20 MPa [DNIT-ES018-2023 p. 3]; IS-210 (1.500 mm/ano, 500 veículos) [DNIT-IPR726 p. 307];
+valeta a 2 a 3 m da crista [DNIT-DREN p. 158]; escalonamento E = 100 H/(α − β) ≤ 50 m, trecho ≤ 2 % [p. 163-164]; descida
+Q = 2,07 L^0,9 H^1,6 [p. 188]; Scobey e Hazen-Williams [LOC-IME p. 83]. Rodados: Xingó VPC-1 (162,57 m) e HEC-12 Ex. 4
+(0,0572 m³/s). Corrigidos: HEC-12 p. 39 imprime 0,016 como K SI (erro; vale 0,376); folga em terra 0,3 a 10 m³/s
+f = √(46·h) cm [DNIT-DREN p. 162, imagem] e Tab. 36 (20 cm acima de 2,80 m³/s) [p. 163]; versão da calculadora 0.1.1;
+aviso de transição da grelha [HEC-12 p. 87]; sensibilidade Tc 5 → 10 min = +12 a +19 % no L (não "dezenas de por cento");
+`normas-e-manuais` → `drenagem-normas-e-manuais`. **Pendências para o André:** Tc mínimo, TR da superficial e declividade
+mínima (decisões em `DIVERGENCIAS.md` F7 Lote A); `folga_valeta` sem a forma √(46·h) nem a linha > 2,80 m³/s (registrado).

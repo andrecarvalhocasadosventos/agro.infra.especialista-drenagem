@@ -34,7 +34,7 @@ A calculadora recebe SI e converte (`d50_riprap_hec11(V, d, Ss=2,65, SF=1,2, z, 
 | Espessura e filtro | ver p. 55-62; filtro real (granular ou geotêxtil) é de Geotecnia | [p. 55-62] |
 | Talude | não mais íngreme que 1V:1,5H [USACE-EM1601 p. 29, §3-3]; a calculadora avisa abaixo de 1,5H:1V | |
 
-Exemplo de livro: Exemplo 1 (canal trapezoidal, Q 5.000 cfs, S 0,0049): V 9,7 ft/s, d 11,8 ft, K1 0,73 (talude 2:1, φ ≈ 41°), Ss 2,65, SF 1,2 → **D50 = 0,43 ft** [FHWA-HEC11 p. 78]. A calculadora com V = 2,957 m/s,
+Exemplo de livro: Exemplo 1 (canal trapezoidal, Q 5.000 cfs, S 0,0049): V 9,7 ft/s, d 11,8 ft, K1 0,73 (talude 2:1, φ ≈ 41°), Ss 2,65, SF 1,2 → **D50 = 0,43 ft** [FHWA-HEC11 p. 72; formulário p. 78]. A calculadora com V = 2,957 m/s,
 d = 3,597 m, z = 2, φ = 41 devolve D50 = 0,129 m (0,425 ft), K1 = 0,732; teste `test_hec11_exemplo1_d50`.
 
 ### 2.1 n de rip-rap (Strickler) e a divergência EM-1601 x HEC-11

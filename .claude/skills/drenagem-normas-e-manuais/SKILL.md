@@ -9,7 +9,7 @@ description: >
   8890 está no corpus", "as fontes divergem", "o DAEE vale fora de SP". Não use para: fórmula de disciplina (use
   hidrologia-de-projeto-para-drenagem, bueiros-e-travessias, drenagem-de-estradas-e-plataformas,
   canais-de-drenagem-e-macrodrenagem, drenagem-subsuperficial); pedido amplo (use drenagem-fundamentos); caso de projeto
-  (use drenagem-casos-de-referencia); IDF (Clima); normas de irrigação (Hidráulico); preço (engenheiro-de-custos).
+  (use drenagem-casos-de-referencia); IDF (Clima); fontes de canal, adutora, bomba, vertedouro e irrigação (normas-e-manuais do Hidráulico); preço (engenheiro-de-custos).
 ---
 
 # Normas e manuais de drenagem: guia das fontes
@@ -124,10 +124,10 @@ Quadro completo com licença e observações: `references/edicoes-paginacao-e-di
 
 Lista completa, com páginas e fontes, em `references/edicoes-paginacao-e-divergencias.md`, seção 4. **Os quatro pontos abertos da F7** (não decidir; escrever "padrão provisório, decisão F7" e mostrar as alternativas):
 
-1. **TR de bueiro de perímetro irrigado**: IPR-726 p. 258 (tubular 15/25; celular 25/50) e IPR-715 p. 24 (dimensionar com 10, verificar 20 ou 25) × DAEE p. 1 (≥ 25 rural, 100) × USBR 5-15 (núcleo) × acervo 25/50. Norma específica de perímetro: **não achada** (`NAO_ABERTOS.md`).
+1. **TR de bueiro de perímetro irrigado**: IPR-726 p. 258 (tubular 15 como canal / 25 como orifício; celular 25 / 50) e IPR-715 p. 24 (dimensionar com 10, verificar 20 ou 25) × DAEE p. 1 (≥ 25 rural, 100) × USBR 5-15 (núcleo) × acervo 25/50. Norma específica de perímetro: **não achada** (`NAO_ABERTOS.md`).
 2. **Ke de alas paralelas**: HDS-5 p. 216 e HEC-13 p. 100 = **0,7** × IPR-724 p. 130 = **0,2**. O código usa 0,7.
-3. **Limite de área do racional**: IPR-726 p. 259 (4 km², 10 km²) × DAEE p. 1 (2 km²) × HEC-22 p. 57 (80 ha) × IPR-715 p. 131 (sem teto, com A^−0,10) × projetos (50 ha a 3,5 km²).
-4. **Tc mínimo de drenagem superficial**: 5 min (IPR-726 p. 258; WSDOT; HEC-22) × **6 min** (Álbum p. 214) × **10 min** (IPR-726 p. 463, vicinais).
+3. **Limite de área do racional**: IPR-726 p. 259 (4 km², 10 km²) × DAEE p. 1 (2 km²) × HEC-22 p. 57 (80 ha) × IPR-715 p. 131 (sem teto, com A^−0,10) × projetos (50 ha a 3,5 km²). O código avisa acima de 2 km² (`racional(limite_km2=2.0)`, critério do DAEE, só SP).
+4. **Tc mínimo de drenagem superficial**: 5 min (IPR-726 p. 258; WSDOT; HEC-22) × **6 min** (Álbum p. 214, só para **dispositivo linear pré-fabricado**, com i "com base na NBR 10.844:1989", norma predial) × **10 min** (IPR-726 p. 463, vicinais).
 
 Outras que mordem: método de bueiro (IPR-724 crítico/orifício × HDS-5 entrada e saída); n do tubo de concreto (0,012 ABTC × 0,011-0,013 HDS-3 × 0,015 base dos charts × 0,018 DAEE); V máx no concreto (4,5 IPR-724 × 4,0 DAEE × 1,8-2,4 CDV);
 fck de sarjeta (20 × 15 × 11 MPa); tolerância (1 × 5 × 10 %); Tc laminar (McCuen 0,938 × planilhas 0,933 × NEH 15-8); Kirpich (0,007 × 0,0078; modificada 1,42; **sem "1,5×" em fonte alguma do corpus**); TR californiano (Pfafstetter) × Weibull (McCuen).
@@ -179,3 +179,13 @@ Sem texto ou com texto ruim: Álbum (24 p.), Pfafstetter (OCR), slides Robson I-
 - **Anteprojeto**: citar a fonte e a página, a edição, e a divergência quando houver; critérios por analogia rotulados.
 - **Projeto básico**: conferir página e tabela no PDF (não só no `_texto`), explicitar o método de bueiro (HDS-5) e a edição.
 - **Executivo**: só confere; norma de execução (ES) e aceitação são do projetista e do contratante.
+
+## Revisão técnica
+
+**2026-10-08, revisor Opus (F7).** Conferência por amostra no `_texto` (marcador `<!-- p. N -->`), sem PDF renderizado.
+
+- **Amostrados: 24 afirmações; conferidas 24; corrigidas 0 por erro numérico; 3 precisões de texto.** Conferidos: IPR-724 Qc = 1,538 D^2,5 (p. 48), HW ≥ 1,2 D (p. 89), c = 0,63 (p. 92), Ke 0,2 de alas paralelas (Tab. 30, p. 130), V máx. do concreto 4,50 m/s (Tab. 31, p. 131, impr. 127 = fís. − 4), TR 10 e 5 min da sarjeta com i em cm/h (p. 171), "tabela 26" errada na p. 169 (a Tab. 26 é o n do concreto, p. 114); IPR-715 IS-203 10 e 20/25 anos e risco J (p. 24), "6,3" do `_texto` e n = A^−0,10 (p. 131); IPR-726 TR por obra e Tc 5 min (p. 258), 4 e 10 km² (p. 259, impr. 256 = fís. − 3), Tc 10 min (p. 463); Álbum "não normativo" (p. 23) e TR 10 e Tc 6 min (p. 214); HDS-5 Ke 0,7 (p. 216), HW/D 1,0-1,5 (p. 72), Y 0,57 (p. 198) × 0,53 (p. 191); HEC-13 0,7 (p. 100); HEC-22 80 ha (p. 57, impr. 25 = fís. − 32) e Ku 0,376/0,56 (p. 79); HEC-12 K 0,56 (p. 39, impr. 22); DAEE ≤ 2 km², TR 25/100, C 0,25, CN 60 (p. 1-2), n 0,018 e V 4,0 do concreto (p. 4); ES 018 25 % (4H:1V) e fck 20 MPa; ES 021 traço 1:3 e juntas em descida > 10 m; DER/PR ES-DR-01 < 0,5 % implica demolição e gabaritos de 2,00 m; NEH 630-15 L = 0,6 Tc e laminar ≤ 100 ft; EM 1601 Tab. 2-5 (p. 25) e Change 1; EM 2902 berço de concreto 2,5 (p. 27); Pfafstetter, validade de 5 min a 6 d e de 0,2 a 100 anos (p. 21), Salvador (Ondina) (p. 31, 280); EFH14 2ª ed. fev/2021.
+- **Precisões feitas:** seção 8, item 4: o Tc de 6 min do Álbum vale só para dispositivo linear pré-fabricado, com i pela NBR 10.844 (p. 214). Item 1: a ordem 15/25 é "como canal / como orifício" (p. 258). Item 3: o código usa 2 km² (DAEE) como limite padrão. Na description, o limite com o `normas-e-manuais` do Hidráulico ficou explícito.
+- **Calculadoras:** as 38 funções da seção 9 existem em `tools/dren/` com o nome e o argumento citados. O teste `test_baixio_legado_vs_hds5_5pct` existe. Nenhum erro numérico encontrado nas constantes conferidas (Ku 0,376; 3,6; A^−0,10; risco J; TC_MIN 5; TR 10).
+- **Fronteiras:** D3 (dissipador → Hidráulico), IDF → Clima e travessia → Hidráulico estão de acordo com a `MATRIZ_DE_INTERFACES.md` §3.3. Não há colisão de description dentro do pacote. Com o `normas-e-manuais` do Hidráulico há gatilhos em comum (HDS-5, DAEE, NBR 8890), mas os dois ficam em pacotes separados e cada um remete ao outro.
+- **Pendentes (para o André):** (a) decisão 4: o "6 min" do Álbum não é um Tc mínimo geral, e sim o de canaleta pré-fabricada com critério predial. Recomendação: 5 min (IPR-726 p. 258) para plataforma e estrada de serviço, 10 min só em vicinal (p. 463). (b) Decisão 3: o padrão de 2 km² do `racional` segue o DAEE (só SP), enquanto o IPR-726 p. 259 permite racional até 4 km² e racional corrigido até 10 km². Entre 2 e 4 km² o código avisa e o DNIT aceita. O aviso cita "2-3 km²", e o 3 não tem fonte. Recomendação: manter 2 km² por conservadorismo, mas citar o IPR-726 no aviso. (c) Página física do PDF não conferida nos ábacos (só o `_texto`). Em projeto básico, abrir o PDF.

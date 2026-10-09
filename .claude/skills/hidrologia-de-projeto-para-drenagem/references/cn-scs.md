@@ -94,7 +94,7 @@ Vale do Iuiu CN 78 (solo B, cultura em fileira, boa), igual ao da Tab. 9-1 (SR, 
 - NRCS Tab. 10-1: CN II 74 → I 55, III 88 [NRCS-NEH630-CH10 p. 12].
 - O NRCS não encontrou relação entre a chuva antecedente de 5 dias e S em bacias onde predomina o escoamento superficial (Treynor, Iowa) e propõe tratar CN como variável aleatória [NRCS-NEH630-CH10 p. 13].
 - DNIT, procedimento B (o mais usado no Brasil): usa CN já elevado (74 no lugar de 60), sem chuvas antecedentes [DNIT-HIDRO p. 57-58, 108].
-- Regra do agente: para obra de drenagem em solo de perímetro irrigado, a umidade do solo no dia da chuva é maior que a da bacia natural. Declarar ARC II ou III e mostrar a sensibilidade (Q com CN II e CN III). A escolha é do projetista (D2) e vai ao parecer como premissa.
+- Regra do agente: para obra de drenagem em solo de perímetro irrigado, a umidade do solo no dia da chuva é maior que a da bacia natural. Declarar ARC II ou III e mostrar a sensibilidade (Q com CN II e CN III). A escolha é do projetista (D2-Hid) e vai ao parecer como premissa.
 
 **CN do CAC Trecho 1 (doc 1139:227):** 65 no anteprojeto e no licitado, **85 no executivo** (HUT acima de 3,5 km², TR 100), sem calibração com vazão observada. CN 85 é alto frente às tabelas do NRCS: tratar como calibração local do semiárido cearense, não como valor de livro, e mostrar a sensibilidade (CN 65, 75 e 85). Delmiro BHD1: CN 75,2 (planossolo B-C, sub-bacia 1), S = 83,77 mm, P bacia 112,40 mm → Pe 50,99 mm (`casos-l2-e-divergencias-f5.md` seção 1).
 

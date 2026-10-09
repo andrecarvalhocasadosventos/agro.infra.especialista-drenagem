@@ -25,7 +25,8 @@ a divergência com os quatro itens da SKILL §2. Referência do método: HDS-5 3
   162,57 x 162,54 m).
 - **Entre fontes** (não é acervo): Ke de alas paralelas 0,7 (HDS-5 p. 216) x 0,2 (DNIT-DREN p. 130); `fonte_ke="dnit"`.
   Tc mínimo 5, 6 ou 10 min; TR da drenagem superficial 10 x 25; V admissível DNIT x EM-1601; Ernst com `a` (ILRI-16
-  38 m x WATERLOG 51,8 m). Todos "padrão provisório, decisão F7".
+  38 m x WATERLOG 51,8 m). Todos "padrão provisório" até decisão do André (sessão F7).
 - Funções NERC e Bransby-Williams estão "não conferidas": só reproduzem projeto do acervo; não são método do pacote.
-- 11 xfail no total de `tests/dren/` segundo o núcleo (`drenagem-fundamentos` §9); a tabela acima lista os 10 de acervo
-  achados no código. O que muda entre os dois números deve ser conferido contra `python -m pytest tests/dren -q`.
+- Contagem conferida (pytest, 2026-10-08): 10 funções `xfail`, todas de acervo e todas na tabela acima; 14 resultados
+  `xfailed` porque `test_baixio_legado_vs_hds5_5pct` e `test_xingo_lamina_normal_vs_doc` têm 3 parâmetros `xfail`
+  cada. O "11 xfail" do núcleo e do `PLANO.md` não corresponde a nenhuma das duas contagens (corrigir lá, não aqui).

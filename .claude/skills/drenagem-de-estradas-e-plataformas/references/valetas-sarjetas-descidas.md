@@ -27,8 +27,8 @@ alvenaria de tijolo ou pedra (junta 1:4), pedra arrumada, vegetação [DNIT-DREN
    trapezoidal por expressão em z, B e H₀ (símbolos corrompidos na extração; usar `canais_drenagem` para yc).
    **Evitar h a menos de 10 % de hc**; o `valeta_manning` avisa Fr em ±10 % do crítico [IME p. 54].
 5. Folga, valeta revestida, Tab. 36 do DNIT: Q ≤ 0,25 m³/s: 10 cm; 0,25-0,56: 13; 0,56-0,84: 14; 0,84-1,40: 15;
-   1,40-2,80: 18; > 2,80: 20 cm. Valeta em terra: f = 0,2 h até 0,3 m³/s; acima, equação impressa corrompida
-   [DNIT-DREN p. 162-163] e EQ. 4.7 do IME ilegível: conferir no PDF. A calculadora implementa só f = 0,2 h e a Tab. 4.2
+   1,40-2,80: 18; > 2,80: 20 cm. Valeta em terra: f = 0,2 h até 0,3 m³/s; de 0,3 a 10 m³/s, **f = √(46·h)**, f e h em cm
+   [DNIT-DREN p. 162, imagem conferida na F7; o `_texto` perde o radical] (provável origem da EQ. 4.7 do IME). A calculadora implementa só f = 0,2 h e a Tab. 4.2
    do IME [p. 54-55]; WSDOT usa 0,5 ft fixos [WSDOT p. 109] (divergência 11).
 6. S excessiva: **escalonar** com barragens, S de trecho ≤ 2 %, E = 100 H/(α − β) (α e β em %), E ≤ 50 m [p. 163-164].
 7. Ao atingir o **comprimento crítico** ou em talvegue secundário: descida d'água para a sarjeta ou caixa coletora [p. 164].

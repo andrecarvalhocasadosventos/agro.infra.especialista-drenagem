@@ -113,7 +113,10 @@ Vazão do dreno: Q = q · L · B (m³/d; `vazao_de_dreno`). Dois conceitos difer
    H disponível, não a declividade; dreno horizontal funciona igual [FAO-IDP62 p. 211-212]. Tubo liso/técnico:
    Q = 89 d^2,714 s^0,571 (s = H/B) [FAO-IDP62 p. 214]; Embrapa grafa Q = 89 d^2,714 i^0,572 (Wesseling), 50 só para
    transporte [EMBRAPA-DREN-SUBT p. 16-17, Tab. 4]. Corrugado: Manning com Km = 1/n, máx. 65 [FAO-IDP62 p. 215-216].
-   **Não há função para este conceito na calculadora** (lacuna; ver §9).
+   **Não há função para este conceito na calculadora** (lacuna; ver §9). Ordem de grandeza (d 0,10 m, s 0,002):
+   89 d^2,714 s^0,571 = 4,9e-3 m³/s × Manning pleno n 0,011 = 2,7e-3 (≈ fórmula de transporte 50 d^2,714 s^0,571,
+   2,8e-3): o Manning com a declividade **subestima ~1,8×** a capacidade do lateral com vazão crescente (lado da
+   segurança); conferir à mão quando o DN sair no limite.
 
 Margens: área drenada +10 a 25 % [EMBRAPA-DREN-SUBT p. 18]; declividade 0,02 a 1,0 %; linha < 300 m por
 manutenção [EMBRAPA-DREN-SUBT p. 17, 20]. Detalhes, Km, a de Blasius, fator de manutenção e **D-86**:
@@ -135,8 +138,9 @@ A skill **não escolhe** entre eles: mostra os três, declara o usado e a conseq
 
 ### 3.5 Envoltório (só o critério hidráulico)
 
-`criterio_de_filtro_hidraulico` (Terzaghi: D15f ≤ 5 D85s e D15f ≥ 5 D15s; o código usa fator 4 conservador, DNIT 5
-[DNIT-DREN p. 252-253]), `necessidade_envoltorio_ilri56` (fluxograma, HFG) e `envoltorio_granular_pontos_controle`
+`criterio_de_filtro_hidraulico` (Terzaghi: D15f ≤ 5 D85s e D15f ≥ 5 D15s [DNIT-DREN p. 252-253]; o código usa um só
+fator, padrão 4: mais exigente na retenção, **menos** exigente na permeabilidade, onde aprova razão 4 a 5 que o DNIT
+reprova; comparar com `fator=5`), `necessidade_envoltorio_ilri56` (fluxograma, HFG) e `envoltorio_granular_pontos_controle`
 (pontos 1 a 7). **Saída é indicativa.** Filtro real, geotêxtil e piping: `[DELEGAR: geotecnia]`. Em solo com
 argila > 25-40 %, o ILRI-56 indica que o envoltório filtrante não é necessário para evitar assoreamento (checar HFG)
 [ILRI-56 p. 46-47]. `references/envoltorio-e-filtro.md`.
@@ -205,13 +209,13 @@ Reproduzir todo `avisos`. Sem K, D e q medidos, o resultado é **ordem de grande
 | Fórmula legada embutida: Q = 33,5 D^2,67 i^0,5 = Manning pleno com n ≈ 0,0093; com n 0,012 a 0,013 a capacidade cai 22 a 28 % | Xingó 1419:21 | converter para n equivalente antes de comparar; DN300, i = 1e-4: 1,35e-2 (legado) × 7,9e-3 (n 0,016) × 9,7e-3 (n 0,013) m³/s |
 | Três critérios de q de dreno de fundo sem reconciliação (6e-5, 3,9e-7, ~1,8e-6 m³/s/m) | CSB, Delmiro, Xingó | tabela §3.4; sem gabarito; delegar K e freático |
 | CSB usa Manning com o **gradiente de pressão**, não a declividade do tubo ("simplificação do USBR"); D por declividade i dá mais: 800 m, 2 tubos, i = 1e-4, n 0,011 → 0,40 m × DN300 do memorial | CSB 1341:76 | citar a diferença como regra do USBR, não erro; capacidades dos tubos sem ancoragem |
-| `q` em L/s/ha lido como mm/d (1,2 L/s/ha = 10,4 mm/d, 5 a 10× a faixa de irrigado árido) | evals dsub-03/04 | converter e comparar com a faixa; perguntar à Irrigação |
+| `q` em L/s/ha lido como mm/d (1,2 L/s/ha = 10,4 mm/d, 5 a 10× a faixa de irrigado árido; lido como "1,2 mm/d" cai dentro dela) | evals dsub-03/04 | converter e comparar com a faixa; 1,2 L/s/ha não tem fonte no corpus: se o q do coletor inclui escoamento superficial, não é recarga de dreno; perguntar à Irrigação |
 | Hooghoudt com o termo extra (Di − Dd) da nota WATERLOG: dimensionalmente inconsistente | WATERLOG-DRAINAGE-EQUATION p. 2 | usar a forma de ILRI-16 Eq. 8.4/8.7 |
 | Ernst do exemplo de Ritzema sem o fator a: 51,8 m contra 38 m (36 %) | WATERLOG-ENDRAIN p. 10 × ILRI-DPA16 Ex. 8.4 | usar a Tab. 8.2 (a = 3,9) |
 | Dreno de fundo com pouca declividade e saída a mais de 250 m; PIL ausente | Delmiro 1492:106 | limite de manutenção 200 a 300 m |
 | D medido da superfície em vez de abaixo do dreno | recorrente | D = cota da barreira − cota do dreno |
 | Premissa de projeto sem fonte numérica local: "1 furo/2400 m²" (literatura 1/800 a 1/4000 m²) | Xingó 1419:20 | declarar a faixa da literatura e o efeito no DN |
-| Tabelas de μ e de profundidade/espaçamento por K **sem página** na calculadora | `drenos.py` | `porosidade_drenavel` difere da Tab. 3 de [EMBRAPA-DREN-SUBT p. 14]; usar a Tab. 3 paginada; `recomendacao_indicativa` não vai a parecer |
+| Tabelas de μ e de profundidade/espaçamento por K **sem página** na calculadora | `drenos.py` | `porosidade_drenavel` difere da Tab. 3 de [EMBRAPA-DREN-SUBT p. 14] (areia 0,15-0,30 × 0,22-0,35; franco 0,05-0,12 × 0,08-0,12; argila 0,01-0,05 × 0,01-0,03): pelo μ médio, Glover-Dumm dá L +13 % (areia média/grossa), +8 % (franco), −18 % (argila); usar a Tab. 3 paginada; `recomendacao_indicativa` não vai a parecer |
 | Nenhum projeto do acervo traz Hooghoudt, Ernst ou Glover-Dumm calculado | `casos/drenagem/_INDICE.md` | sem gabarito de projeto: gabaritos são de livro (ILRI-16, Embrapa) |
 
 ## 7. O que a norma exige e a quem se aplica
@@ -225,20 +229,8 @@ exigência; ver `drenagem-normas-e-manuais`.
 
 ## 8. Referências (IDs e páginas-chave)
 
-- ILRI-DPA16 (Hidráulico): Hooghoudt Eq. 8.3-8.7 p. 264-266; Tab. 8.1 p. 267; d série Eq. 8.9-8.14 p. 268; Ernst
-  Eq. 8.17-8.21 p. 270-272, Tab. 8.2 p. 272, Ex. 8.1-8.4 p. 276-281; Glover-Dumm Eq. 8.28-8.33 p. 283-284.
-- USBR-DRAINAGE (PDF = impr. + 19): d_e de Moody p. 173-174; exemplo transitório p. 187; Donnan p. 188-190; tubo e
-  envoltório p. 231-256 (mapa H15; página exata a confirmar).
-- NRCS-NEH624-CH04: elipse Eq. 4-8 p. 63-66; grades e velocidades p. 87-88; dimensionamento de linha p. 93; filtros
-  p. 96-102.
-- FAO-IDP62: critérios p. 111-114; Anexo 20 (tubos) p. 211-217; Anexo 17 (fórmulas) p. 193-200.
-- ILRI-56-ENVELOPE (próprio): p. 42-47, 66-68, 175 (PDF = impr. + 20).
-- EMBRAPA-DREN-SUBT p. 12-18, 20; EMBRAPA-MANICOBA-1988 p. 1-3, 7-8; EMBRAPA-ESPACAMENTO-1990 p. 5-10;
-  EMBRAPA-BEBEDOURO-1986 (números degradados, só localização); WATERLOG-ENDRAIN p. 7-10; DNIT-DREN p. 252-253.
-- Casos: `csb_geohidro_dreno_fundo_canal_subsuperficial`, `xingo_lote1_drenagem_interna_canal_subsuperficial`,
-  `iuiu_2002_drenabilidade_subterranea_diagnostico`, `2026-10-08_delmiro_gouveia_dreno_fundo_canal_comprimento_maximo`.
-  Nenhum número tem `✓h`.
-- Divergências: `tools/dren/DIVERGENCIAS.md`, seção "drenos".
+Lista paginada em `references/criterios-e-tabelas.md` §7. Divergências: `tools/dren/DIVERGENCIAS.md`, seções
+"drenos" e "Revisão técnica F7 (Opus)".
 
 ## 9. Lacunas
 
@@ -253,3 +245,29 @@ exigência; ver `drenagem-normas-e-manuais`.
 - Nada nesta skill depende dos quatro pontos abertos da F7 do núcleo. Marcado "padrão provisório, decisão F7": n do
   tubo e uso de Manning pleno × parcial no tubo dreno (a calculadora usa pleno; o ILRI-56 e o NEH 624 admitem
   pleno e até 1,2× com carga).
+
+## Revisão técnica
+
+2026-10-08, revisor Opus (F7, lote B). **15 itens amostrados: 13 conferidos, 2 corrigidos, 0 pendentes de fonte.**
+Conferidos no primário: Tab. 1 (lençol) e dreno ~0,5 m abaixo [EMBRAPA-DREN-SUBT p. 12-13]; Tab. 2 (1,5 a 4,5 mm/d)
+[p. 13]; Tab. 3 (μ) [p. 14]; q por clima, lençol e D ≈ L/4 [ILRI-56 p. 42]; 0,8-0,9 / 1,0-1,2 m, Tab. 8 (1-2 mm/d),
+40 mm × 5 % → 1,3 mm/d [FAO-IDP62 p. 113-114]; Q = 89 d^2,714 s^0,571 [FAO-IDP62 p. 214, que cita "FAO, 2005";
+Embrapa atribui a Wesseling 1973, expoente 0,572, p. 16]; Km máx. 65 [FAO-IDP62 p. 215]; n 0,011-0,016, 1,4 ft/s e
+3,5-9 ft/s [NRCS-NEH624-CH04 p. 87-88]; 1,16 / 1,27 e αt > 0,2 [ILRI-DPA16 p. 284]; Maniçoba q 8 mm/d e viés 13,5-35 %
+[EMBRAPA-MANICOBA-1988 p. 3, 7-8]; 1 L/s/ha = 8,64 mm/d; exemplo da CLI (43,5 / 42,9 m) reproduzido. As 31 funções da
+§4 existem em `drenos.py` com os nomes citados; os 24 testes citados existem em `test_drenos.py` (3 xfail estritos).
+Fronteiras conferem com a MATRIZ (linhas Geotecnia e Irrigação); sem colisão de description com o Hidráulico.
+
+**Corrigido:** (1) §3.5 e ref. envoltório: o fator 4 do código foi chamado de "conservador"; é mais exigente só na
+retenção e **menos** exigente na permeabilidade que o DNIT (≥ 5 D15s, p. 252). (2) §6: armadilha do q em L/s/ha
+completada (1,2 lido como mm/d cai na faixa árida; 1,2 L/s/ha sem fonte no corpus) e efeito numérico da tabela de μ.
+
+**Calculadora (registrado em `DIVERGENCIAS.md`, F7 Lote B, não corrigido):** fator único de Terzaghi; `POROSIDADE_DRENAVEL`
+≠ Tab. 3 Embrapa; Wesseling/FAO-62 Anexo 20 ausente.
+
+**Decisões do André:** (a) Terzaghi: fator único 4 (atual) × 5 nas duas razões (DNIT p. 252-253) × separar retenção
+4-5 e permeabilidade 5; recomendo separar. (b) μ: trocar a tabela sem página pela Tab. 3 [EMBRAPA-DREN-SUBT p. 14]
+(L de Glover-Dumm muda +13 % areia, +8 % franco, −18 % argila); recomendo trocar. (c) Wesseling (89 ou 50 × d^2,714
+s^0,571) como função de lateral/coletor; Manning com declividade subestima ~1,8× o lateral; recomendo incluir antes de
+projeto básico (pesa em D-86). (d) 1,2 L/s/ha dos evals dsub-03/04: coeficiente de coletor com escoamento superficial
+ou recarga de dreno? Sem fonte no corpus; recomendo pedir a origem (Codevasf/projeto) antes de virar gabarito.

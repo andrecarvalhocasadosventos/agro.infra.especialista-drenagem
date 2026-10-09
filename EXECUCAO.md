@@ -81,3 +81,20 @@ ou de manutenção.
   (19,5), `drenagem-subsuperficial` (22,4), `drenagem-normas-e-manuais` (21,1), `drenagem-casos-de-referencia` (16,4);
   35 references. Conferente de forma (script): 8/8 com `name` = pasta, description ≤ 1.024 com "Use quando" e
   "Não use", SKILL.md ≤ 25,6 KB. Tokens ~1,8 milhão (Sonnet).
+
+## 2026-10-08/09 — F7 · revisão técnica (parte automática), F8 · agente, F9 · redação dos evals
+
+- F7: 2 Opus (lote A direto; lote B com 4 sub-revisores, um por skill; `tools/briefs/BRIEF_F7.md`). Amostradas
+  ~151 afirmações nas 8 skills (A: 59; B: 21 + 15 + 24 + 16 ≈ 76; mais ~16 do fundamentos/casos); correções de
+  página, unidade e texto nas skills; nenhum erro numérico de calculadora. Seção `## Revisão técnica` no fim dos 8
+  SKILL.md. Achados em `tools/dren/DIVERGENCIAS.md` (Lote A; Lote B reconstituído em 2026-10-09 porque a gravação
+  concorrente do lote A o sobrescreveu). pytest inalterado: 269 passed, 14 xfailed. Tokens Opus ~0,8 milhão.
+- F8: 1 Sonnet. `.claude/agents/engenheiro-de-drenagem.md` (20,5 KB; description 1.066 caracteres; 18 V-regras;
+  8 linhas de roteamento; 12 pontos abertos com padrão provisório), `memoria/MEMORIA.md` em 4 camadas, `LICOES.md`,
+  `pareceres/parecer_cabecalho.md`.
+- F9 (redação): 1 Sonnet. `evals/roteamento.yaml` 88 casos (PAR 30, DELEGACAO 39, NAO-GATILHO 10, CDV 9,
+  VIGENCIA 6, mistos 5; ≥ 4 por skill), `evals/casos_numericos.yaml` 40 casos (21 reproduz, 9 divergência > 5 %,
+  10 sem gabarito), `evals/README.md`; herdados incorporados e apagados. `evals/avaliar_roteamento.py` adaptado do
+  Clima (delegação lida da `nota`). Uma sessão `/treinar squad` escreveu por engano em `evals/` entre 19:35 e 19:41;
+  o redator conferiu e regravou os arquivos.
+- Processos: registro órfão da F2 encerrado em 2026-10-09 (sem processo ativo).

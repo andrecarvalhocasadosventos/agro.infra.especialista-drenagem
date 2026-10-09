@@ -9,7 +9,7 @@ description: >
   pode ser gabarito?", "o projeto errou?", "busque no acervo", "caso novo". Não use para: fórmula e critério
   (use hidrologia-de-projeto-para-drenagem, bueiros-e-travessias, drenagem-de-estradas-e-plataformas,
   canais-de-drenagem-e-macrodrenagem, drenagem-subsuperficial); o que a norma exige (use drenagem-normas-e-manuais);
-  canal, adutora e sifão (Hidráulico); IDF (Clima); preço; núcleo (use drenagem-fundamentos).
+  canal, adutora, sifão, dissipador (Hidráulico); IDF (Clima); preço; núcleo (use drenagem-fundamentos).
 ---
 
 # Casos de referência de drenagem: projetos reais como gabarito de comparação
@@ -26,8 +26,9 @@ Skill "por fonte". Não traz fórmula: a fórmula está na skill da disciplina. 
    logo vale".
 2. **Todo número com fonte e marca.** `doc:página` + marca de ancoragem (`✓`, `✓*`, `~`, `!`, `·`, `✓h`, `✗h`; tabela
    no `consultar-acervo`). Planilha .xls/.docx: citar o bloco, não "página".
-3. **Nenhum caso de drenagem tem `✓h`.** Os 16 casos de 2026-10-08 dizem isso no cabeçalho ("gabaritos são candidatos
-   até conferência humana, F7"); os 10 herdados (2026-10-02) também não têm conferência humana registrada. Logo: todo
+3. **Nenhum caso de drenagem tem `✓h`.** Os 16 casos de 2026-10-08 dizem isso por escrito ("Nenhum `✓h`", "pendente
+   de `✓h`" ou "`✓h` (nenhum)", no cabeçalho ou na seção de rastro); os 10 herdados (2026-10-02) também não têm
+   conferência humana registrada. Logo: todo
    número de caso entra no parecer como **"valor do projeto, não conferido"**. `!`, `~`, `✓*` e `·` nunca viram
    gabarito sem `✓h`. Promover = emitir o comando de conferência pontual (§4) e esperar o veredito do André.
 4. **Qualidade do rastro** (índice): A reproduzível; B método ou entradas literais com coeficiente ou coluna inferido;
@@ -131,7 +132,7 @@ Tabela completa, com fonte, números e consequência: `references/licoes-dos-cas
 | 1 | P (mm) usada como i (mm/h): Q 12 vezes menor | CAC Castanhão, valas (1128:106-112) | conferir a dimensão: C·P·A/3,6e6 reproduz as 7 linhas; com I = P·60/tc, Q(VC2) = 2,05 e não 0,171 m³/s |
 | 2 | Tc de fórmula com rótulo trocado e velocidade em km/h | Delmiro BHD1 (1494:31, 64; 1492:155) | NERC(13,21 km; 32 m) = 7,65 h e Kirpich = 4,92 h; v = L/tc = 0,49 m/s < 0,5 (`test_delmiro_nerc_x_kirpich_rotulo_e_velocidade`) |
 | 3 | Declividade impressa 0,0618 onde as cotas dão 0,0043 | Delmiro BH4.5 (1492:142) | S = ΔH/L em cada linha do Quadro 3.50; marcar \|razão − 1\| > 5 % (57 de 58 conferem) |
-| 4 | Capacidade de tubo dreno 4,7 a 6,9 vezes menor que Manning | Delmiro dreno de fundo (1492:105) | `drenos.capacidade_tubo_parcial`; razão entre DN deveria ser D^(8/3) = 2,19 e o memorial dá 3,25 (2 xfail strict) |
+| 4 | Capacidade de tubo dreno 4,7 a 6,9 vezes menor que Manning | Delmiro dreno de fundo (1492:105) | `drenos.capacidade_tubo_parcial`; razão entre DN deveria ser D^(8/3) = 2,19 (Ø interno 149 e 200 mm) e o memorial dá 3,25 (2 xfail strict) |
 | 5 | Seção menor que o tirante e folga < 25 % em 43 % dos trechos | Delmiro ZTT01 em DT-2.23.1 (1521:165) | `canais_drenagem.verificar_trechos`: tirante 0,331 m > h 0,20 m; 84 de 194 trechos |
 | 6 | Total de extensão que não fecha; dois limites de V; talvegue de 20 km | Salitre Etapa 2 (1584:97-105) | `reconciliar_extensoes` (74.884,41 e não 72.858,41 m); `verificar_limites_alternativos` (1,2 x 1,5 m/s); razão L/área |
 | 7 | Cota do rasto que sobe 1,79 m para jusante | CAC Trecho 1, B31 (1131:66) | monotonia do perfil e coletor abaixo do rasto (B31 viola os dois) |
@@ -150,7 +151,8 @@ fórmula. Lista com teste, valores e hipótese em `references/divergencias-xfail
 HDS-5 em −8,0, −6,4 e −7,8 %; HUT TR 25 6,03 x 2,70 m³/s), CSB (BTCC-N17 −27 %; 2DN150 até 200 m), Xingó (BU-01/06/24:
 lâmina de perfil x Manning normal), Iuiu (DP11 McMath +24 %), Delmiro (DN170 e DN230; pico BHD1 +5,3 %). Marcadores
 `xfail` em `tests/dren/`: não estritos nos testes de Baixio, CSB BTCC-17, Xingó e Iuiu/Baixio HUT; `strict=True` em
-CSB 2DN150, Delmiro DN170/DN230 e BHD1.
+CSB 2DN150, Delmiro DN170/DN230 e BHD1. Contagem (pytest 2026-10-08): 10 funções `xfail`, 14 resultados
+`xfailed` (Baixio legado e Xingó são parametrizados, 3 casos cada); suíte 269 passed, 14 xfailed.
 
 ## 8. Registrar um caso novo
 
@@ -170,8 +172,10 @@ pacote**; caso de canal de adução ou adutora vai ao Hidráulico.
   é dito assim, sem "corrigir" a chuva.
 - **Orçamento**: casos não trazem preço; custo de alternativa vai ao `orcamento` com quantitativos.
 - **Normas e manuais**: "o que a norma exige" -> `drenagem-normas-e-manuais`.
-- **Pontos abertos F7** (padrão provisório, decisão F7; mostrar alternativas com fonte): TR de bueiro de perímetro
-  irrigado (USBR 5-15 x acervo 25/50: Baixio, Iuiu e Delmiro usam 25/50, Salitre e CSB usam 100); Ke de alas
+- **Pontos abertos** (padrão provisório até **decisão do André**, sessão F7; mostrar alternativas com fonte): TR de
+  bueiro de perímetro irrigado (USBR Drainage Manual [USBR-DRAINAGE p. 57]: 5 a 15 anos para drenos superficiais,
+  25 onde a estrutura é cara; acervo: Baixio 25 com verificação 50, Iuiu 2002 50 sob canal e 25 sob estrada, Iuiu
+  2018 25, Delmiro 20 com verificação 50, Salitre e CSB 100); Ke de alas
   paralelas (DNIT 0,2 x HDS-5 0,7); limite de área do racional (50 ha, 100 ha, 350 ha, 2 km², 3,5 km²); Tc mínimo (5, 6
   ou 10 min; Xingó usa 10).
 
@@ -194,3 +198,44 @@ Comando: `python -m tools.dren.<módulo> --json "{\"funcao\": \"...\", ...}"`; `
   Pernambucano e hietograma do Baixio (tabela T-K) e do Delmiro (polinômio cúbico) não estão no acervo textual.
 - Casos B e C dependem de coluna ou coeficiente inferido; promover a gabarito exige página conferida por pessoa.
 - Documentos de rota `imagem` não são alcançáveis por texto.
+
+## Revisão técnica
+
+**2026-10-08, revisor Opus (F7).** 16 itens numéricos amostrados, 15 funções e 17 testes citados conferidos.
+Resultado: 13 conferidos sem mudança, 3 corrigidos, 0 erros de calculadora.
+
+- **Conferidos** (recalculados à mão ou no primário): CAC valas, Q(VC2) 0,171 com P tomado como i e 2,05 m³/s com
+  I = 278,4 mm/h (caso 1128:112); Delmiro: Kirpich 4,92 h, NERC 7,65 h, v 0,48 e 0,49 m/s, S(BH4.5) 0,0043 com razão
+  14,4; DN170/DN230 por Manning meia seção 1,05e-3 e 2,31e-3 m³/s (`capacidade_tubo_parcial` dá o mesmo), Lmáx 388 e
+  1.260 m (2,7 e 5,9 km com Manning); Salitre 74.884,41 m, V 1,2 x 1,5 m/s (1584:105; 1585:97-123); CAC B31 sobe 1,79 m
+  e o coletor fica 0,81 m acima; Jaíba 0,013/0,015 = −13 %; CSB BTCC-N17 3 x 9,54 = 28,6 m³/s (−27 %); Xingó
+  4,48/(1,5·0,96) = 3,11 m/s e Kirpich S1 9,07 x 8,91 h; Baixio folga 0,464 m; Ke de alas paralelas 0,7 [HDS-5 p. 216]
+  x 0,2 [DNIT-DREN p. 130, Tab. 30]. Todas as funções do §10 existem em `tools/dren/` com o nome citado, e todos os
+  testes do §6, §7 e das references existem em `tests/dren/`, com o `strict` declarado no §7.
+- **Corrigidos**: (1) §1 regra 3: os casos não trazem a frase "gabaritos são candidatos até conferência humana, F7"
+  (só 3 dos 16 falam em "conferência humana"); todos dizem "Nenhum `✓h`" ou "pendente de `✓h`". (2) §9: o Delmiro usa
+  TR 20 com verificação TR 50 nos bueiros (caso `delmiro_gouveia_bueiros_tubulares_sob_canal_principal`, 1493:282-285;
+  1492:164), não 25/50; os pontos abertos passam a "decisão do André", e entra o primário do USBR. (3) §7 e
+  `references/divergencias-xfail.md`: contagem de xfail. Também: "dissipador" no "Não use" da description (D3) e
+  "Ø interno 149 e 200 mm" na lição 4.
+- **Fronteiras**: conferem com a `MATRIZ_DE_INTERFACES.md` (Clima entrega IDF; Hidráulica decide canal x sifão x
+  aqueduto x bueiro, D18-Hid; dissipador é do Hidráulico, D3). A description não colide com `casos-de-referencia`
+  do Hidráulico, que exclui drenagem e aponta para `casos/drenagem/`. A regra "apontar, não corrigir" (§2) está
+  aplicada nas lições e nos casos.
+
+**Pendências para o André**
+
+1. **TR de bueiro de perímetro irrigado** (dado novo para o ponto do `PLANO.md`): [USBR-DRAINAGE p. 57] pede 5 a 15
+   anos para drenos superficiais e 25 onde a estrutura é cara ou o dano justifica. O acervo usa 20/50 (Delmiro),
+   25/50 (Baixio; Iuiu 2002 é 50 sob canal e 25 sob estrada), 25 (Iuiu 2018) e 100 (Salitre, CSB). Efeito: I100/I25
+   ≈ 1,3 a 1,4 com as IDFs do acervo (CSB TR^0,241; Delmiro a50/a20), mais o C quando ele cresce com o TR. Recomendação: 25 para bueiro sob canal, com verificação a 50 (o
+   USBR dá apoio ao 25, e o acervo verifica a 50); 100 só quando a falha põe o canal adutor em risco.
+2. **Ke de alas paralelas**: as duas páginas conferem (0,7 x 0,2). Nas outras linhas a Tab. 30 coincide com a C.2 do HDS-5
+   (`DIVERGENCIAS.md` v0.2.0), o que sugere erro de transcrição só nesta linha. Efeito: He = Ke·V²/2g, com V 3 m/s dá 0,32 x 0,09 m. Recomendação:
+   manter o padrão 0,7, como está no código.
+3. **xfail não estritos**: a regra 5 pede `strict=True`, mas 6 funções de acervo (Baixio folga, legado e HUT; CSB
+   BTCC-N17; Xingó; Iuiu DP11) estão com `strict=False`. Não muda número; muda só o alarme se o teste passar a
+   fechar. Recomendação: tornar estritos. O "11 xfail" do `drenagem-fundamentos` §9 e do `PLANO.md` deve virar 10
+   funções e 14 resultados.
+4. Seguem pendentes, sem dado novo: limite de área do racional, Tc mínimo, y/D 75 %, folga 25 % e NERC e
+   Bransby-Williams sem primário (F5).

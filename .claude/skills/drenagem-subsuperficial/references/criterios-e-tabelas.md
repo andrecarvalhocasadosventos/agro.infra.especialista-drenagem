@@ -86,3 +86,20 @@ areia franca, areia fina 0,12 a 0,22; areia média e grossa, cascalho 0,22 a 0,3
 `recomendacao_indicativa(K)` (profundidade e espaçamento por classe de K) e `porosidade_drenavel` são ordens de grandeza
 sem página (FAO-38 fora do corpus). Podem orientar uma pergunta ao usuário; **não entram em parecer como dado**. Os
 valores paginados são os de `faixa_K_por_textura` e `coeficiente_drenagem_tipico` (ILRI-56).
+
+## 7. Referências da skill (IDs e páginas-chave; movido do SKILL.md na revisão F7)
+
+- ILRI-DPA16 (Hidráulico): Hooghoudt Eq. 8.3-8.7 p. 264-266; Tab. 8.1 p. 267; d série Eq. 8.9-8.14 p. 268; Ernst
+  Eq. 8.17-8.21 p. 270-272, Tab. 8.2 p. 272, Ex. 8.1-8.4 p. 276-281; Glover-Dumm Eq. 8.28-8.33 p. 283-284.
+- USBR-DRAINAGE (PDF = impr. + 19): d_e de Moody p. 173-174; exemplo transitório p. 187; Donnan p. 188-190; tubo e
+  envoltório p. 231-256 (mapa H15; página exata a confirmar).
+- NRCS-NEH624-CH04: elipse Eq. 4-8 p. 63-66; grades e velocidades p. 87-88; dimensionamento de linha p. 93; filtros
+  p. 96-102.
+- FAO-IDP62: critérios p. 111-114; Anexo 20 (tubos) p. 211-217; Anexo 17 (fórmulas) p. 193-200.
+- ILRI-56-ENVELOPE (próprio): p. 42-47, 66-68, 175 (PDF = impr. + 20).
+- EMBRAPA-DREN-SUBT p. 12-18, 20; EMBRAPA-MANICOBA-1988 p. 1-3, 7-8; EMBRAPA-ESPACAMENTO-1990 p. 5-10;
+  EMBRAPA-BEBEDOURO-1986 (números degradados, só localização); WATERLOG-ENDRAIN p. 7-10; DNIT-DREN p. 252-253.
+- Casos: `csb_geohidro_dreno_fundo_canal_subsuperficial`, `xingo_lote1_drenagem_interna_canal_subsuperficial`,
+  `iuiu_2002_drenabilidade_subterranea_diagnostico`, `2026-10-08_delmiro_gouveia_dreno_fundo_canal_comprimento_maximo`.
+  Nenhum número tem `✓h`.
+- Divergências: `tools/dren/DIVERGENCIAS.md`, seção "drenos".

@@ -141,3 +141,47 @@ Escolha entre fontes ou critério normativo. Não são erros de fórmula.
 | folga/hmax de valeta | 0,2 h (IME p. 54) × Tab. 4.2 IME (concreto) × 0,15 m (WSDOT) | 0,2 h em terra e Tab. 4.2 em concreto (IME, nacional), checando o mínimo de 0,15 m |
 | colmatação de grelha em sag | sem colmatação × 50 % (HEC-12 Ex. 14) | 50 % em grelha isolada em ponto baixo |
 | n de concreto do bueiro | 0,012 (HDS-5) × 0,013 × 0,015 (prática DNIT/acervo) | 0,013 em projeto (folga de idade e juntas); 0,012 só para reproduzir o HDS-5 |
+
+## Revisão técnica F7 (Opus)
+
+### Lote A (drenagem-fundamentos, hidrologia-de-projeto-para-drenagem, bueiros-e-travessias, drenagem-de-estradas-e-plataformas)
+
+Revisor Opus, 2026-10-08. 59 itens amostrados nas quatro skills (11 + 16 + 16 + 16): 40 conferidos, 19 corrigidos na skill,
+0 pendentes. Suíte inalterada (269 passed, 14 xfailed). **Nenhum erro numérico de calculadora**; achados abaixo, não corrigidos.
+
+| módulo / função | achado | fonte p. N | efeito |
+|---|---|---|---|
+| estradas `folga_valeta` (terra, 0,3 < Q ≤ 10 m³/s) | `ValueError` "EQ 4.7 do IME ilegível"; a forma está no primário: **f = √(46·h)**, f e h em cm (o `_texto` perde o radical) | DNIT-DREN p. 162 (imagem) | função sem resposta nessa faixa. Hipótese a conferir: é a forma USBR F = √(C·y) com C = 1,5 ft (1,5 × 30,48 ≈ 46); se h for a lâmina, e não a profundidade da valeta, o resultado muda. h = 100 cm → f = 68 cm |
+| estradas `folga_valeta` (concreto, Q > 2,8 m³/s) | `ValueError`; a Tab. 36 do DNIT (= Tab. 4.2 do IME) dá **20 cm** acima de 2,80 m³/s | DNIT-DREN p. 163 | linha faltante |
+| hidrologia `MCMATH_CONST["m/m"]` = 0,0091 | conversão exata 0,02832/25,4 × 1000^0,2 × 2,471^0,8 = 0,00915 | USBR-DRAINAGE p. 57 (forma inglesa) | −0,6 % em Q; dentro de 1 %, só registro |
+| hidrologia `coef_distribuicao` (docstring) | cita só o CSB (doc 1341:47); o primário é o DNIT | DNIT-HIDRO p. 131 (A^−0,10, A em km²); Burkli-Ziegler A^−0,15 com A em ha, p. 132 | só citação |
+| fonte HEC-12, eq. 4 | imprime "K = 0.56 (0.016)"; o SI correto é 0,376 (conversão de 0,56 dá 0,377; HEC-22 p. 79) | FHWA-HEC12 p. 39 (imagem) | nenhum: `sarjeta_triangular` usa 0,376 e reproduz o Ex. 4 (0,0572 m³/s) |
+
+Decisões do André (novas no lote A; as da revisão F5 acima não se repetem):
+
+| decisão | alternativas (fonte, página) | efeito numérico | recomendação do revisor |
+|---|---|---|---|
+| TR de bueiro de perímetro irrigado | USBR 5 a 15 anos (página não localizada no corpus); DNIT 10 a 20 no projeto e 20 a 25 na verificação [DNIT-HIDRO p. 23-24]; DAEE 25 rural e 100 urbano [DAEE-IT-DPO11 p. 1]; acervo 25 (estrada) e 50 a 100 (sob canal) | risco em 25 anos: TR 10 = 93 %; 25 = 64 %; 50 = 40 %; 100 = 22 % | 25 em travessia de estrada de serviço e 50 sob canal adutor, verificando com o TR seguinte; USBR só depois de achar a página |
+| Ke de ala paralela (caixa, topo com aresta viva) | 0,7 [FHWA-HDS5 p. 216; FHWA-HEC13 p. 100] × 0,2 [DNIT-DREN p. 130, Tab. 30] | ΔHW de saída = 0,5·V²/2g: 0,23 m com V = 3 m/s; nulo se a entrada governa | 0,7 (duas fontes FHWA concordam; a linha do DNIT funde duas da C.2); 0,2 só para reproduzir projeto DNIT |
+| limite de área do racional | 80 ha (HDS-2, Eslamian); 2 km² [DAEE-IT-DPO11 p. 1]; 3 km² (PMSP); sem teto (DNIT); acervo 50 ha a 3,5 km² (`limite-area-metodos.md`) | Cd = A^−0,10: −7 % em 2 km² e −12 % em 3,5 km² sobre o racional puro | regra operativa da skill: racional puro até 80-100 ha; até 2 km² com Cd e conferência por McMath ou SCS; 2 a 3,5 km² só com HUT de comparação |
+| Tc mínimo de drenagem superficial | 5 min [DNIT-IPR726 p. 258; WSDOT p. 102; LOC-IME p. 53]; 6 min [LOC-DNIT-ALBUM-2018 p. 214, OCR]; 10 min [DNIT-IPR726 p. 463, IS-239; Xingó] | L crítico +12 % (IDF CSB grupo 1) a +19 % (Wilken) de 5 para 10 min | 5 min, com a sensibilidade a 10 min no parecer; 10 só em vicinal sem pavimento ou por pedido do cliente |
+| TR da drenagem superficial | 10 [DNIT-IPR726 p. 258]; 5 a 10 [p. 258, 463]; 25 ENGEFER [LOC-IME p. 53]; 50 em sag [WSDOT p. 104] | de 10 para 25: I × 2,5^b = +25 % (b = 0,241, CSB) ou +17 % (b = 0,172, Wilken) | 10; 25 quando a falha da valeta atinge o canal adutor ou a plataforma da EB |
+| declividade mínima de sarjeta e valeta | 0,5 % [DERPR-ES-DR-01-23 p. 10] × 0,3 % (0,2 % em terreno muito plano) [FHWA-HEC12 p. 19] | Q ∝ √S: 0,3 % dá 23 % menos capacidade que 0,5 % | 0,5 % como padrão; 0,3 % em terreno plano com justificativa; abaixo de 0,3 % (Xingó 0,1 %) só revestida e com plano de manutenção |
+| y/D máximo de tubo parcialmente cheio | 0,75 (Delmiro, 1492:164) × 0,82 (Jaíba, 1182:65) | Q/Q pleno = 0,91 em y/D 0,75 e 1,00 em 0,82: 9,7 % de capacidade | 0,75 no TR de projeto; 0,82 como teto na verificação |
+
+### Lote B (canais-de-drenagem-e-macrodrenagem, drenagem-subsuperficial, drenagem-normas-e-manuais, drenagem-casos-de-referencia)
+
+Reconstituído pelo orquestrador em 2026-10-09 a partir das seções "Revisão técnica" das 4 skills (a escrita original
+do lote B neste arquivo foi sobrescrita pela gravação concorrente do lote A). Nenhum erro numérico de calculadora.
+
+| item | veredito | fonte | efeito |
+|---|---|---|---|
+| `drenos.criterio_de_filtro_hidraulico`: fator único 4 de Terzaghi | pendente F7 (decisão) | DNIT-DREN p. 252–253 (D15f ≤ 5·D85s e ≥ 5·D15s) | fator 4 é mais exigente na retenção e menos na permeabilidade que o DNIT |
+| `drenos.POROSIDADE_DRENAVEL` (tabela sem página) | pendente F7 (decisão) | EMBRAPA-DREN-SUBT Tab. 3 p. 14 | L de Glover-Dumm muda +13 % areia, +8 % franco, −18 % argila |
+| Wesseling Q = 89·d^2,714·s^0,571 ausente | pendente F7 (decisão: incluir função) | FAO-IDP62 p. 214; Embrapa p. 16 (expoente 0,572) | Manning com declividade subestima ~1,8× a capacidade do lateral corrugado; pesa no D-86 |
+| 1,2 L/s/ha dos evals dsub-03/04 | pendente (origem) | sem fonte no corpus (1 L/s/ha = 8,64 mm/d) | 10,4 mm/d está fora da faixa de irrigado árido 1–2 mm/d (FAO-IDP62 p. 113–114) |
+| `canais_drenagem` sem velocidade mínima | pendente F7 (decisão) | NRCS-CPS608-2023 p. 2 (0,43 m/s); Salitre 1584:105 (0,30) | Delmiro: trecho com V = 0,292 m/s falha com qualquer piso |
+| folga de dreno 25 % do tirante | pendente F7 (decisão) | CPS608 p. 2 e HEC-15 p. 34 (0,15 m) | proposta max(25 %; 0,15 m): DS-1.1/C Delmiro 0,108 → 0,15 m |
+| docstring `canais_drenagem` "Exemplo 1 p. 78" do HEC-11 | corrigir (só texto) | HEC-11 p. 72 | nenhum |
+| `hidrologia.racional`: aviso "2–3 km²" | pendente F7 (decisão) | IPR-726 p. 259 (racional até 4 km², corrigido até 10 km²); DAEE 2 km² | o "3" não tem fonte |
+| 6 xfail de acervo com strict=False | proposta | regra 5 de `drenagem-casos-de-referencia` | nenhum número muda |

@@ -1,8 +1,8 @@
-# O que pedir ao Clima (decisão D7) e como reconhecer IDF emprestada
+# O que pedir ao Clima (regra D7-Hid / D13-Clima) e como reconhecer IDF emprestada
 
 O nome do arquivo é mantido (o núcleo e a skill do Clima apontam para ele). O id de delegação é **`clima`**: escrever `[DELEGAR: clima]`, nunca "climatologia".
 
-D7: o Clima entrega a chuva (IDF, P(t, TR), incerteza, ARF, estatística de chuva antecedente e sazonalidade); o Drenagem escolhe método e TR da obra e calcula a vazão. **O Drenagem não ajusta IDF, não desagrega série e não gera máximas anuais**: consome a entrega da skill `chuvas-intensas-e-idf` do Especialista Clima e a **cita** (posto, versão do dado, n, distribuição, IC, desagregação). Se a entrega não existir, usa premissa provisória rotulada "emprestada" e emite o bloco da seção 2 (V12 e V6). O Gestor aprova o roteamento. Consulta de IDF já publicada por terceiros (TPF, SGB, regionais do Nordeste): pedir ao Clima a crítica e a comparação, não fazer aqui.
+D7-Hid: o Clima entrega a chuva (IDF, P(t, TR), incerteza, ARF, estatística de chuva antecedente e sazonalidade); o Drenagem escolhe método e TR da obra e calcula a vazão. **O Drenagem não ajusta IDF, não desagrega série e não gera máximas anuais**: consome a entrega da skill `chuvas-intensas-e-idf` do Especialista Clima e a **cita** (posto, versão do dado, n, distribuição, IC, desagregação). Se a entrega não existir, usa premissa provisória rotulada "emprestada" e emite o bloco da seção 2 (V12 e V6). O Gestor aprova o roteamento. Consulta de IDF já publicada por terceiros (TPF, SGB, regionais do Nordeste): pedir ao Clima a crítica e a comparação, não fazer aqui.
 
 ## 1. Contrato de entrega (itens do Clima, `chuvas-intensas-e-idf` seção 4)
 

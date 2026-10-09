@@ -1,0 +1,393 @@
+# Casos numericos: gabaritos do acervo (casos/drenagem/*.md) x calculadoras de tools/dren/ x testes de tests/dren/ (F9, 2026-10-08).
+# Cada caso aponta para (a) o gabarito em casos/drenagem/, (b) a funcao da calculadora, (c) o teste e (d) a linha de
+# tools/dren/DIVERGENCIAS.md, quando houver. Fontes: casos/drenagem/_INDICE.md, evals/sugestoes_casos_numericos_F4.md,
+# tools/dren/DIVERGENCIAS.md e os nomes reais dos testes. Formato do Hidraulico (evals/casos_numericos.yaml).
+# Campos:
+#   id          identificador unico (num-NN; cdv-NN para os casos de aceitacao CDV)
+#   caso        caminho do gabarito em casos/drenagem/ (e, depois de "#", o trecho do caso); "livro" quando o gabarito e exemplo de manual
+#   modulo      modulo de tools/dren/ (hidrologia, bueiros, canais_drenagem, estradas, drenos, tubos)
+#   funcao      funcao chamada no modulo
+#   entradas    entradas em SI, como na chamada da calculadora
+#   esperado    valor do gabarito do projetista/livro (unidade e fonte doc:pag), NAO o da calculadora
+#   tolerancia  tolerancia relativa/absoluta usada no teste
+#   status      reproduz | divergencia_>5% | sem_gabarito
+#   nota        teste (nome real em tests/dren/), valor calculado, divergencia e hipotese
+# ATENCAO (D17): NENHUM caso de casos/drenagem tem check-h (✓h). Todos os gabaritos do acervo sao candidatos (marcas !, ~, ✓*)
+# ate a conferencia humana da F7; "reproduz" quer dizer que a calculadora devolve o numero do documento, nao que o documento
+# esteja certo. Excecao: casos marcados "livro" (exemplo de manual impresso, nao de acervo).
+# Regra D11: divergencia > 5 % nao se ajusta na formula; o teste fica xfail e vai para sessao interativa com o usuario.
+# status sem_gabarito: ha caso, mas sem numero ancorado reproduzivel ou sem teste dedicado.
+
+# ---------------------------------------------------------------- bueiros
+- id: num-01
+  caso: "casos/drenagem/salitre_rc500_800_bueiros_celulares.md # bueiro celular BTCC1 (CSB Salitre RC500-800, doc 1357:197, Tabela 10.9)"
+  modulo: bueiros
+  funcao: manning_lamina
+  entradas: {forma: retangular, dim_m: [1.5, 1.5], y_m: 1.3, n: 0.015, S0: 0.0101}
+  esperado: "V = 4,1 m/s; Q por camara = 8,1 m3/s (doc 1357:197)"
+  tolerancia: "V rel 3 %; Q rel 6 %"
+  status: reproduz
+  nota: "tests/dren/test_bueiros.py::test_salitre_manning_v (parametro BTCC1; tambem BTCC2, BTCC7 e BDCC5). Rastro A, sem ✓h. Herdado do Hidraulico (era num-02). Atencao: o mesmo documento tem BTCC-N17 (doc 1341:205), num-02, que NAO reproduz."
+- id: num-02
+  caso: "casos/drenagem/csb_geohidro_drenagem_pluvial_bueiros.md # BTCC-N17, 3 celulas 2x2, i = 0,0045 (CSB GEOHIDRO, doc 1341:205, Tab. 4.7)"
+  modulo: bueiros
+  funcao: manning_lamina
+  entradas: {forma: retangular, dim_m: [2.0, 2.0], y_m: 1.5, n: 0.015, S0: 0.0045, n_celulas: 3}
+  esperado: "Q = 39,18 m3/s (doc 1341:205)"
+  tolerancia: "rel 5 %"
+  status: divergencia_>5%
+  nota: "tests/dren/test_bueiros.py::test_csb_btcc17_capacidade_manning (xfail). Calculado 3 x 9,54 = 28,6 m3/s (-27 %). Hipotese: V/Yo da Tab. 4.7 mal lidos pelo extrator ou tabela com outra lamina. Linha em DIVERGENCIAS.md (CSB BTCC-N17). Pelo HDS-5 o HW seria ~2,8 m (test_csb_btcc17_hds5_hw_dentro_da_ordem_de_grandeza). Caso B."
+- id: num-03
+  caso: "casos/drenagem/baixio_irece_bueiros_dimensionamento.md # celular 2,5x2,5 a plena lamina de 2,4 m (Baixio, docs 896/897)"
+  modulo: bueiros
+  funcao: manning_lamina
+  entradas: {forma: retangular, dim_m: [2.5, 2.5], y_m: 2.4, n: 0.015, S0: 0.005}
+  esperado: "V = 4,136 m/s; Q = 24,82 m3/s por celula (49,64 m3/s para 2 celulas)"
+  tolerancia: "rel 0,5 %"
+  status: reproduz
+  nota: "tests/dren/test_bueiros.py::test_baixio_manning_celular_2_5x2_5 (e _2x2: V 3,556 m/s; 27,03 m3/s). Rastro A, sem ✓h."
+- id: num-04
+  caso: "casos/drenagem/baixio_irece_bueiros_dimensionamento.md # verificacao por orificio TR 50, C = 0,62, Q50 = 61,98 m3/s, 2 celulas 2,5x2,5 (docs 896/897)"
+  modulo: bueiros
+  funcao: verificacao_por_orificio
+  entradas: {Q_m3s: 61.98, A_m2: 12.5, Cd: 0.62}
+  esperado: "h = 3,260 m; cota 407,846 m"
+  tolerancia: "abs 0,01 m"
+  status: reproduz
+  nota: "tests/dren/test_bueiros.py::test_baixio_orificio_tr50. Rastro A, sem ✓h."
+- id: num-05
+  caso: "casos/drenagem/baixio_irece_bueiros_dimensionamento.md # BU-CP0-15, folga ao terreno natural (TN 408,31) (doc 897:1)"
+  modulo: bueiros
+  funcao: verificacao_por_orificio
+  entradas: {Q_m3s: 61.98, A_m2: 12.5, Cd: 0.62}
+  esperado: "folga = 0,66 m com TN = 408,31 m (doc 897:1)"
+  tolerancia: "abs 0,01 m"
+  status: divergencia_>5%
+  nota: "tests/dren/test_bueiros.py::test_baixio_folga_ao_tn (xfail). 408,31 - 407,846 = 0,464 m (-30 %): inconsistencia aritmetica do gabarito (a cota 407,846 reproduz; TN implicito seria 408,51). Conferir a planilha 897:1. DIVERGENCIAS.md."
+- id: num-06
+  caso: "casos/drenagem/baixio_irece_bueiros_dimensionamento.md # metodo legado (orificio C = 0,62) x HDS-5, BU-CP0-13 / 15 / 18"
+  modulo: bueiros
+  funcao: comparar_legado_hds5
+  entradas: {obras: [BU-CP0-13, BU-CP0-15, BU-CP0-18], tipo_de_entrada: ret_alas_30_75, L_m: 40.0, TW_m: 0.0}
+  esperado: "HW legado 3,31 / 4,51 / 5,02 m (docs 896/897)"
+  tolerancia: "rel 5 %"
+  status: divergencia_>5%
+  nota: "tests/dren/test_bueiros.py::test_baixio_legado_vs_hds5_5pct (xfail por obra); test_baixio_legado_subestima_hds5 passa. HDS-5: 3,60 / 4,82 / 5,44 m (-8,0 / -6,4 / -7,8 %). Materia de treinamento: o legado subestima HW (contra a seguranca). Entrada, L e TW hipoteticos (alas 30-75, a mais favoravel). DIVERGENCIAS.md."
+- id: num-07
+  caso: "casos/drenagem/jaiba_etapas3e4_sifao_bueiro_afogado_controle_saida.md # bueiro afogado, 2 celulas 1,5x1,5, 90 m, controle de saida (Jaiba Etapas 3-4, doc 1182:57)"
+  modulo: bueiros
+  funcao: controle_de_saida
+  entradas: {Q_m3s: 2.54, forma: retangular, dim_m: [1.5, 1.5], n: 0.015, Ke: 0.5, L_m: 90.0, S0: 0.0, TW_m: 1.2, n_celulas: 2}
+  esperado: "V = 0,564 m/s; hf 0,02 m (doc); NA a montante 480,13 m"
+  tolerancia: "V rel 1 %; NA abs 0,01 m"
+  status: reproduz
+  nota: "tests/dren/test_bueiros.py::test_jaiba_controle_de_saida (e test_jaiba_vazao_2_44_tambem_dentro_da_tolerancia: vale com Q = 2,44 m3/s). Divergencia de Q do caso (2,44 x 2 x 1,27) nao muda o resultado. Rastro B, sem ✓h."
+- id: num-08
+  caso: "casos/drenagem/xingo_lote1_drenagem_transversal_bueiros.md # BU-01 / BU-06 / BU-24, lamina supercritica (Xingo Lote I, doc 1419:154-155)"
+  modulo: bueiros
+  funcao: manning_lamina
+  entradas: {BU-01: {B_m: 1.5, i: 0.01009, Q_m3s: 8.96, celulas: 2}, BU-06: {B_m: 2.5, i: 0.0119, Q_m3s: 39.30, celulas: 2}, BU-24: {B_m: 3.0, i: 0.00976, Q_m3s: 48.8, celulas: 2}}
+  esperado: "y = 0,96 / 1,76 / 1,87 m; V = 3,10 / 4,46 / 4,36 m/s (doc 1419:154)"
+  tolerancia: "rel 5 %"
+  status: divergencia_>5%
+  nota: "tests/dren/test_bueiros.py::test_xingo_lamina_normal_vs_doc (xfail por obra); test_xingo_continuidade_bu01 passa (Q/(B y) = V). Manning normal: y = 0,83 / 1,42 / 1,50 m; V = 3,6 / 5,5 / 5,4. O projeto usa equacao da energia a partir da secao critica (K = 0,5), nao uniforme: a lamina do doc e de perfil. DIVERGENCIAS.md. Caso B."
+- id: num-09
+  caso: "casos/drenagem/xingo_lote1_drenagem_interna_canal_subsuperficial.md # tubo D300, i = 1e-4, formula legada Q = 33,5 D^2,67 i^0,5 (doc 1419)"
+  modulo: drenos
+  funcao: capacidade_tubo_dreno
+  entradas: {D_m: 0.300, S: 0.0001, formula: xingo}
+  esperado: "Q = 0,0135 m3/s"
+  tolerancia: "rel 1 %"
+  status: reproduz
+  nota: "tests/dren/test_drenos.py::test_xingo_tubo_D300_i1e4. A formula legada equivale a n = 0,0093 (test_xingo_n_implicito_da_formula_legada e test_xingo_legado_equivale_a_n_0093_abaixo_do_n_de_projeto em test_bueiros.py): com n de projeto 0,012-0,013 a capacidade cai 22-28 %. Reproduz o numero do projeto; nao valida o n. Rastro A, sem ✓h."
+- id: num-10
+  caso: "casos/drenagem/2026-10-08_delmiro_gouveia_bueiros_tubulares_sob_canal_principal.md # BUC-2 a BUC-5, tubo parcialmente cheio, TR 20 e TR 50 (docs 1493:282-285)"
+  modulo: bueiros
+  funcao: tubo_parcialmente_cheio
+  entradas: {Q_m3s: 0.923, D_m: 0.80, n: 0.015, S0: 0.007}
+  esperado: "BUC-5 TR 50: y = 0,630 m; V = 2,17 m/s; Fr = 0,86 (y/D = 79 %)"
+  tolerancia: "rel 5 % (1 % na pratica)"
+  status: reproduz
+  nota: "tests/dren/test_bueiros.py::test_delmiro_tubo_parcialmente_cheio (8 casos parametrizados) e test_tubo_parcialmente_cheio_froude_com_profundidade_hidraulica_e_avisos (D 0,80; n 0,015; S 0,005; Q 0,499 -> y 0,454; Fr 0,89, A/T). y/D = 79 % passa de 0,75 (padrao provisorio): aviso, decisao F7. Divergencias de declividade e comprimento do caso (itens 1 e 2) continuam abertas. Sem ✓h."
+- id: num-11
+  caso: "casos/drenagem/2026-10-08_jaiba_etapas3e4_bueiros_greide_manning_y_d_082.md # 23 bueiros BSTC 0,80, BC-08, n 0,013 x 0,015 (Jaiba E4, doc 1182)"
+  modulo: bueiros
+  funcao: tubo_parcialmente_cheio
+  entradas: {D_m: 0.80, n: [0.013, 0.015], Q_m3s: "do quadro BC-08 (conferir no caso)", S0: "idem"}
+  esperado: "Y/D <= 0,82; n implicito 0,013 (memorial diz 0,015)"
+  tolerancia: "rel 5 %"
+  status: sem_gabarito
+  nota: "Sem teste dedicado (so test_delmiro_tubo_parcialmente_cheio cobre a funcao). Candidato da F4 (sugestoes_casos_numericos_F4.md): calcular BC-08 com n 0,013 e 0,015 e ver qual reproduz o Y/D do memorial. Entradas ainda a extrair do caso; sem ✓h."
+- id: num-12
+  caso: "casos/drenagem/2026-10-08_cac_trecho1_bueiros_sob_canal_adutor_cota_inconsistente.md # quadro de 59 bueiros, B31 (CAC Trecho 1, doc 1131)"
+  modulo: bueiros
+  funcao: "consistencia de cotas (monotonia; sem funcao propria)"
+  entradas: {quadro: "59 bueiros", obra: B31}
+  esperado: "cota do rasto de B31 incoerente com as vizinhas (caso negativo, rastro C)"
+  tolerancia: "n/a"
+  status: sem_gabarito
+  nota: "Caso negativo: o teste e de consistencia (monotonia de cotas), previsto na F4 mas sem teste em tests/dren/. Nao ha numero para reproduzir. Rastro C, sem ✓h."
+- id: num-13
+  caso: "casos/drenagem/2026-10-08_iuiu_2018_bueiros_sob_canal_91_obras.md # 91 bueiros, classificacao RAC/MOD/HUT por faixa de area, TR 25, n 0,0165 (Iuiu 2018, doc 1069)"
+  modulo: hidrologia
+  funcao: "classificacao de metodo por area (sem funcao propria)"
+  entradas: {obras: 91, TR: 25, n: 0.0165}
+  esperado: "RAC / MOD / HUT por faixa de area (doc 1069)"
+  tolerancia: "n/a"
+  status: sem_gabarito
+  nota: "Sem teste dedicado nem numero ancorado (rastro B/C). Candidato da F4: classificar por area e comparar com a tabela do doc. Sem ✓h."
+- id: num-14
+  caso: "livro # HDS-5 3a ed. p. 279-281: caixa 1,524 m, Q = 8,495 m3/s, S = 0,02, alas 90/15 e muro bisel 45"
+  modulo: bueiros
+  funcao: dimensionar_bueiro
+  entradas: {forma: retangular, tipos: [ret_alas_90_15, ret_muro_bisel_45]}
+  esperado: "HW 2,94 m (alas 90/15) e 2,62 m (bisel 45); V de saida 6,47 m/s (p. 280)"
+  tolerancia: "rel 1-2 %"
+  status: reproduz
+  nota: "tests/dren/test_bueiros.py::test_hds5_p280_caixa_1524_q8495 e test_hds5_p280_velocidade_de_saida_caixa_1524 (depende de n = 0,012, adotado como o n do abaco). Exemplo de manual, nao de acervo: fora da regra ✓h. HDS-5 3a ed. 2012."
+
+# ---------------------------------------------------------------- hidrologia
+- id: num-15
+  caso: "casos/drenagem/csb_geohidro_drenagem_pluvial_bueiros.md # bacia 45: A = 211 ha, L = 2,9 km, H = 12 m, grupo 1, TR 100 (CSB GEOHIDRO, doc 1341:145)"
+  modulo: hidrologia
+  funcao: racional
+  entradas: {C: 0.2536, i_mm_h: 69.54, A_ha: 211, limite_km2: 3.5}
+  esperado: "Tc = 114,09 min; i = 69,54 mm/h; Q = 9,58 m3/s (doc 1341:145)"
+  tolerancia: "rel 3 %"
+  status: reproduz
+  nota: "tests/dren/test_hidrologia.py::test_csb_bacia45_racional (cadeia kirpich_modificada_dnit -> idf_potencial -> coef_c_para_tr -> coef_distribuicao -> racional). limite_km2 declarado (3,5; o padrao de 2 km2 avisaria). Rastro B, sem ✓h."
+- id: num-16
+  caso: "casos/drenagem/iuiu_2002_drenagem_superficial_drenos_bueiros.md # DP08: A = 20 ha, TR 10, C = 0,3 (Iuiu 2002, doc 1051:318,322)"
+  modulo: hidrologia
+  funcao: racional
+  entradas: {C: 0.3, i_mm_h: 49.8, A_ha: 20}
+  esperado: "Q = 0,83 m3/s; Tc ~ 18,9 min; i ~ 49,8 mm/h"
+  tolerancia: "rel 3 %"
+  status: reproduz
+  nota: "tests/dren/test_hidrologia.py::test_iuiu_dp08_racional (H = 3,97 m e suposicao do caso). Rastro A, sem ✓h."
+- id: num-17
+  caso: "casos/drenagem/iuiu_2002_drenagem_superficial_drenos_bueiros.md # DP11 t1: McMath, A = 189 ha (doc 1051:322, quadro 8.34)"
+  modulo: hidrologia
+  funcao: mcmath
+  entradas: {C: 0.3, A_ha: 189, S: 0.0028, L_m: 4670, "i": "P1d/Tc (hipotese)"}
+  esperado: "Q McMath = 2,34 m3/s (doc 1051:322)"
+  tolerancia: "rel 5 %"
+  status: divergencia_>5%
+  nota: "tests/dren/test_hidrologia.py::test_iuiu_dp11_mcmath (xfail); test_iuiu_dp11_mcmath_sensibilidade_ao_S_do_canal documenta que S ~ 0,0020 reproduz, mas S nao e dado do projeto. Calculado 2,90 m3/s (+24 %). i implicito de 41,9 mm/h daria 2,34. DIVERGENCIAS.md."
+- id: num-18
+  caso: "casos/drenagem/baixio_irece_vazoes_hut_scs.md # BU-CP0-11: A = 323,4 ha, CN 62,04, TR 25 (Baixio, docs 898-903)"
+  modulo: hidrologia
+  funcao: convolucao_hu
+  entradas: {A_km2: 3.234, Tc_h: 0.9633, d_h: 0.16055, CN: 62.04, P_total_mm: 55.56, blocos: 12}
+  esperado: "geometria do HU: tlag 0,578 h; tp 0,658 h; tb 1,758 h; qp(10 mm) = 10,22 m3/s; S = 155,39 mm. Pico Q = 6,03 m3/s"
+  tolerancia: "geometria rel 1 %; pico rel 5 %"
+  status: divergencia_>5%
+  nota: "tests/dren/test_hidrologia.py::test_baixio_hu_geometria_e_qp (passa) e ::test_baixio_hut_pico_tr25 (xfail): pico calculado 2,70 m3/s (hietograma triangular de 12 blocos). O pico depende do hietograma (tabela T-K e soma(p): 71,5 mm em 1,44 h, nao recuperaveis do acervo) e da lamina efetiva (3,3 mm). Rastro B, sem ✓h."
+- id: num-19
+  caso: "casos/drenagem/2026-10-08_delmiro_gouveia_hut_bhd1_tr50_bransby_williams.md # HUT BHD1 TR 50: tc 7,53 h, Pe 50,99 mm, Q unitario 15,15 m3/s/mm, pico 58,71 m3/s (docs 1494:64, 1492)"
+  modulo: hidrologia
+  funcao: convolucao_hu
+  entradas: {A_km2: 36.34, tc_h: 7.53, d_h: 0.941, P_total_mm: 112.40, CN: "S de 75,2 mm", blocos: 8}
+  esperado: "pico = 58,71 m3/s; tempo do pico 10,36 h (doc 1494:64)"
+  tolerancia: "rel 5 %"
+  status: divergencia_>5%
+  nota: "tests/dren/test_hidrologia.py::test_delmiro_bhd1_pico_58_71 (xfail strict). Convolucao com chuva uniforme em 8 blocos: 61,8 m3/s (+5,3 %); tempo do pico 10,35 h confere (test_delmiro_bhd1_tempo_do_pico_com_chuva_uniforme; test_delmiro_bhd1_cadeia_tc_s_pe_hut passa). Hietograma por polinomio cubico (Quadro 3.3) nao recuperavel. Qp 15,149 e por 10 mm, nao por mm. Sessao interativa pendente. DIVERGENCIAS.md. Rastro A, sem ✓h."
+- id: num-20
+  caso: "casos/drenagem/2026-10-08_delmiro_gouveia_tc_rotulos_velocidade_declividade.md # NERC impresso como Kirpich: L 13,21 km, H 32 m (docs 1494, 1492:155)"
+  modulo: hidrologia
+  funcao: nerc
+  entradas: {L_km: 13.21, H_m: 32.0}
+  esperado: "NERC 7,65 h (rotulado Kirpich); Kirpich de livro 4,92 h; velocidade 0,48 m/s (< 0,5 m/s do memorial)"
+  tolerancia: "NERC rel 1 %; Kirpich rel 5 %"
+  status: reproduz
+  nota: "tests/dren/test_hidrologia.py::test_delmiro_nerc_x_kirpich_rotulo_e_velocidade (tambem Bransby-Williams, V 0,49). NERC (2,8; 0,47) e Bransby (0,615) sem primario no corpus: so para reproduzir o caso; em projeto novo, Kirpich modificada ou DNOS (D-F7). Caso negativo (rotulo trocado, km/h sob m/s; declividade BH4.5 0,0618 x 0,0043). Rastro A, sem ✓h."
+- id: num-21
+  caso: "casos/drenagem/xingo_lote1_drenagem_transversal_bueiros.md # Kirpich S1: L = 35,67 km, S = 0,36 % (Xingo Lote I, doc 1419:28)"
+  modulo: hidrologia
+  funcao: kirpich
+  entradas: {L_m: 35670, S: 0.0036}
+  esperado: "Tc = 8,91 h"
+  tolerancia: "rel 3 %"
+  status: reproduz
+  nota: "tests/dren/test_hidrologia.py::test_xingo_kirpich_s1 (calculado 9,08 h, +1,9 %). Fora da faixa de validade do Kirpich (L > 10 km): aviso esperado. Rastro B, sem ✓h."
+- id: num-22
+  caso: "casos/drenagem/2026-10-08_cac_castanhao_estrada_acesso_valas_chuva_como_intensidade.md # Q = 2,05 m3/s para A = 44.110 m2 x 0,171 impresso (CAC Castanhao, doc 1128)"
+  modulo: estradas
+  funcao: vazao_por_metro
+  entradas: {A_m2: 44110, "i_impresso": 0.171, nota_unidade: "P em mm usada como mm/h"}
+  esperado: "Q = 2,05 m3/s (impresso); recalculo com intensidade correta, ~12x maior"
+  tolerancia: "n/a"
+  status: sem_gabarito
+  nota: "Caso negativo (V11: P em mm nao e i em mm/h). Sem teste dedicado ao CAC; o analogo de Xingo e tests/dren/test_estradas.py::test_xingo_razao_de_chuvas. Numero de projeto nao serve de gabarito, so o erro de unidade. Rastro B, sem ✓h."
+
+# ---------------------------------------------------------------- estradas
+- id: num-23
+  caso: "casos/drenagem/2026-10-08_xingo_lote1_valetas_protecao_comprimento_critico.md # valeta VPC-1: L critico 162,5 m (i 0,001) e 1259 m (i 0,060) (Xingo Lote I, doc 1419)"
+  modulo: estradas
+  funcao: valeta_comprimento_critico
+  entradas: {b_m: 0.2, z: 1.0, h_m: 0.2, n: 0.016, i: [0.001, 0.010, 0.050, 0.060], I_mm_h: "TR 10 do caso", contribuicoes: "CONTRIB_VPC1"}
+  esperado: "L critico 162,54 / 514,00 / 1149,34 / 1259,04 m"
+  tolerancia: "rel 5 % (desvio real < 0,02 %)"
+  status: reproduz
+  nota: "tests/dren/test_estradas.py::test_xingo_vpc1_acervo_sem_checkh (parametrizado). z = 1 deduzido, nao impresso. hmax = 0,8 h (regra observada, nao declarada). Tambem test_xingo_vpc1_vazao_por_metro_e_velocidade e test_xingo_vpc7_hmax_08h_capacidade_maior_que_documento (capacidade > 0,083 m3/s do doc: o projetista repete hmax 0,24 m). Rotulado 'acervo, sem check-h'. Rastro A."
+
+# ---------------------------------------------------------------- canais de drenagem e macrodrenagem
+- id: num-24
+  caso: "casos/drenagem/2026-10-08_salitre_etapa2_macrodrenos_trapezoidais_manning.md # DT 4.1.6/A: b 2,50, h 0,90, z 1, n 0,030, I 0,00227 (Salitre Etapa 2, docs 1584/1585)"
+  modulo: canais_drenagem
+  funcao: manning_trapezoidal
+  entradas: {b_m: 2.5, z: 1.0, y_m: 0.9, n: 0.030, S: 0.00227}
+  esperado: "A 3,060 m2; P 5,046 m; R 0,606 m; V 1,139 m/s; Q 3,484 m3/s"
+  tolerancia: "rel 5 %"
+  status: reproduz
+  nota: "tests/dren/test_canais_drenagem.py::test_acervo_salitre_dt416a_manning. Rastro A, sem ✓h."
+- id: num-25
+  caso: "casos/drenagem/2026-10-08_salitre_etapa2_macrodrenos_trapezoidais_manning.md # DS 4.1/A: b 56, z 1,5, h 1,5, n 0,030, I 0,00096; limite de velocidade 1,2 (memorial) x 1,5 (planilha)"
+  modulo: canais_drenagem
+  funcao: capacidade_trapezoidal
+  entradas: {b_m: 56.0, z: 1.5, h_m: 1.5, n: 0.030, S: 0.00096}
+  esperado: "V = 1,307 m/s; Q = 114,194 m3/s (tambem outros trechos: V 0,804 / Q 6,295; V 1,005 / Q 4,071)"
+  tolerancia: "rel 5 %"
+  status: reproduz
+  nota: "tests/dren/test_canais_drenagem.py::test_acervo_salitre_outros_trechos e ::test_salitre_n2_dois_limites_de_velocidade (V 1,307 reprova com 1,2 e passa com 1,5: conflito entre memorial e planilha, DIVERGENCIAS). Rastro A, sem ✓h."
+- id: num-26
+  caso: "casos/drenagem/2026-10-08_salitre_etapa2_macrodrenagem_inconsistencias_memorial.md # extensao total 72.858,41 m x soma das parcelas (Salitre Etapa 2, docs 1584/1585)"
+  modulo: canais_drenagem
+  funcao: reconciliar_extensoes
+  entradas: {parcelas_m: {Mulungu: 2026.00, Recreio: 51533.65, Tourao: 21324.76}, total_declarado_m: 72858.41}
+  esperado: "texto: 72.858,41 m; parcelas somam 74.884,41 m (falta Mulungu, 2.026,00 m)"
+  tolerancia: "abs 0,005 m"
+  status: sem_gabarito
+  nota: "tests/dren/test_canais_drenagem.py::test_salitre_n1_reconciliacao_de_extensoes. Teste de consistencia do proprio documento (2,8 %, abaixo de 5 %): nao ha numero de projetista a reproduzir; a calculadora reproduz o achado da inconsistencia. Gabarito B, conferencia humana pendente. DIVERGENCIAS.md."
+- id: num-27
+  caso: "casos/drenagem/2026-10-08_delmiro_gouveia_drenos_lotes_racional_manning.md # DS-1.1/C ZTT04: A 13,92 ha, C 0,15, Tc 16,95 min, IDF TR 10 i 89,2 mm/h, Q 0,518 m3/s; b 0,60, z 1,5, n 0,025, Io 0,00368 (docs 1520/1521)"
+  modulo: canais_drenagem
+  funcao: canal_trapezoidal
+  entradas: {Q_m3s: 0.518, b_m: 0.6, z: 1.5, n: 0.025, S: 0.00368, h_secao_m: 0.45}
+  esperado: "yn 0,43 m; A 0,538 m2; P 2,156 m; R 0,250 m; V 0,962 m/s; Fr 0,576 (subcritico); folga adotada 0,02 m x recomendada 0,11 m"
+  tolerancia: "rel 5 %"
+  status: reproduz
+  nota: "tests/dren/test_canais_drenagem.py::test_acervo_delmiro_ds11c_tirante_froude e ::test_acervo_delmiro_froude_nao_e_com_y (Fr com A/T). A cadeia racional (Q 0,518) e candidata da F4 sem teste proprio. Rastro A, sem ✓h."
+- id: num-28
+  caso: "casos/drenagem/2026-10-08_delmiro_gouveia_drenos_secao_subdimensionada_folga.md # ZTT01 em DT-2.23.1: secao h 0,20 m x tirante 0,331 m; 84 de 194 trechos com folga < 25 % (docs 1521, 1520)"
+  modulo: canais_drenagem
+  funcao: verificar_trechos
+  entradas: {trechos: "planilha DT-2.23.1 (194 trechos)", fracao_folga: 0.25}
+  esperado: "ZTT01 transborda (tirante > altura da secao); 43 % dos trechos com folga abaixo de 25 %"
+  tolerancia: "contagem exata"
+  status: reproduz
+  nota: "tests/dren/test_canais_drenagem.py::test_acervo_delmiro_d1_secao_menor_que_tirante e ::test_verificar_trechos_percentual_fora_do_criterio. Folga de 25 % e padrao provisorio (decisao F7); a violacao de tirante x altura nao depende dele. Rastro B, sem ✓h."
+- id: num-29
+  caso: "casos/drenagem/2026-10-08_retroanalise_canal_gabiao_vs_tubo_manning.md # canal retangular em gabiao b 1,59, y 0,8, S 0,003, n 0,035 x tubo DN1000 y/D 0,85, n 0,010 (RETROANALISE CANAL GABIAO.xlsx, fonte local D8)"
+  modulo: canais_drenagem
+  funcao: manning_trapezoidal
+  entradas: {canal: {b_m: 1.59, z: 0, y_m: 0.8, n: 0.035, S: 0.003}, tubo: {forma: circular, D_m: 1.0, y_m: 0.85, n: 0.010, S0: 0.003}}
+  esperado: "Q canal = 1,0784 m3/s; Q tubo = 1,7591 m3/s"
+  tolerancia: "rel 0,5 %"
+  status: reproduz
+  nota: "tests/dren/test_canais_drenagem.py::test_acervo_gabiao_canal_retangular_e_tubo e ::test_acervo_gabiao_fracoes_da_grade (390 e 210 de 441 combinacoes de n). Gabarito de planilha, rastro B, sem ✓h."
+- id: num-30
+  caso: "casos/drenagem/2026-10-08_sertao_pernambucano_canais_drenagem_laterais_adutor.md # 204 drenos laterais ao adutor, TR 100, 13 secoes-padrao, afastamento 6 m (Canal do Sertao Pernambucano, doc 1390)"
+  modulo: canais_drenagem
+  funcao: canal_trapezoidal
+  entradas: {drenos: 204, TR: 100, secoes_padrao: 13, afastamento_m: 6}
+  esperado: "13 secoes-padrao (sem V critica nem Q por dreno no documento)"
+  tolerancia: "n/a"
+  status: sem_gabarito
+  nota: "Sem numero ancorado (sem V critica e sem Q por dreno) e sem teste dedicado: caso positivo so de criterio (afastamento 6 m, TR 100). Candidato a mapear D-56 e D-85. Rastro B, sem ✓h."
+
+# ---------------------------------------------------------------- drenagem subsuperficial
+- id: num-31
+  caso: "casos/drenagem/xingo_lote1_drenagem_interna_canal_subsuperficial.md # vazao por furo na geomembrana, d = 8 mm, carga 3,0 m, Cd = 0,634 (Xingo Lote I, doc 1419:20-21)"
+  modulo: drenos
+  funcao: vazao_por_furo_geomembrana
+  entradas: {d_furo_m: 0.008, carga_m: 3.0, Cd: 0.634}
+  esperado: "Q por furo = 2,44e-4 m3/s"
+  tolerancia: "rel 1 %"
+  status: reproduz
+  nota: "tests/dren/test_drenos.py::test_xingo_vazao_por_furo_H3 (e test_xingo_vazao_por_metro_secao_hipotetica: 1,8e-6 m3/s/m, ~3 % da taxa do CSB). Rastro A, sem ✓h."
+- id: num-32
+  caso: "casos/drenagem/csb_geohidro_dreno_fundo_canal_subsuperficial.md # q = 6e-5 m3/s/m, L = 800 m, 2 tubos DN300; trechos acumulados e MVF (CSB GEOHIDRO, doc 1341:74-77)"
+  modulo: drenos
+  funcao: dreno_de_fundo_de_canal_revestido
+  entradas: {q_por_m: 6.0e-5, comprimento_m: 800.0, n_tubos: 2}
+  esperado: "Q total = 0,048 m3/s; 0,024 por tubo; DN300; acumulados 2000 m -> DN400 e 3200 m -> DN500; n_MVF = 2 x ceil(24)"
+  tolerancia: "exato (aritmetica)"
+  status: reproduz
+  nota: "tests/dren/test_drenos.py::test_csb_L800_2DN300, test_csb_L1000_2DN300_no_limite, test_csb_trechos_acumulados, test_csb_mvf_regra_interpretativa (regra interpretativa do gabarito). Capacidades dos tubos sem ancoragem (caso B)."
+- id: num-33
+  caso: "casos/drenagem/csb_geohidro_dreno_fundo_canal_subsuperficial.md # 2DN150 ate 200 m (CSB GEOHIDRO, doc 1341:74-77)"
+  modulo: drenos
+  funcao: dreno_de_fundo_de_canal_revestido
+  entradas: {q_por_m: 6.0e-5, comprimento_m: 200.0, n_tubos: 2}
+  esperado: "2DN150 ate 200 m (faixa DN150 do memorial: Q ate 0,005 m3/s por tubo)"
+  tolerancia: "faixa do memorial"
+  status: divergencia_>5%
+  nota: "tests/dren/test_drenos.py::test_csb_L200_2DN150 (xfail strict): Q = 0,012 -> 0,006 m3/s por tubo, acima do limite de 0,005 do proprio memorial (+20 %). DIVERGENCIAS.md. Caso B."
+- id: num-34
+  caso: "casos/drenagem/2026-10-08_delmiro_gouveia_dreno_fundo_canal_comprimento_maximo.md # K = 1e-6 m/s, H 1,26, X 4,06; qd = 3,91e-7; Lmax = 388 e 1260 m (Delmiro Gouveia 2016, doc 1492)"
+  modulo: drenos
+  funcao: comprimento_maximo_dreno_fundo
+  entradas: {Q_capacidade_m3s: [1.518e-4, 4.929e-4], qd: 3.910e-7, limite_manutencao_m: 250.0}
+  esperado: "qd = 3,91e-7 m3/s/m; Lmax = 388 m (DN170) e 1260 m (DN230); limite de manutencao 250 m governa"
+  tolerancia: "rel 1 %"
+  status: reproduz
+  nota: "tests/dren/test_drenos.py::test_delmiro_qd_darcy_e_lmax. Rastro B, sem ✓h. A capacidade do tubo usada como entrada e o valor declarado do memorial; ela mesma nao reproduz: ver num-35."
+- id: num-35
+  caso: "casos/drenagem/2026-10-08_delmiro_gouveia_dreno_fundo_canal_comprimento_maximo.md # capacidade do tubo DN170 e DN230, n 0,016, S 3e-4, meia secao (doc 1492:105)"
+  modulo: drenos
+  funcao: capacidade_tubo_parcial
+  entradas: {D_m: [0.149, 0.200], S: 3.0e-4, n: 0.016, y_D: 0.5}
+  esperado: "DN170 = 1,518e-4 m3/s; DN230 = 4,929e-4 m3/s (memorial 1492:105)"
+  tolerancia: "rel 5 %"
+  status: divergencia_>5%
+  nota: "tests/dren/test_drenos.py::test_delmiro_capacidade_dn170_declarada e ::test_delmiro_capacidade_dn230_declarada (xfail strict). Calculado 1,05e-3 (6,9x) e 2,31e-3 (4,7x); a razao entre DN deveria ser 2,19 (D^8/3) e o memorial da 3,25. Hipoteses a decidir na sessao interativa: S do tubo diferente de 3e-4, n, transcricao. test_delmiro_razao_entre_dn_segue_d_8_3 e test_delmiro_tubo_recalculo_manning_acervo_sem_h passam. DIVERGENCIAS.md (drenos). Relevante para D-86."
+- id: num-36
+  caso: "livro # ILRI-DPA16 Ex. 8.1 (Hooghoudt: q 1 mm/d, h 1,0 m, D 4,8 m, r0 0,10, K 0,14 m/d) e Ex. 8.4 (Ernst duas camadas: q 7 mm/d, h 0,70, Kt 0,5, Kb 2,0, Do 1,0, Db 4,0, r0 0,05)"
+  modulo: drenos
+  funcao: hooghoudt_espacamento
+  entradas: {ex_8_1: {q: 0.001, h: 1.0, D: 4.8, r: 0.1, K: 0.14}, ex_8_4: {funcao: ernst_duas_camadas_dreno_no_topo, q: 0.007, h: 0.70, Kt: 0.5, Kb: 2.0, Do: 1.0, Db: 4.0, r: 0.05}}
+  esperado: "Hooghoudt L = 65 m (64 pela serie); Ernst L = 38 m (a = 3,9; u = 0,157 m)"
+  tolerancia: "rel 1 %"
+  status: reproduz
+  nota: "tests/dren/test_drenos.py::test_ilri16_exemplo_8_1_hooghoudt_65_m, ::test_ernst_ilri16_exemplo_8_4_38_m (e Ex. 8.2 e 8.3, USBR Ex. 5-10, NEH 624 Ex. 1, Embrapa Manicoba 16,96 e 12,72 m). Gabarito de livro, nao de projeto: o acervo NAO tem dreno agrícola calculado (casos/_INDICE.md). Divergencia WATERLOG x ILRI-16 (51,8 x 38 m, fator a) em DIVERGENCIAS.md. Lacuna do acervo para o eval."
+
+# ---------------------------------------------------------------- casos CDV (aceitacao F10, D6): sem gabarito de projeto
+# Sao pendencias do plano; o enunciado completo vem do cartao do Gestor CDV e NAO esta no pacote. Nenhum numero de CDV
+# e gabarito: o parecer e a saida da calculadora, sem escrita no CDV. So o André decide D-xx.
+- id: cdv-01
+  caso: "CDV P-134 e P-265 a P-268 # bueiros de talvegue fora do alcance do McMath, vazoes de 77 a 346 m3/s (PENDENCIAS_DE_TREINAMENTO.md)"
+  modulo: hidrologia
+  funcao: "racional/HUT (limite_km2 declarado) -> bueiros.dimensionar_bueiro"
+  entradas: {Q_m3s: "77 a 346 (faixa; valor por pendencia vem do cartao)", TR: "do cartao", HW_max_m: "do cartao", h: "fundo - terreno (convencao CDV)"}
+  esperado: "sem gabarito de projeto: parecer com TR e risco, HW por controle de entrada e saida, cota de inundacao"
+  tolerancia: "n/a"
+  status: sem_gabarito
+  nota: "Aceitacao F10 (D6). Cobertura de teste: tests/dren/test_bueiros.py (dimensionar_bueiro, comparar_legado_hds5) e test_hidrologia.py (racional, mcmath: faixa de area). P-134, P-265, P-266, P-267 e P-268 sao 5 dos 13 pareceres CDV (PLANO §6); detalhar uma linha por pendencia ao ler o cartao."
+- id: cdv-02
+  caso: "CDV D-56 e D-85 # macrodrenagem e talvegues interceptados pela faixa do canal de aducao (PLANO.md §6; skill canais-de-drenagem-e-macrodrenagem)"
+  modulo: canais_drenagem
+  funcao: "canal_trapezoidal / verificar_trechos / verificar_limites_alternativos"
+  entradas: {Q_m3s: "do cartao", b_m: "do cartao", z: "do cartao", n: "do cartao", S: "do cartao"}
+  esperado: "sem gabarito de projeto: seccao, V admissivel, folga e deságue; decisao de D-56 e D-85 e do André"
+  tolerancia: "n/a"
+  status: sem_gabarito
+  nota: "Aceitacao F10 (D6). A skill diz: sem texto de D-56 e D-85 no pacote (vem no cartao); gabarito de planilha sem ✓h. Cobertura: tests/dren/test_canais_drenagem.py (casos Salitre e Delmiro como analogos, num-24 a num-28)."
+- id: cdv-03
+  caso: "CDV P-42, P-115, P-116 e D-86 # tubo dreno de 300 mm do coletor do setor (PENDENCIAS_DE_TREINAMENTO.md: P-42/P-115 a P-118 e D-86)"
+  modulo: drenos
+  funcao: "capacidade_tubo_dreno / diametro_minimo_dreno / capacidade_tubo_parcial"
+  entradas: {D_m: 0.300, S: "da planta (cartao)", n: 0.016, q_L_s_ha: "do cartao", recarga: "[DELEGAR: irrigacao]"}
+  esperado: "sem gabarito de projeto: capacidade e DN minimo com sensibilidade a n e recarga; so o André decide D-86"
+  tolerancia: "n/a"
+  status: sem_gabarito
+  nota: "Aceitacao F10 (D6). Cobertura: tests/dren/test_drenos.py (test_capacidade_manning_pleno_formula_fechada, test_diametro_minimo_e_inverso_da_capacidade, test_xingo_tubo_D300_i1e4 = num-09, test_delmiro_capacidade_dn170/230_declarada = num-35). Atencao: a razao entre DN do Delmiro nao fecha (num-35); a formula legada do Xingo equivale a n = 0,0093."
+- id: cdv-04
+  caso: "CDV P-108 e P-272 # pendencias de drenagem do plano (D6); tema nao consta no pacote"
+  modulo: "a definir ao ler o cartao"
+  funcao: "a definir"
+  entradas: {cartao: "P-108 e P-272, enunciado do Gestor CDV"}
+  esperado: "sem gabarito: triagem (o que e do Drenagem, o que e de outro especialista, o que falta)"
+  tolerancia: "n/a"
+  status: sem_gabarito
+  nota: "Aceitacao F10 (D6). Lacuna: o pacote cita P-108 e P-272 so como itens da lista de 13 (PLANO.md §6); o enunciado nao esta em nenhum arquivo do pacote. Preencher modulo/funcao/entradas depois de ler o cartao no CDV."

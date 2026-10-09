@@ -180,7 +180,7 @@ disciplina: delegar, sem skill.
 
 ## 7. Protocolo de consulta ao corpus
 
-1. **Corpus próprio** (`referencias/`, 48 itens: Pfafstetter, ABTC/NBR 8890, IME, McCuen, EM 1110-2-1601, HEC-11/12 e
+1. **Corpus próprio** (`referencias/`, 49 itens no `_catalogo.yaml`: Pfafstetter, ABTC/NBR 8890, IME, McCuen, EM 1110-2-1601, HEC-11/12 e
    outros): `referencias/MAPA_DE_CONHECIMENTO.md` (G1 hidrologia, G2 bueiros e tubos, G3 estradas, G4 canais de
    drenagem e subsuperficial) → `referencias/_catalogo.yaml` (`arquivo`, `vigencia`, `licenca`) →
    `referencias/_texto/<ID>.md` (ou `_ocr/` nos escaneados): Grep por termo e por `<!-- p. N -->`; ler só o intervalo.
@@ -196,8 +196,9 @@ disciplina: delegar, sem skill.
 5. **Casos já extraídos**: `casos/drenagem/_INDICE.md` é a primeira parada para "como o projeto X fez".
 6. PDF original só para figura, ábaco ou fórmula quebrada (equações de McCuen e números de tabelas OCR saem
    ilegíveis no texto).
-7. Não está no corpus: dizer e pedir ao usuário. Norma não aberta (NBR 8890:2020, DNIT ES 018/021, FAO-38): citar a
-   obra e a página, nunca transcrever.
+7. Não está no corpus: dizer e pedir ao usuário. Norma não aberta (NBR 8890:2020, FAO-38; ver `NAO_ABERTOS.md`): citar a
+   obra e a página, nunca transcrever. As DNIT ES 018-2023 e 021-2023 estão no corpus próprio (`DNIT-ES018-2023`,
+   `DNIT-ES021-2023`) e o DAEE Guia no do Hidráulico (`DAEE-GUIA`).
 
 Citação: `[ID p. N]`, `Nome.pdf:N` (acervo, com marca), `tools/dren/<módulo>.<função>` com as entradas.
 
@@ -227,24 +228,13 @@ dá* (comando, `[ID p. N]`) · *diferença e consequência* (HW, folga, custo, s
 O número do projetista não é gabarito sem `✓h`, e o do método não vira "o certo" sem os dados que o projetista tinha.
 Divergência > 5 % vai para `DIVERGENCIAS.md`.
 
-| Armadilha | Onde ocorreu | Como detectar |
-|---|---|---|
-| Bueiro verificado só por orifício ou Manning plena; HW 6 a 18 % abaixo do HDS-5. Salitre BTCC 7 e BTCC 1 dariam HW/D ≈ 2,25 e 1,78 pelo controle de entrada | Baixio, CSB, Xingó, Salitre | `comparar_legado_hds5`; o maior HW (entrada × saída) governa |
-| Limite do racional e fórmula de Tc diferentes em cada projeto (50, 100, 350 ha, 2 km², 3,5 km²) | acervo todo | declarar o limite usado e a faixa de validade de cada Tc; não "uniformizar" |
-| Rótulo trocado: NERC chamada Kirpich, km/h sob m/s, declividade 0,0618 × 0,0043 | Delmiro Gouveia (`..._tc_rotulos_velocidade_declividade`) | reproduzir o Tc pela fórmula com a unidade da fonte |
-| P (mm) usada como i (mm/h): vazão 12 vezes menor | CAC Castanhão, valas da estrada | conferir a dimensão da intensidade |
-| Froude com y em seção trapezoidal | Baixio de Irecê | Fr = V/√(gA/T) |
-| Coluna "OK" em planilha com folga negativa; seção ZTT01 menor que o tirante; folga < 25 % em 43 % dos trechos | Baixio; Delmiro Gouveia | recalcular folga = h − y; `verificar_trechos` |
-| Extensão total que não fecha com a soma das parcelas; dois limites de velocidade no mesmo documento | Salitre Etapa 2 | `reconciliar_extensoes`; `verificar_limites_alternativos` |
-| Cota do rasto incoerente no quadro de bueiros | CAC Trecho 1 (B31) | monotonia do perfil |
-| Capacidade de tubo dreno do memorial 4,7 a 6,9 vezes menor que Manning parcial; razão entre DN que não segue D^(8/3) | Delmiro, dreno de fundo; CSB 2DN150 | `capacidade_tubo_parcial`; pedir S e n usados |
-| Fórmula legada embutida (Xingó: 33,5·D^2,67·i^0,5 equivale a n ≈ 0,0093; com n 0,012 a 0,013 a capacidade cai 22 a 28 %) | Xingó, tubo dreno | converter para n equivalente antes de comparar |
-| Hietograma por polinômio não recuperável: pico do HUT +5,3 % sobre o do projeto | Delmiro BHD1 | declarar que o gabarito não é reproduzível |
-| IDF emprestada de outra região (Wilken, SP, num perímetro semiárido) ou sem faixa de duração | vários | sinais de `delegar-climatologia.md` §3; `[DELEGAR: clima]` |
-| Gabarito do próprio manual depende de n não informado (HDS-5 p. 280: 6,47 m/s com n 0,012; 6,07 com n 0,013) | HDS-5 | declarar o n adotado |
+Tabela das armadilhas transversais (orifício × HDS-5, limite do racional, rótulos trocados, P como i, Froude com y,
+folga "OK" negativa, extensões que não fecham, cota de rasto, tubo dreno, fórmula legada, hietograma não recuperável, IDF
+emprestada, gabarito dependente de n): `references/armadilhas-transversais.md`.
 
-**Pendências de treinamento que afetam o parecer**: 11 xfail (Baixio folga ao TN, Baixio legado × HDS-5, CSB BTCC-17,
-Xingó BU-01/06/24, Iuiu DP11 McMath, Baixio HUT TR 25, CSB 2DN150 e outros). Em qualquer um, o parecer reporta a
+**Pendências de treinamento que afetam o parecer**: 14 xfail na suíte de 2026-10-08 (Baixio folga ao TN, Baixio legado ×
+HDS-5 em 3 obras, CSB BTCC-17, Xingó BU-01/06/24, CSB 2DN150, Delmiro DN170 e DN230, Iuiu DP11 McMath, Baixio HUT TR 25,
+Delmiro BHD1 TR 50). Em qualquer um, o parecer reporta a
 divergência e não ajusta fórmula para "fechar". Tabelas de porosidade drenável e de recomendação por classe de K seguem
 "indicativas" (FAO-38 fora do corpus).
 
@@ -255,8 +245,21 @@ divergência e não ajusta fórmula para "fechar". Tabelas de porosidade drenáv
   `PMSP-DRENURB-V2`, `USACE-EM1110-2-1601`. Corpus próprio: `LOC-*` (McCuen, IME, Pfafstetter, TUBOS/ABTC),
   `WATERLOG-*`, `EMBRAPA-*`. Páginas-chave de cada ID: nas skills de disciplina e nos mapas.
 - Lacunas: IDF e regionalização para o norte da Bahia (pedido ao Clima); TR normativo de bueiro de perímetro
-  irrigado; FDOT Drainage Manual (download truncado); NBR 8890:2020, DNIT ES 018/021, FAO-38 e DAEE Guia (não
-  abertos); OCR de Pfafstetter (confiança média 0,69) e do Álbum DNIT 2018 (0,72): conferir tabela na imagem; sem
+  irrigado; FDOT Drainage Manual (download truncado); NBR 8890:2020, FAO-38 e DAEE Manual de Vazões 1994 (não
+  abertos; `NAO_ABERTOS.md`); OCR de Pfafstetter (confiança média 0,69) e do Álbum DNIT 2018 (0,72): conferir tabela na imagem; sem
   caso do acervo com Hooghoudt, Ernst ou Glover-Dumm calculado.
 - Esta skill não decide fórmula e coeficiente de disciplina (skills de disciplina), preço (engenheiro-de-custos),
   nem parâmetro geotécnico, estrutural, agronômico ou climático (delegação).
+
+## Revisão técnica
+
+2026-10-08, revisor Opus (F7, lote A). **11 itens amostrados: 7 conferidos, 4 corrigidos, 0 pendentes.** Conferidos:
+R = 1 − (1 − 1/TR)^N (TR 25, N 25: 64 %); n equivalente do Xingó 0,3117/33,5 = 0,0093 e queda de 22 a 28 % com n 0,012
+a 0,013; Salitre BTCC 7 e 1 (HW/D 2,25 e 1,78, recalculados com `controle_de_entrada`, alas 30-75°); Baixio CS2 Fr 0,197
+× 0,254 (rastreado à lição nº 23 do Hidráulico); Ke 0,7 de ala paralela [FHWA-HEC13 p. 100]; razão 60/tc = 12 do CAC.
+Todas as funções da §8 existem em `tools/dren/` com o nome citado. Corrigidos: nº de xfail (11 → 14, lista completa);
+corpus próprio com 49 itens; DNIT ES 018-2023 e 021-2023 estão no corpus (não são "não abertas"); DAEE Guia está no
+corpus do Hidráulico. Tabela de armadilhas movida para `references/armadilhas-transversais.md` (a skill passava de 25 KB).
+Fronteiras conferidas com a `MATRIZ_DE_INTERFACES.md` §2 e §3.3 (D3, D5, D18-Hid): sem divergência; `estruturas` é id
+"quando existir" (bloco vira pendência humana). **Para o André:** decisões em `tools/dren/DIVERGENCIAS.md`, seção
+"Revisão técnica F7 (Opus)", Lote A.
