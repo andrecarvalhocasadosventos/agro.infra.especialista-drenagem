@@ -80,11 +80,13 @@ def main() -> int:
             "id": i["id"], "titulo": i["titulo"], "fonte": fonte, "orgao": i.get("orgao"), "ano": i.get("ano"),
             "temas": i.get("temas"), "tipo": i.get("tipo"), "vigencia": i.get("vigencia"),
             "url": i["url"], "pasta": pasta, "arquivo": f"{i['id']}_{slug(i['titulo'])}.pdf",
-            "prioridade": i.get("prioridade"), "licenca": i.get("licenca"), "metodo": "http",
+            "prioridade": i.get("prioridade"), "licenca": i.get("licenca"), "metodo": i.get("metodo", "http"),
             "origem": "aberta/F1",
         }
         if i.get("alternativas"):
             r["alternativas"] = i["alternativas"]
+        if r["metodo"] == "link_only":
+            r["status"] = "link_only"
         r.update(OVERRIDES.get(i["id"], {}))
         saida.append({k: v for k, v in r.items() if v is not None})
     copiados = 0

@@ -164,7 +164,7 @@ fck de sarjeta (20 × 15 × 11 MPa); tolerância (1 × 5 × 10 %); Tc laminar (M
 
 1. **Citação**: `[ID p. N]` (N = física); em `_ocr/` N = página do livro (Pfafstetter, Álbum) e a física vai junto quando inferida. Acervo: `Nome.pdf:N` com marca de ancoragem; calculadora: `tools/dren/<módulo>.<função>` com as entradas.
 2. **Navegar, não ler**: Grep por termo e por `<!-- p. ` em `referencias/_texto/<ID>.md` (próprio) ou `../Especialista Hidraulica/referencias/_texto/<ID>.md` (H); ler só o intervalo. Mapas: `referencias/MAPA_DE_CONHECIMENTO.md` (G1-G4) e H12-H15 do Hidráulico.
-3. **Índices FTS5**: próprio `C:\bibdren\db\corpus.sqlite` (`busca_pagina`); Hidráulico `C:\bibhid`. O `<id>` do índice não é o ID do catálogo.
+3. **Índices FTS5**: próprio `<SQUAD_LOCAL>/bibdren/db/corpus.sqlite` (`busca_pagina`); Hidráulico `<SQUAD_LOCAL>/bibhid`. O `<id>` do índice não é o ID do catálogo.
 4. **Abrir o PDF** quando: figura, nomograma, tabela com coluna fundida, equação quebrada, número que vira gabarito, página sem texto.
 5. **Não está no corpus**: dizer e pedir ao usuário (seção 12). **Norma fechada**: citar obra e página.
 6. **Acervo de projetos** (`consultar-acervo`): prática, não norma; número com `!`, `~` ou `✓*` não vira gabarito sem `✓h`; nenhum número dos casos de 2026-10-08 tem `✓h`.

@@ -129,6 +129,7 @@ HW de projeto, de verificação e a cota resultante vão no parecer. HW > D = **
   calculadora desde a v0.2.0). V > limite: proteção do pé ou dissipador [DNIT-DREN p. 34]; [HDS5 p. 99].
 - **Entregar à Hidráulica** (`[DELEGAR: hidraulica]`): Q por célula, largura e altura da boca, **V, Fr e y de saída**, TW, material e
   declividade do canal de restituição, com a fonte do limite de V usado. O tipo e o dimensionamento (HEC-14, ressalto) **não** são daqui.
+- **R5 (fronteira aprovada, 2026-10-09):** o dissipador e o rip-rap na saída do bueiro são **dimensionados pelo Hidráulico** (`vertedouros-e-dissipadores`, `[DELEGAR: hidraulica]`); a Drenagem entrega só a **necessidade** (aviso), V, Fr, y e TW de saída. Não dimensionar D50, comprimento ou bacia aqui, nem com a função `d50_riprap_hec11` (essa é para rip-rap **de canal**, skill `canais-de-drenagem-e-macrodrenagem`).
 
 ### 3.7 Bueiro afogado e sifão sob aterro
 

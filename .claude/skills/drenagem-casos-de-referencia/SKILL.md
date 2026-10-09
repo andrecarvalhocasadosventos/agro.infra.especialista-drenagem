@@ -87,7 +87,7 @@ memória de cálculo; documento específico dos CDV D-56/D-85; estudo HARZA 2001
 Detalhe e exemplos: `references/protocolo-de-busca.md`. Resumo:
 
 ```
-$env:PYTHONIOENCODING="utf-8"; $env:ACERVO_RAIZ="C:\bibtec"
+$env:PYTHONIOENCODING="utf-8"; $env:ACERVO_RAIZ="$env:SQUAD_LOCAL\bibtec"
 # em ../../03. Infraestrutura/Projetos de Referência/_BIBLIOTECA_TECNICA/02_PIPELINE/
 python consultar.py buscar "bueiro celular TR 50" --disciplina HID --limite 20
 python consultar.py buscar "tempo de concentracao" --doc 1493     # a página dentro do volume

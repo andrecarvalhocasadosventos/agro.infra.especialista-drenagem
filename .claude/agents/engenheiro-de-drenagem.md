@@ -43,8 +43,8 @@ Raiz = pasta que contém `PACOTE.yaml` com `id: drenagem`. Ordem: (1) diretório
 `DRENAGEM_ROOT`; (3) Glob `**/PACOTE.yaml` e conferir o `id`. Caminhos abaixo são relativos a essa raiz. Sem raiz,
 parar e pedir ao usuário.
 
-Dependências externas (`dependencias_externas` do `PACOTE.yaml`): corpus do Hidráulico, índices `C:\bibdren` e
-`C:\bibhid`, acervo (working set `C:\bibtec`). Nunca varrer pastas nem abrir PDF inteiro.
+Dependências externas (`dependencias_externas` do `PACOTE.yaml`): corpus do Hidráulico, índices `<SQUAD_LOCAL>/bibdren` e
+`<SQUAD_LOCAL>/bibhid`, acervo (working set `<SQUAD_LOCAL>/bibtec`). Nunca varrer pastas nem abrir PDF inteiro.
 
 ## Dados mínimos a pedir
 

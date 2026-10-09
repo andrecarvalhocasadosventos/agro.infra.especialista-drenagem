@@ -1,16 +1,18 @@
 r"""Indice FTS5 por pagina do corpus proprio do Drenagem, FORA do Drive (SQLite corrompe em pasta sincronizada).
 
-Uso: python tools/indexar_fts.py [--db C:\bibdren\db\corpus.sqlite]
+Uso: python tools/indexar_fts.py [--db <SQUAD_LOCAL>/bibdren/db/corpus.sqlite]
 Le referencias/_texto/*.md (marcadores '<!-- p. N -->'); para planilhas/HTML (sem marcador) grava pagina 0.
 Tabelas: doc(id, titulo, arquivo, ocr), pagina(id, pagina, texto), busca_pagina (FTS5 sobre texto,
 tokenizer unicode61 remove_diacritics 2; colunas nao indexadas: id, pagina).
 Busca:  SELECT id, pagina, snippet(busca_pagina, 0, '[', ']', '...', 12) FROM busca_pagina WHERE busca_pagina MATCH 'sarjeta AND "tempo de concentracao"' ORDER BY rank LIMIT 10;
-Cobre so os itens novos (lacunas abertas + locais); o corpus do Hidraulico segue pelo indice dele (C:\bibhid) e por caminho (D1).
+Cobre so os itens novos (lacunas abertas + locais); o corpus do Hidraulico segue pelo indice dele (<SQUAD_LOCAL>/bibhid) e por caminho (D1).
 Reconstruivel a qualquer momento: o script recria o banco do zero.
 """
 from __future__ import annotations
 
 import argparse
+import os
+import os
 import re
 import sqlite3
 from pathlib import Path
@@ -24,7 +26,7 @@ MARC = re.compile(r"<!-- p\. (\d+) -->")
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--db", default=r"C:\bibdren\db\corpus.sqlite")
+    ap.add_argument("--db", default=str(Path(os.environ.get("SQUAD_LOCAL") or (RAIZ.parent / "_infra")) / "bibdren" / "db" / "corpus.sqlite"))
     a = ap.parse_args()
     db = Path(a.db)
     db.parent.mkdir(parents=True, exist_ok=True)

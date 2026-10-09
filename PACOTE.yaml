@@ -10,16 +10,16 @@ marcadores_raiz: [tools/dren/bueiros.py, casos/drenagem/]
 calculadoras: tools/dren   # migrado na F5a (D2), 2026-10-08
 testes: tests/dren
 repo: https://github.com/andrecarvalhocasadosventos/agro.infra.especialista-drenagem
-gitdir: C:\gitdirs\especialista-drenagem
+gitdir: D:\14 - AGRO\gitdirs\especialista-drenagem
 python: ">=3.12"
 dependencias_externas:
   acervo_projetos: ../../03. Infraestrutura/Projetos de Referência/_BIBLIOTECA_TECNICA
   corpus_hidraulica: ../Especialista Hidraulica/referencias   # D1: corpus por caminho
-  working_sets: {bibhid: C:\bibhid, bibdren: C:\bibdren}
+  working_sets: {bibhid: "<SQUAD_LOCAL>/bibhid", bibdren: "<SQUAD_LOCAL>/bibdren"}   # origem: _infra/ (ver _infra/CAMINHOS.md)
   fonte_local_andre: G:\Meu Drive\DRENAGEM   # D8: só a lista A/B do PLANO §5.1
 delega_para: [clima, hidraulica, geotecnia, terraplenagem, pavimentacao, irrigacao, orcamento]
 recebe_de: [hidraulica, clima, geotecnia, terraplenagem, irrigacao, pavimentacao]
 fase_atual: F9
-proximo_passo: "Portão F7: André responde PARA_O_ANDRE_F7.md; no servidor: copiar _infra/bib* para disco local, ajustar working_sets/núcleo/agente, aplicar decisões, F10 e F11"
+proximo_passo: "Portão F7 pendente: André responde PARA_O_ANDRE_F7.md (e os itens de PARA_O_ANDRE.md). Plano HEC-RAS (PLANO §11, D9): F3 dos 4 manuais v6.6, F5 hecras_verifica.py (rashdf/h5py, só leitura), F6 da skill modelagem-hidraulica-hec-ras após o /treinar squad decidir a fronteira (11.3) e o André decidir a instalação do HEC-RAS; depois F10 e F11"
 ultima_sessao: 2026-10-09
-maquina_treinamento: "G: (máquina do André)"
+maquina_treinamento: SRVCVERSP

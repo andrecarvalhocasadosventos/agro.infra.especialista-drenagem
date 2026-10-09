@@ -16,6 +16,8 @@
 | D6 | (2026-10-07) Aceitação F10 com as 8 pendências de drenagem do CDV (P-42, P-108, P-115, P-116, P-134, P-266, P-268, P-272) + P-265, P-267, D-56, D-85, D-86 | §6, F10 |
 | D7 | (2026-10-07) Repositório `agro.infra.especialista-drenagem` (privado), gitdir `C:\gitdirs\especialista-drenagem` | git a partir da F0 |
 | D8 | (2026-10-07) A pasta pessoal `G:\Meu Drive\DRENAGEM` (300 arquivos, 2,4 GB) entra como **fonte local**: só os PDFs da lista A/B do §5.1 são copiados para `referencias/` na F2; vídeos, DWG, instaladores e material de Civil 3D/SSA ficam fora | §5.1, F1, F2 |
+| D9 | (2026-10-09) **Determinação do André:** o especialista de drenagem passa a desenvolver estudos com HEC-RAS, como no projeto da TPF. Premissa de treinamento (R0). Fronteira em uso: Drenagem = cheias, travessias e manchas de inundação; Hidráulica = canais de adução e estruturas hidráulicas; proposta com Hidráulica e Geoprocessamento congelada, decisão no `/treinar squad` (§11.3) | §11; skill nova `modelagem-hidraulica-hec-ras` (F6 posterior); F1, F2 e F4 incrementais feitas em 2026-10-09 |
+| D10 | (2026-10-09, R5 aprovada pelo André) O dissipador e o rip-rap na saída do bueiro são **dimensionados pelo Hidráulico**; a Drenagem entrega a necessidade, V, Fr, y e TW de saída. Reforça D3 | `bueiros-e-travessias` §3.6 ganhou o parágrafo R5 |
 
 Herdadas do padrão (valem sem nova decisão): calculadoras em Python testadas, o agente roda e cita (não calcula no
 texto); divergência > 5 % vai para `DIVERGENCIAS.md`; nenhuma escrita no CDV fora de cartão; git invisível (a sessão
@@ -187,7 +189,66 @@ Atualizado ao fim de cada sessão (data, fase, o que falta). Critério de instal
 | 2026-10-07 | F1 | manifesto: 28 abertos + 21 locais | portão F1 |
 | 2026-10-08 | F2–F6 | corpus 6.527 p.; mapa; 26 casos; 6 calculadoras (269 passed, 14 xfail); 8 skills | F7 |
 | 2026-10-09 | F7 (auto), F8, F9 | revisão Opus das 8 skills; agente; evals 97,7 % | **portão F7: `PARA_O_ANDRE_F7.md`**; depois F10 e F11 |
+| 2026-10-09 (servidor) | Passo 0, R5, D9 (HEC-RAS) | caminhos, PACOTE.yaml e FTS no espelho (52 doc., 8.194 p.); 269 testes passaram, 14 xfail; 4 manuais HEC-RAS 6.6 no corpus; 6 casos HEC-RAS (3 negativos) | **portão F7 pendente (André)**; plano HEC-RAS §11; F3 dos manuais, F5 do verificador, F6 da skill; depois F10 e F11 |
 
 ## 10. Pendências abertas
 
 Herdadas de `PENDENCIAS_DE_TREINAMENTO.md` §2 (calculadoras) e §4 (lições do acervo): entram na F5 e na F7.
+
+## 11. Escopo HEC-RAS (D9, 2026-10-09) — treinamento incremental
+
+**Origem:** determinação do André em 2026-10-09: o especialista de drenagem passa a desenvolver estudos com HEC-RAS, como no projeto da TPF. Premissa de treinamento, não decisão de projeto do CDV (R0). Conduzido como F1, F2 e F4 incrementais (feitas nesta sessão) e F6 posterior (plano abaixo).
+
+### 11.1 Feito em 2026-10-09 (servidor)
+- Inventário (`casos/hec-ras/INVENTARIO_TPF.md`): 8 documentos; modelos HEC-RAS 6.5 só para a captação no São Francisco (2D, 6 vazões) e para os riachos Recife/Ferreira (2D, TR 2-100); rio Verde só em texto (Standard Step, sem arquivo).
+- F1: 4 PDFs v6.6 do USACE HEC com URL verificada (HTTP 200, `application/pdf`) e 3 links online (Applications Guide, Release Notes, hgt); licença: domínio público (obra do governo federal dos EUA). FHWA: URLs candidatas sem resposta do servidor (código 000); nenhum item FHWA entrou (sem URL verificada).
+- F2: `USACE-HECRAS-HRM-66` (482 p.), `-2DUM-66` (286 p.), `-UM-66` (837 p.), `-MAPPER-66` (193 p.) baixados, texto extraído, FTS reconstruído no espelho (52 documentos, 8.194 páginas). Applications Guide e Release Notes ficam `link_only` (só HTML em árvore Confluence).
+- F4: 6 casos em `casos/hec-ras/` (3 positivos, 3 negativos), nenhum com ✓h.
+
+### 11.2 Plano da skill `modelagem-hidraulica-hec-ras` (F6 posterior)
+
+**Escopo.** Estudos de cheia e de remanso para travessias, canais de drenagem e manchas de inundação com HEC-RAS 6.x: o especialista especifica, confere e interpreta o modelo; a calculadora (F5) lê e verifica arquivos, não executa o modelo (HEC-RAS não está instalado no servidor).
+
+**Taxonomia (seções da skill):**
+1. **Escolha do modelo:** 1D permanente (Standard Step), 1D não permanente, 2D (SWE-ELM × difusão), 1D/2D acoplado, chuva na malha. **1D × 2D:** 1D para canal confinado com seções reais (remanso, ponte, bueiro, travessia com Q conhecido); 2D para planície, riachos paralelos ao canal, escoamento sem direção única, confluência e mancha; 1D/2D quando a calha é bem definida e a planície, larga. Equação 2D: SWE-ELM por padrão; difusão só para planície lenta e como teste [USACE-HECRAS-2DUM-66 p. 196-203].
+2. **Dados mínimos por tipo:** terreno (LIDAR/MDT, resolução e data; batimetria quando houver), Q de projeto e TR (do Clima/hidrologia, com ARF), hidrogramas por sub-bacia (pico, tempo ao pico, volume), n por uso do solo, contornos de jusante com fonte (curva-chave, NA conhecido, declividade medida), estruturas (ponte, bueiro, vertedouro: geometria), datum, nível inicial.
+3. **Contornos:** normal depth só com declividade medida e seção uniforme [USACE-HECRAS-2DUM-66 p. 144-145]; preferir NA ou curva-chave quando houver barragem ou remanso a jusante (caso HR-06: soleira sem carga).
+4. **Malha:** tamanho de célula pela escala da feição, breaklines na calha e em obras, teste de sensibilidade com 2 resoluções [USACE-HECRAS-2DUM-66 p. 53, 11]; passo de tempo por Courant [USACE-HECRAS-2DUM-66 p. 201-203].
+5. **Rugosidade e calibração:** n por tabela de referência e por mapa de uso; calibração com marca de cheia, curva-chave ou NA observado; **sensibilidade de n (±20 %)** obrigatória [USACE-HECRAS-UM-66 p. 328; USACE-HECRAS-HRM-66 p. 389].
+6. **Estruturas:** ponte (coeficientes de contração e expansão) e bueiro (controle de entrada e de saída) no HEC-RAS [USACE-HECRAS-HRM-66 p. 180, 218-220]; o **dimensionamento do bueiro segue `bueiros-e-travessias` e o do dissipador é da Hidráulica (R5)**; o HEC-RAS só confere a cota de montante.
+7. **Critérios de aceitação de modelo** (checklist do parecer, tirados dos casos HR-01 a HR-06): versão e unidades; terreno e datum; n e fonte; malha (mediana, máx.) e sensibilidade; contornos com fonte; condição inicial e duração; estabilização (ΔNA ≤ 0,01 m em 2 h nas células de interesse, ou justificado); balanço de volume; Courant; comparação com dado observado; sensibilidade de n e de TR; conferência dos hidrogramas de entrada contra a hidrologia (pico, volume); discrepância texto × arquivo; nenhuma cota de projeto tirada de um único n sem calibração.
+8. **Entregáveis:** parecer replicável (arquivos `.prj/.g/.p/.u`, versão, resumo de entradas, tabela de NA e velocidade por cenário e local, mapas com escala, lista de premissas sem dado, sensibilidade, o que falta); nunca "NA = x" sem ponto, TR e incerteza.
+
+**Antes da F6:** F3 (mapa de conhecimento dos 4 manuais), F5 (verificador, 11.4) e a confirmação do André (11.5).
+
+### 11.3 Fronteira proposta com Hidráulico e Geoprocessamento (INTERFACE CONGELADA — pendência para `/treinar squad`)
+Premissa em uso: **Drenagem = cheias, travessias e manchas de inundação; Hidráulica = canais de adução e estruturas hidráulicas.** Proposta a decidir:
+
+| Tema | Dono proposto | Observação |
+|---|---|---|
+| Mancha de inundação e NA de cheia de rio/riacho; travessia (aqueduto, sifão, bueiro) sob cheia; remanso causado por estrutura de drenagem | **Drenagem** | HR-01, HR-04, HR-06 |
+| Remanso em canal de adução (permanente, seção revestida, estruturas de controle) | **Hidráulica** (`canais-abertos`, passo padrão) | HEC-RAS só como conferência, se a Hidráulica pedir |
+| Vertedouro, bacia de dissipação, comporta | **Hidráulica** | |
+| Captação em rio: NA e velocidade na captação | **Drenagem** produz NA/velocidade; **Hidráulica** projeta captação e bombas | HR-01 |
+| MDT, batimetria, LIDAR, ANADEM, hidrografia, delimitação de bacia | **Geoprocessamento** (onda 2) | Drenagem consome, cita fonte e resolução; até lá pede à equipe |
+| Q de projeto, IDF, ARF | **Clima** | ARF é do Clima |
+
+Pendência: o `/treinar squad` decide se registra na `MATRIZ_DE_INTERFACES.md`. Esta sessão não editou matriz nem ROTEAMENTO.
+
+### 11.4 Calculadora (F5 posterior) — recomendação sobre bibliotecas
+
+| Opção | O que faz | Avaliação |
+|---|---|---|
+| `rashdf` 0.12.0 (PyPI; Python ≥ 3.11) | lê `.hdf` do HEC-RAS (geometria, séries, máximos) sem o programa | **recomendada** para o verificador (somente leitura); licença não informada na metadata do PyPI: conferir no repositório antes de adotar |
+| `h5py` 3.16 (BSD-3) | leitura genérica de HDF5 | **já usada nesta sessão** (HR-02; instalada no venv do squad); fallback |
+| `ras-commander` 0.104.0 (PyPI; Python ≥ 3.10) | automatiza a execução de HEC-RAS 6.x (rodar planos, editar arquivos) | só depois que o André instalar o HEC-RAS; licença a conferir; escrita em arquivos exige pasta de trabalho local |
+| HEC-RAS Controller (COM, Windows) | controla o programa instalado | só com HEC-RAS instalado; frágil por versão; alternativa à `ras-commander` |
+| `pyras` 0.2.1 (MIT) | wrapper antigo | não recomendada (versão antiga, sem evidência de manutenção) |
+
+Recomendação: F5 começa por `tools/dren/hecras_verifica.py` com `rashdf`/`h5py` (somente leitura): conferir `.p01`/`.u01`, n, malha (área de célula), contornos, estabilização, extrair NA/velocidade e comparar com a tabela do relatório. Execução e `ras-commander` ficam para depois da instalação. **Nada foi instalado no servidor** (h5py entrou só no venv do squad).
+
+### 11.5 Itens para o André (também em `PARA_O_ANDRE.md`)
+1. Instalar o HEC-RAS 6.6 no SRVCVERSP (gratuito, USACE HEC; `https://www.hec.usace.army.mil/software/hec-ras/`). Sem ele, o especialista confere modelos, mas não roda.
+2. Confirmar a fronteira de 11.3 e levá-la ao `/treinar squad`.
+3. Pedir à TPF os arquivos HEC-RAS do rio Verde e a nota de cálculo do Standard Step (HR-06).
+4. Conferência humana (✓h) dos números dos casos HR-01 a HR-06 antes de usá-los como gabarito.

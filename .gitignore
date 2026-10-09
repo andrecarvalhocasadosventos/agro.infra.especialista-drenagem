@@ -4,7 +4,7 @@ referencias/**
 !referencias/MAPA_DE_CONHECIMENTO.md
 !referencias/README.md
 
-# Working set do índice FTS (fora do Drive, em C:\bibhid) e artefatos temporários
+# Working set do índice FTS (fora do Drive, em <SQUAD_LOCAL>/bibhid) e artefatos temporários
 .artefacts/temp/
 *.sqlite
 *.duckdb

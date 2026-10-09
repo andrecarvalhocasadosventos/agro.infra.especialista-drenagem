@@ -5,7 +5,7 @@ no total). RAIZ = `08. AI Squad/Especialista Drenagem`. Só os itens novos do co
 do Hidráulico já tem mapa (`../Especialista Hidraulica/referencias/MAPA_DE_CONHECIMENTO.md`, seções H12–H15 são de
 drenagem — use Grep nelas só para registrar divergência ou complemento com o que você mapeou, sem refazer).
 Texto: `referencias/_texto/<ID>.*` com `<!-- p. N -->` (páginas de OCR marcadas `<!-- ocr -->`: números de OCR
-saem "(OCR, conferir na imagem)"). Índice FTS opcional: `C:\bibdren\db\corpus.sqlite`.
+saem "(OCR, conferir na imagem)"). Índice FTS opcional: `<SQUAD_LOCAL>/bibdren/db/corpus.sqlite`.
 Escreva só `referencias/_mapa_parcial/<grupo>.md`. Ignore os slides Robson I–IV (sem OCR) e o FDOT (não baixado).
 
 Grupos:

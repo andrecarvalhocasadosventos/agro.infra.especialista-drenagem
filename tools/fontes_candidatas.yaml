@@ -368,6 +368,89 @@ itens:
 
 # Fontes locais (D8). Nada copiado: a cópia para referencias/ é da F2.
 # escaneado: pdftotext -l 2 devolveu 0 caractere = sim; < 600 caracteres = "a conferir" (slides ou capa); >= 1000 = não.
+# --- F1 incremental HEC-RAS (2026-10-09, D9). URLs verificadas em 2026-10-09 (HTTP 200, application/pdf). ---
+- id: USACE-HECRAS-HRM-66
+  titulo: HEC-RAS Hydraulic Reference Manual, versão 6.6 (USACE HEC)
+  orgao: USACE
+  ano: 2024
+  url: https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_Hydraulic_Reference_Manual_v6.6.pdf
+  tipo: manual
+  grupo: hecras
+  prioridade: A
+  licenca: dominio-publico
+  vigencia: v6.6 na página oficial de documentação em 2026-10-09; o site mantém só a versão corrente em PDF (as 6.0-6.5 existem no Confluence rasdocs). Modelo usado na TPF foi 6.5 (Feb 2024)
+  temas: [modelagem-hidraulica-hec-ras]
+  tamanho_mb: 24.5
+- id: USACE-HECRAS-2DUM-66
+  titulo: HEC-RAS 2D Modeling User's Manual, versão 6.6 (USACE HEC)
+  orgao: USACE
+  ano: 2024
+  url: https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_2D_Users_Manual_v6.6.pdf
+  tipo: manual
+  grupo: hecras
+  prioridade: A
+  licenca: dominio-publico
+  vigencia: v6.6, idem
+  temas: [modelagem-hidraulica-hec-ras]
+  tamanho_mb: 59.0
+- id: USACE-HECRAS-UM-66
+  titulo: HEC-RAS User's Manual, versão 6.6 (USACE HEC)
+  orgao: USACE
+  ano: 2024
+  url: https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_Users_Manual_v6.6.pdf
+  tipo: manual
+  grupo: hecras
+  prioridade: A
+  licenca: dominio-publico
+  vigencia: v6.6, idem
+  temas: [modelagem-hidraulica-hec-ras]
+  tamanho_mb: 83.8
+- id: USACE-HECRAS-MAPPER-66
+  titulo: HEC-RAS Mapper User's Manual, versão 6.6 (USACE HEC)
+  orgao: USACE
+  ano: 2024
+  url: https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_Mapper_Users_Manual_v6.6.pdf
+  tipo: manual
+  grupo: hecras
+  prioridade: B
+  licenca: dominio-publico
+  vigencia: v6.6, idem
+  temas: [modelagem-hidraulica-hec-ras]
+  tamanho_mb: 62.6
+  nota: terreno, malha, mapeamento de inundação (MDT liga com Geoprocessamento)
+- id: USACE-HECRAS-APPGUIDE
+  titulo: HEC-RAS Applications Guide (Confluence HEC, exemplos resolvidos)
+  orgao: USACE
+  url: https://www.hec.usace.army.mil/confluence/rasdocs/rasappguide/latest
+  tipo: manual
+  grupo: hecras
+  prioridade: A
+  licenca: dominio-publico
+  metodo: link_only
+  vigencia: online (HTTP 200 em 2026-10-09); só HTML em árvore Confluence, sem PDF direto nem sub-URL de exportação verificada; consulta online. Não baixado
+  temas: [modelagem-hidraulica-hec-ras]
+- id: USACE-HECRAS-RELNOTES
+  titulo: HEC-RAS Release Notes (versões 6.0 a 6.x; Confluence HEC)
+  orgao: USACE
+  url: https://www.hec.usace.army.mil/confluence/rasdocs/rasrn/latest
+  tipo: manual
+  grupo: hecras
+  prioridade: B
+  licenca: dominio-publico
+  metodo: link_only
+  vigencia: online (HTTP 200 em 2026-10-09); lista 6.0, 6.1, 6.2, 6.3, 6.3.1, 6.4, ... Não baixado
+  temas: [modelagem-hidraulica-hec-ras]
+- id: USACE-HECRAS-HGT
+  titulo: HEC-RAS Hydraulic Guidance / documentação auxiliar (rasdocs hgt) - ponteiro
+  orgao: USACE
+  url: https://www.hec.usace.army.mil/confluence/rasdocs/hgt/latest
+  tipo: manual
+  grupo: hecras
+  prioridade: C
+  licenca: dominio-publico
+  metodo: link_only
+  vigencia: HTTP 200 em 2026-10-09; conteúdo não lido nesta sessão (título não conferido). Não baixado
+  temas: [modelagem-hidraulica-hec-ras]
 fontes_locais:
 - id: LOC-PFAFSTETTER-CHUVAS-INTENSAS
   titulo: Chuvas Intensas no Brasil (Pfafstetter, DNOS)

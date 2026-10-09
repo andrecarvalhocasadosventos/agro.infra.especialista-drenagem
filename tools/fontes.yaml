@@ -470,6 +470,118 @@
   licenca: aberta
   metodo: http
   origem: aberta/F1
+- id: USACE-HECRAS-HRM-66
+  titulo: HEC-RAS Hydraulic Reference Manual, versão 6.6 (USACE HEC)
+  fonte: USACE
+  orgao: USACE
+  ano: 2024
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: v6.6 na página oficial de documentação em 2026-10-09; o site mantém só a versão corrente em PDF (as 6.0-6.5 existem no Confluence rasdocs). Modelo usado na TPF foi 6.5 (Feb 2024)
+  url: https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_Hydraulic_Reference_Manual_v6.6.pdf
+  pasta: 05_USACE
+  arquivo: USACE-HECRAS-HRM-66_hec-ras-hydraulic-reference-manual-versa.pdf
+  prioridade: A
+  licenca: dominio-publico
+  metodo: http
+  origem: aberta/F1
+- id: USACE-HECRAS-2DUM-66
+  titulo: HEC-RAS 2D Modeling User's Manual, versão 6.6 (USACE HEC)
+  fonte: USACE
+  orgao: USACE
+  ano: 2024
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: v6.6, idem
+  url: https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_2D_Users_Manual_v6.6.pdf
+  pasta: 05_USACE
+  arquivo: USACE-HECRAS-2DUM-66_hec-ras-2d-modeling-user-s-manual-versao.pdf
+  prioridade: A
+  licenca: dominio-publico
+  metodo: http
+  origem: aberta/F1
+- id: USACE-HECRAS-UM-66
+  titulo: HEC-RAS User's Manual, versão 6.6 (USACE HEC)
+  fonte: USACE
+  orgao: USACE
+  ano: 2024
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: v6.6, idem
+  url: https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_Users_Manual_v6.6.pdf
+  pasta: 05_USACE
+  arquivo: USACE-HECRAS-UM-66_hec-ras-user-s-manual-versao-6-6-usace-h.pdf
+  prioridade: A
+  licenca: dominio-publico
+  metodo: http
+  origem: aberta/F1
+- id: USACE-HECRAS-MAPPER-66
+  titulo: HEC-RAS Mapper User's Manual, versão 6.6 (USACE HEC)
+  fonte: USACE
+  orgao: USACE
+  ano: 2024
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: v6.6, idem
+  url: https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_Mapper_Users_Manual_v6.6.pdf
+  pasta: 05_USACE
+  arquivo: USACE-HECRAS-MAPPER-66_hec-ras-mapper-user-s-manual-versao-6-6.pdf
+  prioridade: B
+  licenca: dominio-publico
+  metodo: http
+  origem: aberta/F1
+- id: USACE-HECRAS-APPGUIDE
+  titulo: HEC-RAS Applications Guide (Confluence HEC, exemplos resolvidos)
+  fonte: USACE
+  orgao: USACE
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: online (HTTP 200 em 2026-10-09); só HTML em árvore Confluence, sem PDF direto nem sub-URL de exportação verificada; consulta online. Não baixado
+  url: https://www.hec.usace.army.mil/confluence/rasdocs/rasappguide/latest
+  pasta: 05_USACE
+  arquivo: USACE-HECRAS-APPGUIDE_hec-ras-applications-guide-confluence-he.pdf
+  prioridade: A
+  licenca: dominio-publico
+  metodo: link_only
+  origem: aberta/F1
+  status: link_only
+- id: USACE-HECRAS-RELNOTES
+  titulo: HEC-RAS Release Notes (versões 6.0 a 6.x; Confluence HEC)
+  fonte: USACE
+  orgao: USACE
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: online (HTTP 200 em 2026-10-09); lista 6.0, 6.1, 6.2, 6.3, 6.3.1, 6.4, ... Não baixado
+  url: https://www.hec.usace.army.mil/confluence/rasdocs/rasrn/latest
+  pasta: 05_USACE
+  arquivo: USACE-HECRAS-RELNOTES_hec-ras-release-notes-versoes-6-0-a-6-x.pdf
+  prioridade: B
+  licenca: dominio-publico
+  metodo: link_only
+  origem: aberta/F1
+  status: link_only
+- id: USACE-HECRAS-HGT
+  titulo: HEC-RAS Hydraulic Guidance / documentação auxiliar (rasdocs hgt) - ponteiro
+  fonte: USACE
+  orgao: USACE
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: HTTP 200 em 2026-10-09; conteúdo não lido nesta sessão (título não conferido). Não baixado
+  url: https://www.hec.usace.army.mil/confluence/rasdocs/hgt/latest
+  pasta: 05_USACE
+  arquivo: USACE-HECRAS-HGT_hec-ras-hydraulic-guidance-documentacao.pdf
+  prioridade: C
+  licenca: dominio-publico
+  metodo: link_only
+  origem: aberta/F1
+  status: link_only
 - id: LOC-PFAFSTETTER-CHUVAS-INTENSAS
   titulo: Chuvas Intensas no Brasil (Pfafstetter, DNOS)
   fonte: Pfafstetter/DNOS

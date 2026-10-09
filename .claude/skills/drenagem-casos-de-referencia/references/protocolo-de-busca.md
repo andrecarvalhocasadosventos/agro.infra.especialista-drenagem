@@ -1,12 +1,12 @@
 # Protocolo de busca no acervo e no corpus (drenagem)
 
 Somente leitura. Scripts em `../../03. Infraestrutura/Projetos de Referência/_BIBLIOTECA_TECNICA/02_PIPELINE/`
-(relativo à raiz do pacote). Working set do acervo: `C:\bibtec`.
+(relativo à raiz do pacote). Working set do acervo: `<SQUAD_LOCAL>/bibtec`.
 
 ## 0. Antes de tudo
 
 ```
-$env:PYTHONIOENCODING="utf-8"; $env:ACERVO_RAIZ="C:\bibtec"
+$env:PYTHONIOENCODING="utf-8"; $env:ACERVO_RAIZ="$env:SQUAD_LOCAL\bibtec"
 python verificar_acervo.py        # deve terminar em OK; catálogo degradado: dizer ao usuário antes de responder
 ```
 
@@ -50,8 +50,8 @@ veredito do André.
 
 Para "o que o manual diz" (não para "o que o projeto fez"): `drenagem-fundamentos` §7. Corpus próprio
 `referencias/MAPA_DE_CONHECIMENTO.md` (G1 a G4) → `_catalogo.yaml` → `_texto/<ID>.md` (marcador `<!-- p. N -->`);
-corpus do Hidráulico por caminho (D1), citando pelos IDs dele; índice FTS5 em `C:\bibdren\db\corpus.sqlite` e
-`C:\bibhid`. PDF original só para figura, ábaco ou fórmula ilegível.
+corpus do Hidráulico por caminho (D1), citando pelos IDs dele; índice FTS5 em `<SQUAD_LOCAL>/bibdren/db/corpus.sqlite` e
+`<SQUAD_LOCAL>/bibhid`. PDF original só para figura, ábaco ou fórmula ilegível.
 
 ## 5. Como citar
 

@@ -187,10 +187,10 @@ disciplina: delegar, sem skill.
 2. **Corpus do Hidráulico, por caminho (D1)**: `../Especialista Hidraulica/referencias/` (HDS-5, HEC-14/15/22,
    IPR-715/724/736, NEH 630/624/650, ILRI 16, DAEE, FAO 26); mapa nas seções H12 a H15 de
    `../Especialista Hidraulica/referencias/MAPA_DE_CONHECIMENTO.md`. **Cite pelos IDs dele**, não pelo caminho.
-3. **Índices FTS5**: corpus próprio em `C:\bibdren\db\corpus.sqlite` (tabelas `doc`, `pagina`, `busca_pagina`); corpus
-   do Hidráulico em `C:\bibhid`. Buscar o termo, ler a página; se o índice não existir, usar o Grep do item 1.
+3. **Índices FTS5**: corpus próprio em `<SQUAD_LOCAL>/bibdren/db/corpus.sqlite` (tabelas `doc`, `pagina`, `busca_pagina`); corpus
+   do Hidráulico em `<SQUAD_LOCAL>/bibhid`. Buscar o termo, ler a página; se o índice não existir, usar o Grep do item 1.
 4. **Acervo de projetos reais**: `consultar.py` em
-   `../../03. Infraestrutura/Projetos de Referência/_BIBLIOTECA_TECNICA/02_PIPELINE/` (working set `C:\bibtec`):
+   `../../03. Infraestrutura/Projetos de Referência/_BIBLIOTECA_TECNICA/02_PIPELINE/` (working set `<SQUAD_LOCAL>/bibtec`):
    MAPA → buscar → doc → parâmetros → ler página; somente leitura. Número com marca `!`, `~` ou `✓*` entra marcado e
    **não vira gabarito sem `✓h`**; nenhum número dos casos de 2026-10-08 tem `✓h`.
 5. **Casos já extraídos**: `casos/drenagem/_INDICE.md` é a primeira parada para "como o projeto X fez".

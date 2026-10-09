@@ -1,13 +1,13 @@
 # Catalogo do corpus de referencias -- gerado por tools/baixar_referencias.py + tools/catalogar.py; nao editar a mao.
 metadados:
-  gerado_em: '2026-10-08T18:41:38'
+  gerado_em: '2026-10-09T14:58:33'
   gerado_por: tools/baixar_referencias.py
-  total: 49
+  total: 56
   por_status:
-    ok: 48
+    ok: 52
     failed: 0
     manual_needed: 1
-    link_only: 0
+    link_only: 3
     pendente_ocr: 0
   pos_processado_por: tools/catalogar.py
 documentos:
@@ -1150,6 +1150,173 @@ documentos:
   status: ok
   obs: null
   caracteres: 300414
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: USACE-HECRAS-2DUM-66
+  titulo: HEC-RAS 2D Modeling User's Manual, versão 6.6 (USACE HEC)
+  orgao: USACE
+  fonte: USACE
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: v6.6, idem
+  url: https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_2D_Users_Manual_v6.6.pdf
+  ano: 2024
+  prioridade: A
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 05_USACE/USACE-HECRAS-2DUM-66_hec-ras-2d-modeling-user-s-manual-versao.pdf
+  sha256: 84ac836eaf207b14e2bf531bb77f49b5976735dbfed5aa1f520447a2661cc399
+  bytes: 58983993
+  paginas: 286
+  data_download: '2026-10-09'
+  status: ok
+  obs: null
+  caracteres: 559801
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: USACE-HECRAS-APPGUIDE
+  titulo: HEC-RAS Applications Guide (Confluence HEC, exemplos resolvidos)
+  orgao: USACE
+  fonte: USACE
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: online (HTTP 200 em 2026-10-09); só HTML em árvore Confluence, sem PDF direto nem sub-URL de exportação verificada; consulta online. Não baixado
+  url: https://www.hec.usace.army.mil/confluence/rasdocs/rasappguide/latest
+  prioridade: A
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: null
+  sha256: null
+  bytes: null
+  paginas: null
+  data_download: null
+  status: link_only
+  obs: null
+  tem_texto: false
+  ocr: nao
+- id: USACE-HECRAS-HGT
+  titulo: HEC-RAS Hydraulic Guidance / documentação auxiliar (rasdocs hgt) - ponteiro
+  orgao: USACE
+  fonte: USACE
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: HTTP 200 em 2026-10-09; conteúdo não lido nesta sessão (título não conferido). Não baixado
+  url: https://www.hec.usace.army.mil/confluence/rasdocs/hgt/latest
+  prioridade: C
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: null
+  sha256: null
+  bytes: null
+  paginas: null
+  data_download: null
+  status: link_only
+  obs: null
+  tem_texto: false
+  ocr: nao
+- id: USACE-HECRAS-HRM-66
+  titulo: HEC-RAS Hydraulic Reference Manual, versão 6.6 (USACE HEC)
+  orgao: USACE
+  fonte: USACE
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: v6.6 na página oficial de documentação em 2026-10-09; o site mantém só a versão corrente em PDF (as 6.0-6.5 existem no Confluence rasdocs). Modelo usado na TPF foi 6.5 (Feb 2024)
+  url: https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_Hydraulic_Reference_Manual_v6.6.pdf
+  ano: 2024
+  prioridade: A
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 05_USACE/USACE-HECRAS-HRM-66_hec-ras-hydraulic-reference-manual-versa.pdf
+  sha256: 9360ef093696d1c05eccb05f5d68897a68433ca14fd7c296cbec3e95850de9df
+  bytes: 24462936
+  paginas: 482
+  data_download: '2026-10-09'
+  status: ok
+  obs: null
+  caracteres: 983219
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: USACE-HECRAS-MAPPER-66
+  titulo: HEC-RAS Mapper User's Manual, versão 6.6 (USACE HEC)
+  orgao: USACE
+  fonte: USACE
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: v6.6, idem
+  url: https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_Mapper_Users_Manual_v6.6.pdf
+  ano: 2024
+  prioridade: B
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 05_USACE/USACE-HECRAS-MAPPER-66_hec-ras-mapper-user-s-manual-versao-6-6.pdf
+  sha256: c45351459e4c701f7dc525b6a2220d827d2c157e531068884f56236741fc84c1
+  bytes: 62583903
+  paginas: 193
+  data_download: '2026-10-09'
+  status: ok
+  obs: null
+  caracteres: 304457
+  escaneado: false
+  paginas_ocr: 0
+  paginas_sem_texto: 0
+  tem_texto: true
+  ocr: nao-necessario
+- id: USACE-HECRAS-RELNOTES
+  titulo: HEC-RAS Release Notes (versões 6.0 a 6.x; Confluence HEC)
+  orgao: USACE
+  fonte: USACE
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: online (HTTP 200 em 2026-10-09); lista 6.0, 6.1, 6.2, 6.3, 6.3.1, 6.4, ... Não baixado
+  url: https://www.hec.usace.army.mil/confluence/rasdocs/rasrn/latest
+  prioridade: B
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: null
+  sha256: null
+  bytes: null
+  paginas: null
+  data_download: null
+  status: link_only
+  obs: null
+  tem_texto: false
+  ocr: nao
+- id: USACE-HECRAS-UM-66
+  titulo: HEC-RAS User's Manual, versão 6.6 (USACE HEC)
+  orgao: USACE
+  fonte: USACE
+  temas:
+  - modelagem-hidraulica-hec-ras
+  tipo: manual
+  vigencia: v6.6, idem
+  url: https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_Users_Manual_v6.6.pdf
+  ano: 2024
+  prioridade: A
+  licenca: dominio-publico
+  origem: aberta/F1
+  arquivo: 05_USACE/USACE-HECRAS-UM-66_hec-ras-user-s-manual-versao-6-6-usace-h.pdf
+  sha256: a4c702e05cf0029171c9306a10ca7f0b7cf1ed11f0db3775f9b93a4039fde427
+  bytes: 83819756
+  paginas: 837
+  data_download: '2026-10-09'
+  status: ok
+  obs: null
+  caracteres: 1628450
   escaneado: false
   paginas_ocr: 0
   paginas_sem_texto: 0
