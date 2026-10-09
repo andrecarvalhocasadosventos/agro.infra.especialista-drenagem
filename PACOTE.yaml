@@ -20,6 +20,6 @@ dependencias_externas:
 delega_para: [clima, hidraulica, geotecnia, terraplenagem, pavimentacao, irrigacao, orcamento]
 recebe_de: [hidraulica, clima, geotecnia, terraplenagem, irrigacao, pavimentacao]
 fase_atual: F9
-proximo_passo: "Portão F7: André responde PARA_O_ANDRE_F7.md (23 itens + 14 xfail); depois aplicar decisões, F10 (13 pareceres CDV) e F11"
+proximo_passo: "Portão F7: André responde PARA_O_ANDRE_F7.md; no servidor: copiar _infra/bib* para disco local, ajustar working_sets/núcleo/agente, aplicar decisões, F10 e F11"
 ultima_sessao: 2026-10-09
 maquina_treinamento: "G: (máquina do André)"

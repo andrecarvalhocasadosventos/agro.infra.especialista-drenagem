@@ -69,3 +69,14 @@ Drenagem, contra a D3. A sessão squad concordou e registrou o diff para você a
 
 Eu aplico as decisões (calculadoras, skills, `pontos-abertos.md`), rodo testes e evals, e sigo para a F10
 (13 pareceres do CDV, sem escrever no CDV) e a F11 (instalação). Os dois têm portão seu.
+
+## F. Infraestrutura (aviso de 2026-10-09)
+
+A sessão /treinar squad está migrando C:\bibtec, C:\bibhid e C:\bibdren para `08. AI Squad/_infra/`, por causa do
+servidor novo, e vai renomear os originais. Autorizei a renomeação porque o Drenagem não os usa até o seu portão.
+Antes da F10 vou atualizar os caminhos em `PACOTE.yaml`, no núcleo e no agente.
+Atualização: migração concluída. A cópia está em `_infra/` e os originais viraram `C:\bib*_MIGRADO_2026-10-09`. Pela
+sua decisão (`Agent Builder/DECISOES_2026-10-09.md`), os caminhos novos só valem na 1ª sessão no servidor, com os
+bancos copiados para disco local curto (sugestão `D:\bib*`), nunca lidos direto do Drive. Até lá, nesta máquina, o
+acervo e o `corpus.sqlite` estão indisponíveis. A F10 deve rodar no servidor, depois de ajustar `PACOTE.yaml`, o
+núcleo e o agente para o caminho local de lá.
