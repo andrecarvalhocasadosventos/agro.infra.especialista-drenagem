@@ -184,6 +184,9 @@ Atualizado ao fim de cada sessão (data, fase, o que falta). Critério de instal
 |---|---|---|---|
 | 2026-10-02 | — | semente separada do Hidráulico (D18-Hid) | — |
 | 2026-10-07 | F0 | plano v0.1 aprovado (D1–D8); git vinculado; pasta local triada | F1: rodar `tools/BRIEF_F1.md` (1 Sonnet) |
+| 2026-10-07 | F1 | manifesto: 28 abertos + 21 locais | portão F1 |
+| 2026-10-08 | F2–F6 | corpus 6.527 p.; mapa; 26 casos; 6 calculadoras (269 passed, 14 xfail); 8 skills | F7 |
+| 2026-10-09 | F7 (auto), F8, F9 | revisão Opus das 8 skills; agente; evals 97,7 % | **portão F7: `PARA_O_ANDRE_F7.md`**; depois F10 e F11 |
 
 ## 10. Pendências abertas
 
