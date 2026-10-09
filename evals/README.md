@@ -22,6 +22,18 @@ Resultados de cada rodada vão em `evals/resultados/<AAAA-MM-DD>.md`.
 | `esperado` | skills que DEVEM ser carregadas (lista vazia = nenhuma skill) |
 | `nao_esperado` | skills cuja carga seria erro claro |
 | `nota` | justificativa e marcas: `PAR`, `DELEGACAO`, `NAO-GATILHO`, `CDV`, `VIGENCIA` |
+| `delegacao` | ids (`MATRIZ_DE_INTERFACES` §1) dos blocos `[DELEGAR]` que o agente DEVE emitir, dado o prompt como escrito; `[]` = nenhum obrigatório |
+| `delegacao_toleravel` | ids de blocos aceitáveis mas não exigidos; `[]` = nenhum |
+
+Acerto de delegação no avaliador: observada contém `delegacao` **e** está contida em `delegacao` + `delegacao_toleravel`
+(bloco fora das duas listas reprova). Regras de classificação: (1) obrigatória quando o prompt não traz um dado que só outro
+especialista fornece e que é indispensável ao que se pede (chuva/IDF para Q de bacia ou faixa sem i; K sem valor em
+dreno; recarga; greide; seção pavimentada; custo para escolher alternativa; dissipador; armadura; decisão canal x sifão x
+aqueduto x bueiro); (2) tolerável quando o prompt já traz o dado ou a delegação só ocorreria num desdobramento não
+pedido; (3) `NAO-GATILHO` de pedido inteiro de outra disciplina: `delegacao: [destino]` (o perfil delimita a interface e
+emite o pedido); "não coberto pelo squad" (drenagem urbana em rede, HEC-RAS 2D): `delegacao: []`. A mesma situação recebe a
+mesma classificação em todos os casos; a `nota` explica, mas a decisão está nos campos. O avaliador só usa a nota como
+fallback se nenhum dos dois campos existir no caso.
 
 Prefixos de id: `fund-` (núcleo, pedidos amplos); por skill: `hid-` (hidrologia-de-projeto-para-drenagem), `bue-`
 (bueiros-e-travessias), `est-` (drenagem-de-estradas-e-plataformas), `can-` (canais-de-drenagem-e-macrodrenagem), `dsub-`
@@ -47,7 +59,7 @@ reprovar) ficam fora de `esperado` e de `nao_esperado`; a `nota` diz quais são.
 - `DELEGACAO`: o agente resolve até a fronteira e emite `[DELEGAR: <id-destino>]`; `esperado` traz a skill própria que
   ainda assim se aplica; a nota diz o bloco esperado, com o id da `MATRIZ_DE_INTERFACES.md` §1 (`clima`, `hidraulica`,
   `geotecnia`, `terraplenagem`, `pavimentacao`, `irrigacao`, `orcamento`; `estruturas` é destinatário que ainda não
-  existe: o bloco vira pendência humana). "Tolerável" na nota = bloco que pode aparecer sem reprovar.
+  existe: o bloco vira pendência humana). "Tolerável" = bloco em `delegacao_toleravel` (pode aparecer sem reprovar); o obrigatório está em `delegacao`.
 - `NAO-GATILHO`: pedido fora de escopo, `esperado: []`, e a nota diz para quem vai. Também cobre o que o perfil declara
   não coberto (drenagem urbana em rede) e consultoria (HEC-RAS 2D).
 - `CDV`: modo CDV (cartão CT-xx, D-xx, P-xx). Os enunciados completos vêm do Gestor da Visão CDV e não estão no pacote:
@@ -77,8 +89,8 @@ O juiz não calcula engenharia e não decide D-xx.
 
 Conferir por categoria:
 
-- `DELEGACAO`: bloco `[DELEGAR: <id>]` completo (pedido, entrego, preciso de, premissa provisória, impacto se mudar,
-  urgência) e do id da nota; o agente não chamou outro agente (`disallowedTools` bloqueia `Agent`) nem resolveu a parte alheia.
+- `DELEGACAO`: blocos de `delegacao` todos presentes, nenhum fora de `delegacao` + `delegacao_toleravel`, cada um com forma completa (pedido, entrego, preciso de, premissa provisória, impacto se mudar,
+  urgência); o agente não chamou outro agente (`disallowedTools` bloqueia `Agent`) nem resolveu a parte alheia.
 - `NAO-GATILHO`: nenhuma skill carregada, nenhum valor inventado, destino indicado.
 - `CDV`: formato Situação / Preciso de você / Próximo passo / Detalhes; nenhuma D-xx decidida; dúvida vira P-nova com a
   hipótese; nada escrito fora da linha `escreve:` do cartão (só `pareceres/`, `memoria/` e `LICOES.md` do pacote).

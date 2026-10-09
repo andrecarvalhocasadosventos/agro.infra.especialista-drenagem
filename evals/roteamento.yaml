@@ -1,7 +1,8 @@
 # Casos de roteamento do agente engenheiro-de-drenagem (F9, redação 2026-10-08).
 # Campos: id (prefixo-NN, único) · prompt (pt-BR) · esperado (skills que DEVEM ser carregadas; [] = nenhuma)
 #         · nao_esperado (skills cuja carga seria erro) · nota (justificativa + marcas PAR, DELEGACAO, NAO-GATILHO, CDV, VIGENCIA).
-# Delegação esperada: a nota diz "DELEGACAO: [DELEGAR: <id-destino>]" (ids da MATRIZ_DE_INTERFACES §1).
+# Delegação: `delegacao` = blocos [DELEGAR: id] que o agente DEVE emitir; `delegacao_toleravel` = aceitáveis, não exigidos
+#         (ids da MATRIZ_DE_INTERFACES §1). A decisão está nos campos; a nota só explica.
 # Skills do pacote (8): drenagem-fundamentos (núcleo, pré-carregado), hidrologia-de-projeto-para-drenagem,
 # bueiros-e-travessias, drenagem-de-estradas-e-plataformas, canais-de-drenagem-e-macrodrenagem, drenagem-subsuperficial,
 # drenagem-normas-e-manuais, drenagem-casos-de-referencia.
@@ -18,6 +19,8 @@
   - drenagem-fundamentos
   nao_esperado: []
   nota: 'Pedido amplo (fluxo de 8 passos, dados mínimos, formato do parecer) responde o núcleo. Skills de disciplina são toleráveis como remissão. Sem skill de disciplina obrigatória.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: fund-02
   prompt: 'Em quais situações você delega em vez de resolver, e como é o formato do bloco de delegação? Quero entender isso antes de te passar um trecho com bueiro, valeta e dreno de fundo.'
   esperado:
@@ -25,6 +28,8 @@
   nao_esperado:
   - drenagem-casos-de-referencia
   nota: 'Protocolo [DELEGAR], fronteiras e o que se pede a cada companheiro estão no núcleo (§4). Disciplinas toleráveis só como exemplo. Nenhum bloco emitido: a pergunta é conceitual.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: fund-03
   prompt: 'Que dados você precisa de mim para dimensionar um dreno agrícola e que dados para uma travessia de talvegue? E quais regras V você confere antes de entregar o parecer?'
   esperado:
@@ -32,6 +37,8 @@
   nao_esperado:
   - drenagem-normas-e-manuais
   nota: 'Dados mínimos por tipo de pedido e V1-V18 vêm do núcleo/perfil. PAR núcleo x disciplina: drenagem-subsuperficial e bueiros-e-travessias são toleráveis como remissão, mas o pedido não traz número para calcular.'
+  delegacao: []
+  delegacao_toleravel: []
 
 # ---------------------------------------------------------------- hidrologia de projeto
 - id: hid-01
@@ -42,6 +49,8 @@
   - drenagem-subsuperficial
   - canais-de-drenagem-e-macrodrenagem
   nota: 'Herdado (era hid-01). Tc por duas fórmulas com faixa (V8). bueiros-e-travessias tolerável; a IDF, se faltar, vira DELEGACAO: [DELEGAR: clima] sem reprovar.'
+  delegacao: []
+  delegacao_toleravel: [clima]
 - id: hid-02
   prompt: 'Para uma bacia de 120 ha, uso o método racional ou o SCS? Qual TR para um bueiro de estrada vicinal e qual para um extravasor de reservatório? C de 0,35 e i de 78 mm/h já informados.'
   esperado:
@@ -50,6 +59,8 @@
   - drenagem-subsuperficial
   - canais-de-drenagem-e-macrodrenagem
   nota: 'Herdado (era hid-02). Escolha do método pela área (V7) e TR por obra com risco (V6). drenagem-normas-e-manuais tolerável (IPR-715). O extravasor é só pergunta de TR, não pedido de dimensionamento.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: hid-03
   prompt: 'Hidrograma de projeto pelo SCS para uma bacia de 18 km² com CN 78, Tc de 3,1 h e chuva de 140 mm em 24 h (dado do projeto). Quero pico e volume escoado.'
   esperado:
@@ -58,6 +69,8 @@
   - drenagem-subsuperficial
   - drenagem-de-estradas-e-plataformas
   nota: 'Herdado (era hid-03). SCS-CN com hidrograma unitário triangular; a chuva já veio dada, então não é caso de delegação ao clima. Laminação em reservatório seria da Hidráulica, mas não é pedida.'
+  delegacao: []
+  delegacao_toleravel: [hidraulica]
 - id: hid-04
   prompt: 'Tenho 14 postos com series de chuva diária e preciso de C ponderado para uma bacia com 40 % de pastagem, 35 % de caatinga arbustiva e 25 % de solo exposto. Qual C uso e qual o limite de área para o racional que vocês adotam?'
   esperado:
@@ -66,6 +79,8 @@
   - drenagem-subsuperficial
   - bueiros-e-travessias
   nota: 'C ponderado e limite de área do racional (ponto aberto, rotular padrão provisório e alternativas 80 ha, 2 km², 3 km²). Os 14 postos são ruído; ajuste de série e IDF não são do pacote (nenhum bloco obrigatório).'
+  delegacao: []
+  delegacao_toleravel: [clima]
 - id: hid-05
   prompt: 'A planilha do projetista usa NERC para o Tc e chama de Kirpich. A bacia tem L = 13,2 km e desnível de 32 m. Confira o Tc e diga se a velocidade implícita faz sentido.'
   esperado:
@@ -73,6 +88,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'Conferência de Tc com rótulo trocado (V8, V14). drenagem-casos-de-referencia é tolerável (caso Delmiro). Divergência é apontada, não corrigida.'
+  delegacao: []
+  delegacao_toleravel: []
 
 # ---------------------------------------------------------------- bueiros e travessias
 - id: bue-01
@@ -83,6 +100,8 @@
   - drenagem-subsuperficial
   - hidrologia-de-projeto-para-drenagem
   nota: 'Herdado (era bue-01). Vazão dada: só a skill (V2, dois controles). hidrologia-de-projeto-para-drenagem não deve ser carregada porque a vazão não é pedida (PAR hidrologia x bueiros, sentido bueiros). drenagem-normas-e-manuais (HDS-5) tolerável.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: bue-02
   prompt: 'Uma bacia de 14 km² corta o traçado do canal. Estime a vazão de TR 100 e depois dimensione o bueiro celular para passar essa vazão, com HW máximo de 4 m acima da geratriz inferior.'
   esperado:
@@ -92,6 +111,8 @@
   - drenagem-subsuperficial
   - canais-de-drenagem-e-macrodrenagem
   nota: 'Herdado (era bue-02, sem a pista numérica da resposta). PAR hidrologia x bueiros, sentido pedido-misto: vazão mais obra, cadeia hidrologia -> bueiro. A chuva de TR 100 vem do Clima: DELEGACAO: [DELEGAR: clima] esperado (ou IDF emprestada rotulada), mas as duas skills são obrigatórias.'
+  delegacao: [clima]
+  delegacao_toleravel: []
 - id: bue-03
   prompt: 'Meu bueiro tubular DN 1500 tem controle de entrada dando HW de 4,8 m e o de saída 3,4 m. Qual governa? E por que o método legado de orifício me deu 4,5 m?'
   esperado:
@@ -100,6 +121,8 @@
   - drenagem-subsuperficial
   - drenagem-de-estradas-e-plataformas
   nota: 'Herdado (era bue-04). V2: vale o maior HW; legado só como comparação rotulada (subestima HW, ver DIVERGENCIAS Baixio). drenagem-normas-e-manuais tolerável (HDS-5 p. 72).'
+  delegacao: []
+  delegacao_toleravel: []
 - id: bue-04
   prompt: 'A velocidade de saída do bueiro celular deu 5,6 m/s para jusante em areia fina. O que o critério diz, qual o Froude de saída e o que eu informo na saída?'
   esperado:
@@ -108,6 +131,8 @@
   - drenagem-subsuperficial
   - canais-de-drenagem-e-macrodrenagem
   nota: 'V3: V de saída x limite do material (Tab. 31 DNIT), Fr com A/T, aviso "precisa de dissipador". O dissipador em si não é dimensionado aqui: DELEGACAO: [DELEGAR: hidraulica] (D3) esperado.'
+  delegacao: [hidraulica]
+  delegacao_toleravel: []
 - id: bue-05
   prompt: 'Preciso do bueiro de uma travessia de vicinal com 2,8 m de aterro sobre a geratriz, Q de 3,4 m³/s, declive 0,8 %, saída livre. Quantas linhas de DN 1000 em concreto, e qual a classe do tubo indicativa?'
   esperado:
@@ -115,6 +140,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'Número de linhas e classe de tubo INDICATIVA (NBR 8890 via ABTC, não transcrita). Armadura e dimensionamento estrutural do tubo seriam Estruturas, mas não são pedidos. Sem DELEGAR obrigatório.'
+  delegacao: []
+  delegacao_toleravel: [estruturas]
 - id: bue-06
   prompt: 'O quadro de bueiros da projetista tem 59 obras sob o canal adutor. Pegue três delas e confira cota de entrada, cota de saída e declividade, e me diga se o greide faz sentido.'
   esperado:
@@ -122,6 +149,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'Conferência de planilha de projetista (V5, V14, monotonia de cotas). drenagem-casos-de-referencia é tolerável (caso CAC B31). A discrepância é apontada com evidência, não corrigida.'
+  delegacao: []
+  delegacao_toleravel: []
 
 # ---------------------------------------------------------------- drenagem de estradas e plataformas
 - id: est-01
@@ -131,7 +160,9 @@
   nao_esperado:
   - drenagem-subsuperficial
   - bueiros-e-travessias
-  nota: 'Herdado (era bue-03). Descida d''água e sarjeta: drenagem-de-estradas-e-plataformas. hidrologia-de-projeto-para-drenagem tolerável para o Q da faixa. Energia nos degraus/dissipador seria da Hidráulica, só se pedido: DELEGACAO: [DELEGAR: hidraulica] tolerável.'
+  nota: 'Herdado (era bue-03). Descida d''água e sarjeta: drenagem-de-estradas-e-plataformas. hidrologia-de-projeto-para-drenagem tolerável para o Q da faixa. Sem IDF nem i no pedido, o Q da faixa exige DELEGACAO: [DELEGAR: clima] (obrigatório). Energia nos degraus/dissipador seria da Hidráulica, só se pedido: [DELEGAR: hidraulica] tolerável.'
+  delegacao: [clima]
+  delegacao_toleravel: [hidraulica]
 - id: est-02
   prompt: 'Valeta de crista trapezoidal b = 0,40 m, talude 1:1, h = 0,40 m, n 0,016, i = 0,3 %. Faixa contribuinte de 80 m de talude mais 40 m de terreno natural, TR 10. Qual o comprimento crítico?'
   esperado:
@@ -139,7 +170,9 @@
   nao_esperado:
   - canais-de-drenagem-e-macrodrenagem
   - bueiros-e-travessias
-  nota: 'Comprimento crítico de valeta VPC (calculadora `estradas`), TR 10 e Tc mínimo como padrões provisórios rotulados. A IDF é dada pelo usuário ou vira DELEGACAO: [DELEGAR: clima].'
+  nota: 'Comprimento crítico de valeta VPC (calculadora `estradas`), TR 10 e Tc mínimo como padrões provisórios rotulados. O pedido não traz IDF nem i: DELEGACAO: [DELEGAR: clima] (obrigatório).'
+  delegacao: [clima]
+  delegacao_toleravel: []
 - id: est-03
   prompt: 'Sarjeta composta de 0,60 m de faixa deprimida, Sx 3 %, Sw 8 %, declividade longitudinal 1,2 %. Quanto a sarjeta escoa para um espalhamento de 2,5 m e onde ponho a caixa coletora com grelha?'
   esperado:
@@ -147,6 +180,8 @@
   nao_esperado:
   - canais-de-drenagem-e-macrodrenagem
   nota: 'Sarjeta composta (HEC-12) e caixa com grelha (vertedor x orifício, aviso na transição, colmatação em ponto baixo como ponto aberto). Só a skill.'
+  delegacao: []
+  delegacao_toleravel: [clima]
 - id: est-04
   prompt: 'As valas de proteção do projeto da estrada de acesso do Castanhão usam a chuva em mm no lugar de mm/h. Refaça a vazão por metro e me diga o quanto a projetista errou.'
   esperado:
@@ -155,6 +190,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'PAR estradas x casos: conferência de caso real negativo (V11, V14, razão de ~12 vezes no acervo, sem ✓h). Casos fornece o caso, estradas a calculadora. Divergência apontada, o número da projetista não é alterado.'
+  delegacao: []
+  delegacao_toleravel: [clima]
 
 # ---------------------------------------------------------------- canais de drenagem e macrodrenagem
 - id: can-01
@@ -165,6 +202,8 @@
   - drenagem-subsuperficial
   - bueiros-e-travessias
   nota: 'Seção por Manning, Fr com A/T (V4), V admissível por tabela com fonte (V10), folga (V5). Q dada: hidrologia não necessária.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: can-02
   prompt: 'O macrodreno do projeto tem seção de 0,20 m de altura e a planilha dá tirante de 0,33 m para Q = 0,52 m³/s, com folga declarada de 0,02 m. Isso fecha? Quantos trechos da planilha estão com folga abaixo de 25 %?'
   esperado:
@@ -172,6 +211,8 @@
   nao_esperado:
   - bueiros-e-travessias
   nota: 'Conferência de planilha (tirante x altura da seção, folga 25 % como padrão provisório, V5/V14). drenagem-casos-de-referencia tolerável (Delmiro). CDV não envolvido.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: can-03
   prompt: 'O dreno desce 4 m em 600 m de extensão até o rio. Quero degraus ou queda, posição e altura, e o que fazer no deságue para não erodir o leito.'
   esperado:
@@ -179,13 +220,17 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'Degraus e deságue de canal de drenagem. A bacia de dissipação formal (energia, ressalto) seria Hidráulica: DELEGACAO: [DELEGAR: hidraulica] se o usuário pedir dissipador; aqui o enunciado é de degrau e proteção de deságue.'
+  delegacao: []
+  delegacao_toleravel: [hidraulica]
 - id: can-04
   prompt: 'Preciso decidir entre canal revestido em gabião e tubo DN 1000 em PEAD para um trecho de 800 m com declividade de 0,4 % e Q de 1,1 m³/s. Compare a capacidade por Manning para a faixa de n de cada material.'
   esperado:
   - canais-de-drenagem-e-macrodrenagem
   nao_esperado:
   - drenagem-subsuperficial
-  nota: 'Retroanálise gabião x tubo (caso do acervo, fonte local D8). Capacidade por Manning é da skill; a escolha por custo vira DELEGACAO: [DELEGAR: orcamento] (V17) com quantitativos.'
+  nota: 'Retroanálise gabião x tubo (caso do acervo, fonte local D8). Capacidade por Manning é da skill; o pedido é só a capacidade por Manning; a escolha por custo seria [DELEGAR: orcamento] (V17) com quantitativos, tolerável (obrigatório só se a recomendação final for dada).'
+  delegacao: []
+  delegacao_toleravel: [orcamento]
 
 # ---------------------------------------------------------------- drenagem subsuperficial
 - id: dsub-01
@@ -197,6 +242,8 @@
   - hidrologia-de-projeto-para-drenagem
   - bueiros-e-travessias
   nota: 'Herdado. Só a skill (Hooghoudt, profundidade equivalente, viés do método declarado, V12). K real e profundidade da camada são dados da Geotecnia e a recarga da Irrigação: premissa rotulada; DELEGACAO: [DELEGAR: geotecnia] e [DELEGAR: irrigacao] toleráveis.'
+  delegacao: []
+  delegacao_toleravel: [geotecnia, irrigacao]
 - id: dsub-02
   prompt: 'O canal em geomembrana passa em corte com lençol freático alto. Preciso do dreno de fundo para aliviar a subpressão com o canal vazio: vazão por furo na geomembrana, 2 tubos DN200 e a carga admissível.'
   esperado:
@@ -205,6 +252,8 @@
   - bueiros-e-travessias
   - hidrologia-de-projeto-para-drenagem
   nota: 'Herdado, corrigido (a skill canais-abertos é do Hidráulico e não existe neste pacote). PAR subsuperficial x canais de drenagem, sentido subsuperficial: dreno de fundo e subpressão. O envoltório real do tubo é DELEGACAO: [DELEGAR: geotecnia] (toleravel); seção e NA do canal de adução são dados do Hidráulico.'
+  delegacao: []
+  delegacao_toleravel: [geotecnia, hidraulica]
 - id: dsub-03
   prompt: 'Capacidade do tubo dreno PEAD DN160 com i = 0,3 %, comprimento de linha de 400 m e q = 1,2 L/s/ha em 6 ha por lateral. Cabe? Qual a velocidade?'
   esperado:
@@ -213,6 +262,8 @@
   - canais-de-drenagem-e-macrodrenagem
   - drenagem-de-estradas-e-plataformas
   nota: 'Herdado. Capacidade do tubo dreno como conduto livre (Manning, D-86 em aberto: só o André decide o DN). Ponto de atenção da skill: o 1,2 L/s/ha é coeficiente de coletor e não de drenagem superficial.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: dsub-04
   prompt: 'Os coletores de 600 ha de drenos agrícolas deságuam num canal de drenagem aberto. Dimensione os coletores e o canal coletor para q de projeto de 1,2 L/s/ha.'
   esperado:
@@ -221,6 +272,8 @@
   nao_esperado:
   - bueiros-e-travessias
   nota: 'Herdado. PAR subsuperficial x canais de drenagem, sentido misto: coletores em drenagem-subsuperficial e canal coletor aberto em canais-de-drenagem-e-macrodrenagem. q de projeto depende da Irrigação (recarga): DELEGACAO: [DELEGAR: irrigacao] toleravel.'
+  delegacao: []
+  delegacao_toleravel: [irrigacao]
 
 # ---------------------------------------------------------------- normas e manuais
 - id: nrm-01
@@ -230,6 +283,8 @@
   nao_esperado:
   - hidrologia-de-projeto-para-drenagem
   nota: 'Localização de fonte e divergência entre fontes (0,7 HDS-5 x 0,2 DNIT, ponto aberto, padrão provisório 0,7). PAR normas x bueiros, sentido normas: não há bueiro para calcular. bueiros-e-travessias tolerável como remissão.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: nrm-02
   prompt: 'O que o IPR-715 exige de TR para drenagem de rodovia e o que a EM 1110-2-1601 diz de velocidade em canal revestido em concreto? Preciso citar página no relatório.'
   esperado:
@@ -237,6 +292,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'Guia de fontes com página (V1, V16). canais-de-drenagem-e-macrodrenagem tolerável para a velocidade admissível. Nenhum cálculo pedido.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: nrm-03
   prompt: 'Usei o ábaco do HDS-5 para um bueiro de 1,5 m de diâmetro com Q = 4,2 m³/s e declividade de 0,6 %. Qual o HW/D e qual o controle que governa? Aplique o método.'
   esperado:
@@ -244,6 +301,8 @@
   nao_esperado:
   - drenagem-normas-e-manuais
   nota: 'PAR normas x bueiros, sentido bueiros: o pedido é aplicar o método (calculadora), não localizar a fonte. A skill de normas pode ser lida de passagem, mas não é obrigatória.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: nrm-04
   prompt: 'A NBR 8890 está no corpus de vocês? Preciso da tabela de classes de tubo de concreto para o relatório; posso colar a tabela aqui?'
   esperado:
@@ -251,6 +310,8 @@
   nao_esperado:
   - bueiros-e-travessias
   nota: 'VIGENCIA. NBR 8890:2020 é norma fechada (NAO-ABERTA): citar como referência, indicar o que está disponível via ABTC, nunca transcrever a tabela. Não calcular classe.'
+  delegacao: []
+  delegacao_toleravel: []
 
 # ---------------------------------------------------------------- casos de referência
 - id: cas-01
@@ -261,6 +322,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'PAR casos x bueiros, sentido casos: o pedido é "como o projeto fez" e comparar. Ancoragem doc:pág com marca (nenhum caso tem ✓h); comparação com o critério provisório y/D 75 %.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: cas-02
   prompt: 'No Jaíba Etapas 3 e 4 os bueiros BSTC de 0,80 m saíram com Y/D abaixo de 0,82 e eu desconfio que o n implícito não é o 0,015 do memorial. Dá para usar esses números como gabarito?'
   esperado:
@@ -268,6 +331,8 @@
   nao_esperado:
   - drenagem-fundamentos
   nota: 'Número do acervo sem ✓h não vira gabarito (V14, D17); n implícito 0,013 x 0,015 marcado. PAR casos x bueiros: tolerável carregar bueiros-e-travessias para recalcular.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: cas-03
   prompt: 'Busque no acervo se existe algum projeto com dreno agrícola dimensionado por Ernst ou Glover-Dumm e me diga qual a memória de cálculo e a página.'
   esperado:
@@ -275,6 +340,8 @@
   nao_esperado:
   - hidrologia-de-projeto-para-drenagem
   nota: 'Protocolo de busca (consultar.py) e lacuna conhecida: nenhum caso lido dimensiona dreno agrícola (casos/_INDICE.md). A resposta correta é dizer que não há, sem inventar. drenagem-subsuperficial tolerável.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: cas-04
   prompt: 'Quero registrar um caso novo no acervo de drenagem: o memorial do Salitre Etapa 2 diz 72.858,41 m de macrodrenos, mas as parcelas somam outro valor. Como registro e qual o formato?'
   esperado:
@@ -282,6 +349,8 @@
   nao_esperado:
   - canais-de-drenagem-e-macrodrenagem
   nota: 'Registro de caso novo e regra de apontar divergência com evidência sem corrigir o projeto. PAR casos x canais, sentido casos: reconciliação já existe nos testes; aqui o ato é catalogar.'
+  delegacao: []
+  delegacao_toleravel: []
 
 # ---------------------------------------------------------------- pares vizinhos (os dois sentidos)
 - id: par-01
@@ -292,6 +361,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'PAR hidrologia x bueiros, sentido "o bueiro passa?" com só a bacia: hidrologia primeiro, depois bueiro (cadeia). IDF/chuva por TR: DELEGACAO: [DELEGAR: clima] esperado.'
+  delegacao: [clima]
+  delegacao_toleravel: []
 - id: par-02
   prompt: 'Vou te passar a vazão do TR 25 de cada travessia, já calculada pela projetista (Q = 11,8 m³/s na primeira). Só quero o HW e o controle de entrada x saída do bueiro tubular, DN 1500, duas linhas.'
   esperado:
@@ -299,6 +370,8 @@
   nao_esperado:
   - hidrologia-de-projeto-para-drenagem
   nota: 'PAR hidrologia x bueiros, sentido bueiros: vazão dada, hidrologia não é carregada (a conferência da vazão da projetista não foi pedida).'
+  delegacao: []
+  delegacao_toleravel: []
 - id: par-03
   prompt: 'Um talvegue de 2,4 km² corta a estrada de serviço a cada 700 m. Dimensione o bueiro de cada travessia, TR 25, com aterro de 1,8 m de altura.'
   esperado:
@@ -306,7 +379,9 @@
   - hidrologia-de-projeto-para-drenagem
   nao_esperado:
   - drenagem-de-estradas-e-plataformas
-  nota: 'PAR bueiros x estradas, sentido bueiros: bueiro de talvegue sob estrada é de bueiros-e-travessias (a vazão da bacia exige a hidrologia). Valeta/sarjeta da plataforma não são pedidas.'
+  nota: 'PAR bueiros x estradas, sentido bueiros: bueiro de talvegue sob estrada é de bueiros-e-travessias (a vazão da bacia exige a hidrologia). Valeta/sarjeta da plataforma não são pedidas. Bacia sem IDF nem chuva: DELEGACAO: [DELEGAR: clima] (obrigatório).'
+  delegacao: [clima]
+  delegacao_toleravel: []
 - id: par-04
   prompt: 'A sarjeta do trecho em corte despeja num bueiro de greide que leva a água para o pé do talude. Dimensione a caixa coletora e o bueiro de greide para Q = 0,12 m³/s.'
   esperado:
@@ -314,6 +389,8 @@
   nao_esperado:
   - bueiros-e-travessias
   nota: 'PAR bueiros x estradas, sentido estradas: o bueiro de greide e a caixa coletora fazem parte do dispositivo da plataforma. bueiros-e-travessias não é para talvegue.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: par-05
   prompt: 'O macrodreno recebe a água de 5 talvegues antes de chegar ao rio. Defina a seção e o revestimento do canal no trecho final, com Q de 12 m³/s no trecho final (já somada), e o deságue.'
   esperado:
@@ -322,6 +399,8 @@
   - bueiros-e-travessias
   - hidrologia-de-projeto-para-drenagem
   nota: 'PAR canais x bueiros, sentido canais: canal de drenagem e deságue; as travessias não são pedidas. Q dada: hidrologia não necessária.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: par-06
   prompt: 'O dreno atravessa a estrada por um sifão invertido com dois tubos de 1,2 m e preciso saber o nível a montante com o conduto afogado e a saída controlada por jusante.'
   esperado:
@@ -329,6 +408,8 @@
   nao_esperado:
   - canais-de-drenagem-e-macrodrenagem
   nota: 'PAR canais x bueiros, sentido bueiros: sifão sob estrada/bueiro afogado com controle na saída (caso Jaíba). Se o sifão fosse de canal de adução, seria Hidráulica (DELEGACAO: [DELEGAR: hidraulica]); aqui é dreno sob estrada.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: par-07
   prompt: 'A valeta de pé de talude tem 900 m de extensão com declividade de 0,1 %. Pelo comprimento crítico, ela dá conta ou preciso de um deságue intermediário?'
   esperado:
@@ -336,6 +417,8 @@
   nao_esperado:
   - canais-de-drenagem-e-macrodrenagem
   nota: 'PAR estradas x canais, sentido estradas: comprimento crítico e deságues intermediários de valeta (dispositivo da plataforma). Declividade mínima de valeta é aviso, não bloqueio.'
+  delegacao: []
+  delegacao_toleravel: [clima]
 - id: par-08
   prompt: 'Preciso do dreno lateral ao canal adutor, 6 m de afastamento, TR 100, recebendo 204 pontos de contribuição ao longo de 38 km. Defina a seção-padrão e o critério de velocidade.'
   esperado:
@@ -343,13 +426,17 @@
   nao_esperado:
   - drenagem-de-estradas-e-plataformas
   nota: 'PAR estradas x canais, sentido canais: dreno lateral ao adutor (caso Sertão Pernambucano) é canal de drenagem. A estrada de serviço paralela não entra. A vazão por dreno depende de hidrologia (tolerável).'
+  delegacao: []
+  delegacao_toleravel: [clima]
 - id: par-09
   prompt: 'O canal em concreto tem dreno de fundo por tubos furados sob a laje, com NA externo a 2,4 m acima do fundo. Dimensione o dreno de fundo e o comprimento máximo antes de uma caixa de inspeção.'
   esperado:
   - drenagem-subsuperficial
   nao_esperado:
   - canais-de-drenagem-e-macrodrenagem
-  nota: 'PAR canais x subsuperficial, sentido subsuperficial: dreno de fundo/subpressão é drenagem-subsuperficial (Darcy, Lmáx). A capacidade do tubo do caso Delmiro não reproduz por Manning (DIVERGENCIAS, xfail).'
+  nota: 'K sob o revestimento não vem no pedido: DELEGACAO: [DELEGAR: geotecnia] (obrigatório). PAR canais x subsuperficial, sentido subsuperficial: dreno de fundo/subpressão é drenagem-subsuperficial (Darcy, Lmáx). A capacidade do tubo do caso Delmiro não reproduz por Manning (DIVERGENCIAS, xfail).'
+  delegacao: [geotecnia]
+  delegacao_toleravel: []
 - id: par-10
   prompt: 'Para rebaixar o lençol da várzea vou abrir um canal coletor de 4,2 km, trapezoidal, em terra, Q de projeto 0,9 m³/s no final. Dimensione a seção, a folga e o deságue; a drenagem dos lotes já foi feita.'
   esperado:
@@ -357,20 +444,26 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'PAR canais x subsuperficial, sentido canais: o dreno parcelar já está feito; o que se pede é o canal aberto coletor. Q dado.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: par-11
   prompt: 'A estrada de serviço pavimentada em corte tem lençol 0,9 m abaixo do greide. Dimensione o dreno profundo longitudinal, o comprimento crítico e a vazão por metro, DN 200 em PEAD.'
   esperado:
   - drenagem-de-estradas-e-plataformas
   nao_esperado:
   - drenagem-subsuperficial
-  nota: 'PAR estradas x subsuperficial, sentido estradas: dreno profundo de plataforma/pavimento. A seção do pavimento e a camada drenante são DELEGACAO: [DELEGAR: pavimentacao] (seção pavimentada).'
+  nota: 'PAR estradas x subsuperficial, sentido estradas: dreno profundo de plataforma/pavimento. A seção do pavimento e a camada drenante são DELEGACAO: [DELEGAR: pavimentacao] (seção pavimentada); o K do solo não vem no pedido: [DELEGAR: geotecnia]. Ambos obrigatórios.'
+  delegacao: [pavimentacao, geotecnia]
+  delegacao_toleravel: []
 - id: par-12
   prompt: 'Ao longo da estrada de serviço há drenos agrícolas coletores a cada 120 m, paralelos à faixa. Quero o espaçamento por Ernst e a profundidade, com camada impermeável a 3,8 m, recarga de 4 mm/dia.'
   esperado:
   - drenagem-subsuperficial
   nao_esperado:
   - drenagem-de-estradas-e-plataformas
-  nota: 'PAR estradas x subsuperficial, sentido subsuperficial: o drenos são agrícolas (Ernst, ILRI-16), mesmo vizinhos à estrada. K e camada impermeável: DELEGACAO: [DELEGAR: geotecnia] e recarga [DELEGAR: irrigacao], toleráveis.'
+  nota: 'PAR estradas x subsuperficial, sentido subsuperficial: o drenos são agrícolas (Ernst, ILRI-16), mesmo vizinhos à estrada. K não vem no pedido: DELEGACAO: [DELEGAR: geotecnia] (obrigatório). Camada impermeável e recarga já foram dadas; [DELEGAR: irrigacao] tolerável.'
+  delegacao: [geotecnia]
+  delegacao_toleravel: [irrigacao]
 - id: par-13
   prompt: 'Preciso do Tc e da vazão de TR 10 da faixa contribuinte da valeta de pé: 150 m de talude com 22 % de declividade e 80 m de terreno natural, C 0,35. Depois quero a valeta.'
   esperado:
@@ -379,6 +472,8 @@
   nao_esperado:
   - bueiros-e-travessias
   nota: 'PAR hidrologia x estradas, sentido misto: Tc (escoamento em lâmina, avisos de limite de L) e depois a valeta. IDF: DELEGACAO: [DELEGAR: clima] esperado se não fornecida.'
+  delegacao: [clima]
+  delegacao_toleravel: []
 - id: par-14
   prompt: 'Tc mínimo de 5 min ou de 10 min para a valeta de crista? Qual TR a norma pede e o que muda no comprimento crítico?'
   esperado:
@@ -386,6 +481,8 @@
   nao_esperado:
   - hidrologia-de-projeto-para-drenagem
   nota: 'PAR hidrologia x estradas, sentido estradas: Tc mínimo e TR da drenagem superficial são critérios de dispositivo (pontos abertos, padrão provisório 5 min e TR 10; alternativa 6 ou 10 min). Sem Tc de bacia para calcular.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: par-15
   prompt: 'Cada um dos 4 talvegues que o macrodreno intercepta tem área entre 1,2 e 9 km². Calcule a vazão de TR 50 de cada um e dimensione o canal do trecho final.'
   esperado:
@@ -394,6 +491,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'PAR hidrologia x canais, sentido misto: Q por talvegue (racional/HUT conforme a área, V7) e canal. Chuva por TR: DELEGACAO: [DELEGAR: clima].'
+  delegacao: [clima]
+  delegacao_toleravel: []
 - id: par-16
   prompt: 'Seção trapezoidal em concreto para o dreno, Q = 3,1 m³/s já fornecida pelo projeto, declive 0,25 %, n 0,015. Confira regime, Fr com profundidade hidráulica e velocidade máxima.'
   esperado:
@@ -401,6 +500,8 @@
   nao_esperado:
   - hidrologia-de-projeto-para-drenagem
   nota: 'PAR hidrologia x canais, sentido canais: Q dada, só a seção. Fr com A/T (V4), faixa instável 0,89-1,13 reportada.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: par-17
   prompt: 'Preciso do hietograma e do pico de vazão por SCS da bacia de 6,5 km² (CN 74) e depois saber se esse pico passa em um bueiro DN 1200 com 35 m de comprimento; ainda não escolhi a seção.'
   esperado:
@@ -408,7 +509,9 @@
   - bueiros-e-travessias
   nao_esperado:
   - drenagem-subsuperficial
-  nota: 'PAR hidrologia x bueiros, terceiro caso (sentido misto, hidrograma e passagem): o pico e a verificação do DN. IDF dada ou DELEGACAO: [DELEGAR: clima].'
+  nota: 'PAR hidrologia x bueiros, terceiro caso (sentido misto, hidrograma e passagem): o pico e a verificação do DN. O pedido não traz chuva: DELEGACAO: [DELEGAR: clima] (obrigatório).'
+  delegacao: [clima]
+  delegacao_toleravel: []
 
 # ---------------------------------------------------------------- delegação (um por id de delega_para, mais estruturas)
 - id: del-01
@@ -418,6 +521,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'DELEGACAO: [DELEGAR: clima]. IDF com fonte e IC e P(t,TR) são do Clima (V11); o Drenagem entrega Tc, TR, método e durações e segue com IDF emprestada rotulada, sem ajustar IDF.'
+  delegacao: [clima]
+  delegacao_toleravel: []
 - id: del-02
   prompt: 'O bueiro celular de saída dá 6,2 m/s de velocidade num leito de areia média e Fr de 1,3. Preciso do dissipador e do rip-rap da saída dimensionados.'
   esperado:
@@ -425,6 +530,8 @@
   nao_esperado:
   - canais-de-drenagem-e-macrodrenagem
   nota: 'DELEGACAO: [DELEGAR: hidraulica] (D3): o Drenagem entrega V, Fr, y de saída e o aviso "precisa de dissipador"; o dissipador não é dimensionado aqui. Tolerável um segundo bloco para cota de inundação.'
+  delegacao: [hidraulica]
+  delegacao_toleravel: []
 - id: del-03
   prompt: 'Verifique se o envoltório de brita de 5 mm serve para o tubo dreno em solo siltoso com D85 de 0,09 mm e me diga o gradiente de saída seguro, sem risco de piping.'
   esperado:
@@ -432,6 +539,8 @@
   nao_esperado:
   - canais-de-drenagem-e-macrodrenagem
   nota: 'DELEGACAO: [DELEGAR: geotecnia]. Só o critério hidráulico de envoltório (ILRI-56, Terzaghi) é do Drenagem; filtro real, k medido e piping são da Geotecnia. Premissa provisória rotulada.'
+  delegacao: [geotecnia]
+  delegacao_toleravel: []
 - id: del-04
   prompt: 'Tenho as cotas de fundo das valetas e quero amarrar o deságue de cada uma ao greide da estrada por estaca; o corte e o aterro ainda não estão fechados. Dá para fechar a drenagem provisória da obra?'
   esperado:
@@ -439,20 +548,26 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'DELEGACAO: [DELEGAR: terraplenagem]. Greide, plataforma, taludes e volumes são da Terraplenagem; o Drenagem entrega dispositivos por estaca, cotas de deságue e drenagem provisória e pede o greide.'
+  delegacao: [terraplenagem]
+  delegacao_toleravel: []
 - id: del-05
   prompt: 'A estrada será pavimentada com revestimento asfáltico. Dimensione a sarjeta e os drenos do acostamento e me diga a camada drenante necessária sob o pavimento para uma plataforma de 8,4 m.'
   esperado:
   - drenagem-de-estradas-e-plataformas
   nao_esperado:
   - drenagem-subsuperficial
-  nota: 'DELEGACAO: [DELEGAR: pavimentacao] para a camada drenante e a seção pavimentada; sarjeta e dreno de plataforma são do Drenagem (agente, tabela de roteamento).'
+  nota: 'DELEGACAO: [DELEGAR: pavimentacao] para a camada drenante e a seção pavimentada; sarjeta e dreno de plataforma são do Drenagem (agente, tabela de roteamento); sem IDF nem i para a plataforma de 8,4 m, também [DELEGAR: clima] (obrigatório).'
+  delegacao: [pavimentacao, clima]
+  delegacao_toleravel: []
 - id: del-06
   prompt: 'Dimensione o espaçamento e a profundidade dos drenos de um lote de 120 ha irrigado por pivô. Não sei a recarga nem a salinidade da água; use o que achar razoável.'
   esperado:
   - drenagem-subsuperficial
   nao_esperado:
   - hidrologia-de-projeto-para-drenagem
-  nota: 'DELEGACAO: [DELEGAR: irrigacao] (recarga, eficiência, salinidade, lençol admissível). Premissa provisória rotulada com consequência; K e camada impermeável também viram [DELEGAR: geotecnia] tolerável.'
+  nota: 'DELEGACAO: [DELEGAR: irrigacao] (recarga, eficiência, salinidade, lençol admissível). Premissa provisória rotulada com consequência; K e camada impermeável também não vêm no pedido: [DELEGAR: geotecnia] (obrigatório).'
+  delegacao: [irrigacao, geotecnia]
+  delegacao_toleravel: []
 - id: del-07
   prompt: 'Entre bueiro celular 2 × 2,5 × 2,5 m e três linhas de tubo DN 1500 para o mesmo cruzamento, qual a melhor opção? Já verifiquei o HW das duas e as duas atendem.'
   esperado:
@@ -460,6 +575,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'DELEGACAO: [DELEGAR: orcamento] (V17): alternativas com custo relevante vão ao Orçamento com quantitativos (n de células, m de tubo, m³ de escavação) antes da recomendação final; sem número de custo inventado.'
+  delegacao: [orcamento]
+  delegacao_toleravel: []
 - id: del-08
   prompt: 'A aduela celular de 3 × 3 m do bueiro tem 4,5 m de aterro e sobrecarga de TB-450. Preciso da armadura e da espessura da laje.'
   esperado:
@@ -467,6 +584,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'DELEGACAO: [DELEGAR: estruturas] (id citado na matriz §1 como "quando existir"; destinatário inexistente: o bloco fica como pendência humana). O Drenagem entrega geometria funcional e classe de tubo indicativa, não armadura.'
+  delegacao: [estruturas]
+  delegacao_toleravel: []
 - id: del-09
   prompt: 'O traçado do canal adutor passa em cima de um talvegue de 1,8 km². Decidir entre bueiro sob o canal, sifão ou aqueduto; já tenho as cotas do greide do canal e do fundo do talvegue.'
   esperado:
@@ -474,6 +593,8 @@
   nao_esperado:
   - canais-de-drenagem-e-macrodrenagem
   nota: 'DELEGACAO: [DELEGAR: hidraulica] (D18-Hid): a decisão canal x sifão x aqueduto x bueiro sob o canal é da Hidráulica; o Drenagem dimensiona a travessia de drenagem natural e devolve a cota de inundação. Resolver a parte própria até a fronteira.'
+  delegacao: [hidraulica]
+  delegacao_toleravel: [clima]   # 2026-10-09: Q da bacia de 1,8 km² sem IDF no pedido (coerência com a regra de dado ausente)
 
 # ---------------------------------------------------------------- não-gatilho (um por destinatário da matriz)
 - id: nao-01
@@ -483,6 +604,8 @@
   - drenagem-fundamentos
   - hidrologia-de-projeto-para-drenagem
   nota: 'NAO-GATILHO: ajuste de IDF e séries é do Clima. Nenhuma skill carregada, nenhum valor inventado; DELEGACAO: [DELEGAR: clima] com o checklist de chuva.'
+  delegacao: [clima]
+  delegacao_toleravel: []
 - id: nao-02
   prompt: 'Dimensione a adutora de recalque de 8,0 km, DN 1200, para 2,5 m³/s com perda de carga e verifique o golpe de aríete.'
   esperado: []
@@ -490,7 +613,9 @@
   - drenagem-fundamentos
   - canais-de-drenagem-e-macrodrenagem
   - bueiros-e-travessias
-  nota: 'NAO-GATILHO: adução e transiente são da Hidráulica. Nenhuma skill, nenhum valor; destinatário hidraulica (DELEGACAO: [DELEGAR: hidraulica] só se houver interface com drenagem; aqui o pedido é inteiro dela).'
+  nota: 'NAO-GATILHO: adução e transiente são da Hidráulica. Nenhuma skill, nenhum valor; pedido inteiro de outra disciplina: DELEGACAO: [DELEGAR: hidraulica] (delimita a interface e emite o pedido).'
+  delegacao: [hidraulica]
+  delegacao_toleravel: []
 - id: nao-03
   prompt: 'Preciso do ângulo de atrito, da coesão e da capacidade de suporte do solo do aterro do bueiro e da estabilidade do talude de 1:1,5 em solo saturado.'
   esperado: []
@@ -499,6 +624,8 @@
   - drenagem-subsuperficial
   - bueiros-e-travessias
   nota: 'NAO-GATILHO: parâmetros geotécnicos e estabilidade de talude são da Geotecnia. Nenhuma skill, nenhum valor inventado; destinatário geotecnia.'
+  delegacao: [geotecnia]
+  delegacao_toleravel: []
 - id: nao-04
   prompt: 'Faça o balanço de massas do trecho km 0 a km 8 do canal, com DMT e bota-fora, e diga quanto de rocha de 3ª categoria vou escavar.'
   esperado: []
@@ -506,6 +633,8 @@
   - drenagem-fundamentos
   - canais-de-drenagem-e-macrodrenagem
   nota: 'NAO-GATILHO: balanço de massas, DMT e classificação de material são da Terraplenagem (e da Geotecnia para a classificação). Nenhuma skill; destinatário terraplenagem.'
+  delegacao: [terraplenagem]
+  delegacao_toleravel: [geotecnia]
 - id: nao-05
   prompt: 'Dimensione a estrutura do pavimento da estrada de serviço (CBR do subleito 8, tráfego de 2 x 10^5 N): espessuras de base e sub-base.'
   esperado: []
@@ -513,13 +642,17 @@
   - drenagem-fundamentos
   - drenagem-de-estradas-e-plataformas
   nota: 'NAO-GATILHO: espessura de camadas do pavimento é da Pavimentação (id pavimentacao). Nenhuma skill, nenhum valor; a drenagem da plataforma só entra se o usuário a pedir.'
+  delegacao: [pavimentacao]
+  delegacao_toleravel: []
 - id: nao-06
   prompt: 'Qual a lâmina líquida de irrigação e a eficiência de aplicação para o pivô de milho em Barreiras, e qual o Kc de cada estágio?'
   esperado: []
   nao_esperado:
   - drenagem-fundamentos
   - drenagem-subsuperficial
-  nota: 'NAO-GATILHO: lâmina, Kc, eficiência e método de irrigação são da Irrigação (id irrigacao); recarga para drenos só seria pedida a ela se o usuário quisesse drenar. Nenhuma skill.'
+  nota: 'NAO-GATILHO: lâmina, Kc, eficiência e método de irrigação são da Irrigação (id irrigacao); DELEGACAO: [DELEGAR: irrigacao] (pedido inteiro dela). Nenhuma skill.'
+  delegacao: [irrigacao]
+  delegacao_toleravel: []
 - id: nao-07
   prompt: 'Faça o orçamento do bueiro celular 2 × 2,5 × 2,5 m, com composições do SINAPI da Bahia e BDI de 22 %.'
   esperado: []
@@ -527,6 +660,8 @@
   - drenagem-fundamentos
   - bueiros-e-travessias
   nota: 'NAO-GATILHO: preço, composição e BDI são do Orçamento (engenheiro-de-custos, id orcamento). Nenhuma skill; o Drenagem só entregaria quantitativos se o bueiro já estivesse dimensionado.'
+  delegacao: [orcamento]
+  delegacao_toleravel: []
 - id: nao-08
   prompt: 'Calcule a armadura e verifique a fissuração da laje superior do bueiro celular 3 × 3 m para 6 m de aterro.'
   esperado: []
@@ -534,6 +669,8 @@
   - drenagem-fundamentos
   - bueiros-e-travessias
   nota: 'NAO-GATILHO: armadura e concreto de aduela são de Estruturas (id estruturas, destinatário inexistente: pendência humana). Nenhuma skill, nenhum valor.'
+  delegacao: [estruturas]
+  delegacao_toleravel: []
 - id: nao-09
   prompt: 'Projete a rede de galerias de águas pluviais de um loteamento de 25 ha, com bocas de lobo e poços de visita, para TR 10 e a sarjeta das ruas.'
   esperado: []
@@ -542,6 +679,8 @@
   - drenagem-de-estradas-e-plataformas
   - hidrologia-de-projeto-para-drenagem
   nota: 'NAO-GATILHO: drenagem urbana em rede não é coberta (perfil, fora de escopo). Dizer que não está coberta, sem adaptar o método rodoviário; sem skill; destino é equipe humana especializada.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: nao-10
   prompt: 'Rode o HEC-RAS 2D para a cheia de TR 100 no talvegue que atravessa a estrada e me dê as manchas de inundação.'
   esperado: []
@@ -549,6 +688,8 @@
   - drenagem-fundamentos
   - bueiros-e-travessias
   nota: 'NAO-GATILHO: simulação 2D é consultoria, fora de escopo (perfil). Nenhuma skill; dizer o que a consultoria deve entregar (Q, hidrograma, geometria, rugosidade), sem rodar nem estimar manchas.'
+  delegacao: []
+  delegacao_toleravel: []
 
 # ---------------------------------------------------------------- pedidos mistos (parte própria + parte alheia)
 - id: mis-01
@@ -559,6 +700,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'Misto: bueiro e vazão são próprios; chuva por TR é do Clima. DELEGACAO: [DELEGAR: clima] e skills própria carregadas (hidrologia -> bueiros). A chuva não é inventada.'
+  delegacao: [clima]
+  delegacao_toleravel: []
 - id: mis-02
   prompt: 'O bueiro celular 3 × 3 m sai a 7 m/s no leito de areia. Dimensione o bueiro para Q = 38 m³/s, TW 1,9 m, e já quero o dissipador e o custo da solução.'
   esperado:
@@ -566,6 +709,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'Misto triplo: bueiro próprio; dissipador = DELEGACAO: [DELEGAR: hidraulica] (D3); custo = [DELEGAR: orcamento]. Dois blocos, skill própria carregada. Nenhum valor de custo ou de dissipador inventado.'
+  delegacao: [hidraulica, orcamento]
+  delegacao_toleravel: []
 - id: mis-03
   prompt: 'Quero a valeta de crista da estrada em corte, TR 10, Q de 0,25 m³/s, e que você amarre o deságue no greide que o pessoal de terraplenagem vai me mandar.'
   esperado:
@@ -573,6 +718,8 @@
   nao_esperado:
   - canais-de-drenagem-e-macrodrenagem
   nota: 'Misto: valeta própria; greide é DELEGACAO: [DELEGAR: terraplenagem] (pedido: greide da estrada e da faixa; premissa provisória rotulada).'
+  delegacao: [terraplenagem]
+  delegacao_toleravel: []
 - id: mis-04
   prompt: 'Espaçamento de drenos para 250 ha, com K medido de 0,5 m/d e camada impermeável a 5 m (dados da sondagem). Eu não tenho a recarga nem a lâmina de irrigação; ajuste conforme a salinidade esperada.'
   esperado:
@@ -580,6 +727,8 @@
   nao_esperado:
   - hidrologia-de-projeto-para-drenagem
   nota: 'Misto: espaçamento próprio (Hooghoudt/Ernst); recarga, lâmina e salinidade são DELEGACAO: [DELEGAR: irrigacao] (urgência: bloqueia a resposta final). K/camada tomados como dados do usuário; incerteza declarada (V12).'
+  delegacao: [irrigacao]
+  delegacao_toleravel: []
 - id: mis-05
   prompt: 'O dreno desce para o canal de adução e tem que cruzar o canal. Dimensione a seção do dreno (Q 4,5 m³/s, terra) e diga como ele deságua sem afetar o canal adutor.'
   esperado:
@@ -587,6 +736,8 @@
   nao_esperado:
   - bueiros-e-travessias
   nota: 'Misto: seção e deságue do dreno são próprios; o cruzamento com o canal de adução (sifão, aqueduto, bueiro sob o canal) é DELEGACAO: [DELEGAR: hidraulica] (D18-Hid). PAR canais x bueiros: tolerável carregar bueiros-e-travessias.'
+  delegacao: [hidraulica]
+  delegacao_toleravel: []
 
 # ---------------------------------------------------------------- modo CDV (cartões; enunciados completos vêm do Gestor)
 - id: cdv-01
@@ -597,6 +748,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'CDV: P-134 (PENDENCIAS_DE_TREINAMENTO: P-134, P-265 a P-268, bueiros fora do McMath, 77 a 346 m³/s). V6, V7: McMath não vale; racional/HUT com limite de área declarado; h = fundo - terreno; nada escrito no CDV fora da linha `escreve:`; só o André decide D-xx; dúvida vira P-nova com a hipótese. Chuva: DELEGACAO: [DELEGAR: clima] se a IDF não vier no cartão.'
+  delegacao: []
+  delegacao_toleravel: [clima]
 - id: cdv-02
   prompt: 'Cartão do Gestor CDV para as pendências P-265 e P-266 (bueiros com vazão de projeto entre 120 e 346 m³/s, bacias fora do McMath). Quero HW e células com o TR do cartão e o risco na vida útil, no formato do CDV.'
   esperado:
@@ -605,6 +758,8 @@
   nao_esperado:
   - drenagem-casos-de-referencia
   nota: 'CDV: P-265, P-266 (faixa 77 a 346 m³/s). Parecer em Situação / Preciso de você / Próximo passo / Detalhes; TR e R = 1-(1-1/TR)^N (V6); curva ou coeficiente de curvas/ só muda por cartão; TR de bueiro de perímetro é ponto aberto (D-xx não decidido pelo agente). Número do acervo, se usado, sem ✓h.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: cdv-03
   prompt: 'CDV, pendências P-267 e P-268: bueiros celulares múltiplos com h = fundo - terreno medido no cartão. O CDV pede a verificação dos controles de entrada e saída e a cota de inundação a montante. Responda no formato do CDV e diga o que escreveria em cada linha `escreve:`.'
   esperado:
@@ -612,6 +767,8 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'CDV: P-267, P-268. V2 (dois controles), cota de inundação a montante devolvida ao Hidráulico (DELEGACAO: [DELEGAR: hidraulica] se a decisão canal x bueiro depender dela). h = fundo - terreno; nenhuma escrita fora de `escreve:`; só o André decide D-xx.'
+  delegacao: []
+  delegacao_toleravel: [hidraulica]
 - id: cdv-04
   prompt: 'Cartão CDV D-56: talvegue cortado pela faixa do canal de adução, drenagem de macrodreno proposta ao longo do canal. O Gestor quer a análise hidráulica das alternativas (dreno lateral versus travessia). Dê só a análise, a decisão é do André.'
   esperado:
@@ -619,7 +776,9 @@
   - hidrologia-de-projeto-para-drenagem
   nao_esperado:
   - drenagem-subsuperficial
-  nota: 'CDV: D-56. Decisão de projeto: o agente analisa e não decide (REGRA 14 do CDV); PAR canais x bueiros (travessia sob o canal é DELEGACAO: [DELEGAR: hidraulica], D18-Hid). Custo das alternativas: [DELEGAR: orcamento].'
+  nota: 'CDV: D-56. Decisão de projeto: o agente analisa e não decide (REGRA 14 do CDV); PAR canais x bueiros (travessia sob o canal é DELEGACAO: [DELEGAR: hidraulica], D18-Hid). A travessia sob o canal é DELEGACAO obrigatória a hidraulica; custo das alternativas: [DELEGAR: orcamento] tolerável (não pedido).'
+  delegacao: [hidraulica]
+  delegacao_toleravel: [orcamento]
 - id: cdv-05
   prompt: 'Cartão CDV D-85, macrodrenagem com interceptação de talvegues pela faixa do canal: confirme se a seção e a velocidade admissível do dreno atendem para os Q do cartão e liste o que fica pendente. Responda no formato do CDV.'
   esperado:
@@ -627,13 +786,17 @@
   nao_esperado:
   - drenagem-casos-de-referencia
   nota: 'CDV: D-85. O texto do cartão não está no pacote (a skill avisa: o enunciado vem do cartão). V4, V5, V10 e conferência de planilha, sem decidir D-85; pendências em Detalhes.'
+  delegacao: []
+  delegacao_toleravel: [hidraulica]
 - id: cdv-06
   prompt: 'CDV, pendências P-42, P-115 e P-116 (tubo dreno): o cartão pede o diâmetro mínimo do tubo dreno de 300 mm para o coletor do setor, com q do cartão e declividade da planta. Responda no formato do CDV.'
   esperado:
   - drenagem-subsuperficial
   nao_esperado:
   - hidrologia-de-projeto-para-drenagem
-  nota: 'CDV: P-42, P-115 a P-118 (PENDENCIAS_DE_TREINAMENTO). Capacidade de tubo dreno (Manning, n 0,016, y/D como ponto aberto); recarga e K são DELEGACAO: [DELEGAR: irrigacao] e [DELEGAR: geotecnia]; premissa provisória rotulada; nenhuma escrita fora do cartão.'
+  nota: 'CDV: P-42, P-115 a P-118 (PENDENCIAS_DE_TREINAMENTO). Capacidade de tubo dreno (Manning, n 0,016, y/D como ponto aberto); q vem do cartão; recarga e K, se citados, são [DELEGAR: irrigacao] e [DELEGAR: geotecnia] toleráveis; premissa provisória rotulada; nenhuma escrita fora do cartão.'
+  delegacao: []
+  delegacao_toleravel: [irrigacao, geotecnia]
 - id: cdv-07
   prompt: 'CDV D-86: a decisão sobre DN do tubo dreno (300 mm) foi trazida para você. Mostre a análise de capacidade, sensibilidade a n e a recarga e deixe a decisão com o André.'
   esperado:
@@ -641,6 +804,8 @@
   nao_esperado:
   - canais-de-drenagem-e-macrodrenagem
   nota: 'CDV: D-86. A skill diz que só o André decide D-86 e entrega a análise (tubo-dreno-e-coletores). V15: ponto aberto e alternativa, sem decisão. Se nenhum n for decidido, declarar o ponto aberto.'
+  delegacao: []
+  delegacao_toleravel: [irrigacao]
 - id: cdv-08
   prompt: 'Gestor CDV: pendências P-108 e P-272 de drenagem. O enunciado completo está no cartão em anexo, que você deve ler primeiro. Faça a triagem: o que é meu, o que é de outro especialista e o que falta.'
   esperado:
@@ -648,6 +813,8 @@
   nao_esperado:
   - drenagem-casos-de-referencia
   nota: 'CDV: P-108, P-272 (temas não constam no pacote; confirmar com o cartão na F10). Triagem de interfaces e fronteiras: núcleo. As skills de disciplina entram só depois de lido o cartão; DELEGACAO conforme o conteúdo (não presumido aqui).'
+  delegacao: []
+  delegacao_toleravel: [clima, hidraulica, geotecnia, terraplenagem, pavimentacao, irrigacao, orcamento, estruturas]
 
 # ---------------------------------------------------------------- vigência, edição e licença
 - id: vig-01
@@ -657,6 +824,8 @@
   nao_esperado:
   - hidrologia-de-projeto-para-drenagem
   nota: 'VIGENCIA: HDS-5 3ª ed. 2012 no corpus (rotular), constantes da Tab. A.1 conferidas; não misturar edições. bueiros-e-travessias tolerável. Sem transcrever.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: vig-02
   prompt: 'Cite a NBR 8890:2020 na classe de tubo do meu memorial e me diga o que ela exige para DN 1000 em vala com 3 m de recobrimento.'
   esperado:
@@ -665,6 +834,8 @@
   nao_esperado:
   - drenagem-casos-de-referencia
   nota: 'VIGENCIA: norma fechada (NBR 8890:2020, NAO-ABERTA): citada como referência, nunca transcrita. Classe de tubo só INDICATIVA via ABTC com a ressalva; valor da norma não inventado.'
+  delegacao: []
+  delegacao_toleravel: []
 - id: vig-03
   prompt: 'Os ES 018, 020 e 021 do DNIT e o FAO-38 estão no corpus? Preciso copiar a tabela de valetas e a tabela de eficiência de irrigação para um anexo.'
   esperado:
@@ -672,13 +843,17 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'VIGENCIA: material NAO-ABERTA ou FORNECIDA-PELO-USUARIO (ES 018/021, FAO-38) é citado, não reproduzido. FAO-38 é eficiência de irrigação, assunto da Irrigação (nao-gatilho nessa parte).'
+  delegacao: []
+  delegacao_toleravel: [irrigacao]
 - id: vig-04
   prompt: 'A IDF de Pfafstetter ainda vale para o Nordeste? Posso usar para a vazão do bueiro, e a vigência da NBR da ABTC mudou?'
   esperado:
   - drenagem-normas-e-manuais
   nao_esperado:
   - hidrologia-de-projeto-para-drenagem
-  nota: 'VIGENCIA: Pfafstetter só para localizar na skill (IDF é do Clima): DELEGACAO: [DELEGAR: clima] para a IDF vigente. Edição de cada fonte rotulada no catálogo (`vigencia`, `licenca`), sem inventar.'
+  nota: 'VIGENCIA: Pfafstetter só para localizar na skill (IDF é do Clima): [DELEGAR: clima] para a IDF vigente é tolerável (a pergunta é de vigência, sem número pedido). Edição de cada fonte rotulada no catálogo (`vigencia`, `licenca`), sem inventar.'
+  delegacao: []
+  delegacao_toleravel: [clima]
 - id: vig-05
   prompt: 'O limite de 2 km² do racional do DAEE vale fora de São Paulo? Qual limite vocês adotam para uma bacia de 3,5 km² na Bahia?'
   esperado:
@@ -687,3 +862,5 @@
   nao_esperado:
   - drenagem-subsuperficial
   nota: 'VIGENCIA: âmbito de norma regional (DAEE) rotulado; limite do racional é ponto aberto (2 km² DAEE, 3 km² PMSP, 80 ha HDS-2, 3,5 km² projetos do acervo): padrão provisório declarado, sem decidir.'
+  delegacao: []
+  delegacao_toleravel: []

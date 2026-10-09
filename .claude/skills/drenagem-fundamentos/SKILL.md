@@ -38,7 +38,7 @@ description: >
   `tr_para_risco`). O parecer mostra TR **e** o risco correspondente: TR 25 numa vida útil de 25 anos ainda dá
   cerca de 64 % de chance de excedência. TR de projeto é decisão de critério (tipo de obra, consequência da falha),
   não de fórmula: tabelas em `tr-por-tipo-de-obra` (skill `bueiros-e-travessias`) e `tr-por-obra` (hidrologia).
-- **Padrões provisórios** (marcados "padrão provisório, decisão F7" nas calculadoras): y/D ≤ 0,75 em tubo
+- **Padrões provisórios** (tabela completa em `references/pontos-abertos.md`) (marcados "padrão provisório, decisão F7" nas calculadoras): y/D ≤ 0,75 em tubo
   parcialmente cheio; folga de canal ≥ 25 % do tirante normal; tc_min 5 min e TR 10 em drenagem superficial. Entram
   no parecer **rotulados** e com a alternativa da fonte; não são regra do pacote.
 - **Pontos abertos para a F7** (não decidir; mostrar as alternativas com fonte): TR de bueiro de perímetro irrigado

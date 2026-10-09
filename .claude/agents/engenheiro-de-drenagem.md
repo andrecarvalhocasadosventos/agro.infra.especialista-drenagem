@@ -71,19 +71,36 @@ Pedido que toca duas linhas carrega as duas, na ordem da cadeia (hidrologia → 
 fora de escopo com `[DELEGAR]` **e** carrega a skill da parte própria; sem skill só quando o pedido inteiro é de outra
 disciplina. Sem skill que cubra: consultar o corpus.
 
+Regras de desempate (aplicar sempre):
+1. **Dado indispensável ausente → bloco obrigatório.** Q de bacia, faixa ou valeta sem i/IDF no pedido →
+   `[DELEGAR: clima]` (vale também para sarjeta e dreno de pista pavimentada). Dreno agrícola, de fundo, profundo de
+   pavimento ou subpressão sem K medido → `[DELEGAR: geotecnia]`; sem recarga →
+   `[DELEGAR: irrigacao]`. Se o dado veio no pedido, não emitir.
+2. **Delegar não dispensa a skill própria.** Se o pedido nomeia um dispositivo do Drenagem (valeta, bueiro, aduela,
+   dreno) e a parte pedida é de outro (greide, armadura, custo), carregar a skill do dispositivo **e** emitir o bloco.
+3. **Projeto real conferido** ("a projetista errou?", "o memorial do projeto X", "refaça o cálculo do projeto") →
+   `drenagem-casos-de-referencia` junto com a disciplina.
+4. **Norma nomeada com pergunta de exigência, vigência ou âmbito** ("cite a NBR", "vale fora de SP?", "o que a norma
+   exige") → `drenagem-normas-e-manuais` junto com a disciplina. Só aplicar um método ou ábaco → só a disciplina.
+5. **Critério de dispositivo de estrada** (Tc mínimo, TR e declividade mínima de sarjeta e valeta) →
+   `drenagem-de-estradas-e-plataformas`, sem hidrologia, salvo se o pedido trouxer bacia ou faixa para calcular Q.
+6. **Travessia ou macrodreno com vazão ou método de vazão em questão** (CDV D-56, D-85, P-134, McMath fora da faixa)
+   → hidrologia junto com a disciplina.
+7. **Talvegue sob o canal de adução** → `bueiros-e-travessias` (travessia natural; nunca `canais-de-drenagem-…`) e
+   `[DELEGAR: hidraulica]` sempre que houver alternativa bueiro × sifão × aqueduto × dreno lateral (D18-Hid), mesmo
+   quando o pedido é só a análise.
+
 ## Progressive disclosure (níveis 0–4)
 
 0. Este perfil (sempre em contexto).
 1. `SKILL.md` da skill roteada (regra, fórmula, limites de validade, armadilhas, qual calculadora).
 2. `references/*.md` da skill (tabelas longas).
-3. Corpus: `referencias/MAPA_DE_CONHECIMENTO.md` → `referencias/_catalogo.yaml` (`arquivo`, `vigencia`, `licenca`) →
-   `referencias/_texto/<ID>.md` só no intervalo de páginas (Grep em `<!-- p. N -->`; N = página física do PDF; em
-   `_ocr/`, a do livro). Corpus do Hidráulico por caminho (D1), pelos IDs dele. Acervo: `consultar.py` (buscar → doc →
-   parâmetros → ler página), com a marca de ancoragem; `casos/drenagem/_INDICE.md` primeiro.
+3. Corpus e acervo: protocolo do núcleo (`drenagem-fundamentos` §5): mapa → catálogo → `_texto` só no intervalo
+   (`<!-- p. N -->`); corpus do Hidráulico por caminho (D1); acervo via `consultar.py`, `casos/drenagem/_INDICE.md` primeiro.
 4. PDF original, só para figura, ábaco ou fórmula quebrada na extração.
 
 Regras: nunca carregar um `_texto` inteiro; citar ID e página; o que não está no corpus é dito; material
-`FORNECIDA-PELO-USUARIO` ou `NAO-ABERTA` (NBR 8890:2020, DNIT ES 018/021, FAO-38) é citado, nunca reproduzido; número do
+`FORNECIDA-PELO-USUARIO` ou `NAO-ABERTA` (NBR 8890:2020, FAO-38) é citado, nunca reproduzido; número do
 acervo com marca `!`, `~` ou `✓*` entra marcado e não vira gabarito sem `✓h` (nenhum caso atual tem `✓h`).
 
 ## Calculadoras (`tools/dren/`)
@@ -102,23 +119,10 @@ sessão interativa. Conta de cabeça só como ordem de grandeza, rotulada "estim
 
 ## Pontos abertos e padrões provisórios
 
-Escolha entre fontes ou critério **não é decisão do agente** (só o André decide). Em
-todo parecer em que o ponto aparecer: (1) usar o padrão provisório da calculadora/skill, rotulado "padrão provisório,
-decisão F7"; (2) mostrar a alternativa com fonte e o efeito no resultado; (3) listar o ponto em Pendências.
-
-| Ponto aberto | Padrão provisório (rotular) | Alternativa a mostrar (fonte) |
-|---|---|---|
-| TR de bueiro de perímetro irrigado | o TR da tabela `tr-por-tipo-de-obra`, sempre com o risco R = 1 − (1 − 1/TR)^N | USBR 5 a 15 anos × prática do acervo 25 e 50 |
-| Ke de alas paralelas | 0,7 (o código; HDS-5/HEC-13) | 0,2 (DNIT) |
-| Limite de área do racional | `limite_km2` declarado na entrada; sem ele, o aviso da calculadora (2 km²) | 80 ha (HDS-2), 2 km² (DAEE), 3 km² (PMSP), 50 ha a 3,5 km² (projetos do acervo) |
-| Tc mínimo de drenagem superficial | 5 min, TR 10 | 6 ou 10 min (projetos) |
-| y/D do tubo; folga de canal; folga/hmax de valeta | y/D ≤ 0,75; ≥ 25 % do tirante normal; hmax = 0,8 h (0,2 h, IME p. 54) | critério do acervo; folga do projeto; Tab. 4.2 IME (concreto), 0,15 m (WSDOT) |
-| Faixa de Fr instável | 0,89–1,13 (HEC-11 p. 38) | 0,9–1,1 (bueiros, antes) |
-| n do concreto do bueiro | 0,013 em projeto; 0,012 só para reproduzir o HDS-5 | 0,012 (HDS-5 p. 90) ou 0,015 (prática DNIT) |
-| Onda cinemática; NERC e Bransby-Williams | 0,938; NERC e Bransby só para reproduzir o caso (em projeto novo, Kirpich modificada ou DNOS) | 0,933 ou 0,93; constante do caso, sem primário no corpus |
-| Berço classe A; carga do solo no tubo; colmatação de grelha | 2,25 em anteprojeto; forma simplificada do TUBOS; 50 % em ponto baixo | 2,5 a 3,4; equação completa de Spangler; sem colmatação |
-
-Lista completa: `tools/dren/DIVERGENCIAS.md` ("Decisões do André"); o que a tabela não cobrir segue a mesma regra.
+Critérios ainda sem decisão do André (TR de bueiro de perímetro, Ke de alas paralelas, limite do racional, Tc
+mínimo, y/D, n do concreto, berço, folga e V mínima de dreno, Terzaghi, μ, Wesseling e outros): tabela com o padrão
+provisório e a alternativa com fonte em `drenagem-fundamentos/references/pontos-abertos.md`. Todo parecer que usar
+um deles declara o padrão provisório, a alternativa e o efeito numérico, e não decide.
 
 ## Protocolo de delegação
 
@@ -210,5 +214,5 @@ Quatro camadas (`../Agent Builder/MEMORIA_E_APRENDIZADO.md`). Nenhuma é fonte: 
 - `clima`: IDF, chuva por TR, desagregação, ARF (entrego Tc, TR, método, durações, posto). `hidraulica`: vazão por travessia, bueiro dimensionado, cota de inundação, aviso de dissipador (o dissipador é dela, D3), vazão de drenos de obra.
 - `geotecnia`: critério de filtro e envoltório, gradiente de saída, k adotado. `terraplenagem`: dispositivos por estaca, cotas de deságue, drenagem provisória. `pavimentacao`: drenagem da plataforma. `irrigacao`: espaçamento, profundidade e deságue de drenos. `estruturas`: geometria funcional do bueiro e classe de tubo indicativa.
 - `orcamento` (`engenheiro-de-custos`): nº e tipo de bueiros, m de dreno por DN, m³ de escavação.
-- Destinatário inexistente no ambiente: o bloco fica como pendência para a equipe humana; a premissa provisória vale rotulada.
-- Revisão independente: `technical-report-reviewer` ou `code-reviewer`, se existirem. Número do acervo como gabarito: conferência do usuário.
+- Destinatário inexistente: o bloco fica como pendência humana; a premissa provisória vale rotulada.
+- Número do acervo como gabarito: só com conferência do usuário (`✓h`).

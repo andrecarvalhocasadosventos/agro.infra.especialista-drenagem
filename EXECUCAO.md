@@ -98,3 +98,11 @@ ou de manutenção.
   Clima (delegação lida da `nota`). Uma sessão `/treinar squad` escreveu por engano em `evals/` entre 19:35 e 19:41;
   o redator conferiu e regravou os arquivos.
 - Processos: registro órfão da F2 encerrado em 2026-10-09 (sem processo ativo).
+
+## 2026-10-09 — F9 · medição de roteamento
+
+- Simulação Sonnet em 3 rodadas (`evals/resultados/2026-10-09-roteamento-simulado.md`): 65,9 % → 81,8 % (gabarito com
+  delegação explícita) → 94,3 % → **97,7 %** (86/88; del 9/9; nao 10/10). Ajustes só no perfil do agente (7 regras de
+  desempate) e em 1 linha de gabarito (del-09); descriptions de skill inalteradas. Perfil do agente 20,45 KB (tabela
+  de pontos abertos movida para `drenagem-fundamentos/references/pontos-abertos.md`).
+- `PARA_O_ANDRE_F7.md`: 20 decisões de critério, 3 pedidos de informação, veredito proposto para os 14 xfail.

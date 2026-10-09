@@ -15,7 +15,9 @@ O arquivo de respostas mapeia id -> skills observadas e delegacao observada:
 Regras de acerto por caso:
   - todas as skills de `esperado` foram carregadas;
   - nenhuma skill de `nao_esperado` foi carregada;
-  - a delegacao observada e igual a esperada (null = nenhuma [DELEGAR] emitida).
+  - delegacao: observada contem `delegacao` (obrigatorios) e esta contida em `delegacao` + `delegacao_toleravel`
+    (null/[] = nenhuma [DELEGAR] emitida). Sem esses campos no caso, vale o fallback pela nota
+    (ids "[DELEGAR: x]" citados = obrigatorios, nada tolerado).
 O nucleo drenagem-fundamentos e pre-carregado e e ignorado nas observadas, salvo se estiver em `esperado`.
 Casos sem resposta contam como erro. Sai com codigo 1 se o total ficar abaixo do criterio (90 %).
 """
@@ -31,12 +33,21 @@ DELEGACOES = {"clima", "hidraulica", "geotecnia", "terraplenagem", "pavimentacao
 import re
 
 
+def _lista(v):
+    if v is None:
+        return set()
+    return set(v if isinstance(v, list) else [v])
+
+
 def _deleg_esperada(caso):
-    """Conjunto de ids [DELEGAR: id] citados na nota (adaptado ao formato do Drenagem)."""
-    if caso.get("delegacao") is not None:
-        d = caso["delegacao"]
-        return set(d if isinstance(d, list) else [d])
-    return set(re.findall(r"\[DELEGAR:\s*([a-z]+)\]", caso.get("nota") or "")) & DELEGACOES
+    """(obrigatoria, toleravel) como conjuntos de ids [DELEGAR: id].
+
+    Campos explicitos `delegacao` e `delegacao_toleravel`. Fallback pela nota (todo id citado
+    vira obrigatorio, sem toleravel) so quando nenhum dos dois campos existe no caso.
+    """
+    if "delegacao" in caso or "delegacao_toleravel" in caso:
+        return _lista(caso.get("delegacao")), _lista(caso.get("delegacao_toleravel"))
+    return set(re.findall(r"\[DELEGAR:\s*([a-z]+)\]", caso.get("nota") or "")) & DELEGACOES, set()
 
 
 def _deleg_obs(resp):
@@ -52,15 +63,17 @@ def avaliar(caso, resp):
     if NUCLEO not in esp:
         obs.discard(NUCLEO)
     nao = set(caso.get("nao_esperado") or [])
-    d_esp = _deleg_esperada(caso)
+    d_obrig, d_toler = _deleg_esperada(caso)
     d_obs = _deleg_obs(resp)
     falhas = []
     if esp - obs:
         falhas.append("faltou skill: " + ", ".join(sorted(esp - obs)))
     if nao & obs:
         falhas.append("skill indevida: " + ", ".join(sorted(nao & obs)))
-    if d_esp != d_obs:
-        falhas.append(f"delegacao esperada={sorted(d_esp)} observada={sorted(d_obs)}")
+    if d_obrig - d_obs:
+        falhas.append(f"faltou delegacao: {sorted(d_obrig - d_obs)}")
+    if d_obs - d_obrig - d_toler:
+        falhas.append(f"delegacao indevida: {sorted(d_obs - d_obrig - d_toler)}")
     return falhas
 
 
@@ -76,9 +89,13 @@ def main():
         print("ERRO: ids duplicados em roteamento.yaml")
         return 2
     for c in casos:
-        d = c.get("delegacao")
-        if d is not None and not set(d if isinstance(d, list) else [d]) <= DELEGACOES:
-            print(f"ERRO: {c['id']} com delegacao invalida: {d}")
+        for campo in ("delegacao", "delegacao_toleravel"):
+            d = _lista(c.get(campo))
+            if not d <= DELEGACOES:
+                print(f"ERRO: {c['id']} com {campo} invalida: {sorted(d)}")
+                return 2
+        if _lista(c.get("delegacao")) & _lista(c.get("delegacao_toleravel")):
+            print(f"ERRO: {c['id']} com id em delegacao e delegacao_toleravel")
             return 2
 
     por_tema = defaultdict(lambda: [0, 0])
