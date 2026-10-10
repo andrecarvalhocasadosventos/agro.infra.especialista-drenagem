@@ -289,3 +289,6 @@ Linhas novas/alteradas de `hidrologia.py` v0.3.0 (módulo | função | fórmula 
 Gabaritos G1 cobertos: 1, 2, 4, 5, 6 (parcial: R-1 e R-3 não recalculáveis), 7, 8, 9, 14, 15 (parte de Tc e IDF; o tanque não foi implementado).
 Não cobertos: 3 (Ex. 3-14, falta Tab. 3-15), 10 (qu da Fig. 7-9c), 11 (LP3), 12 (Tab. 9-17), 13 (Pfafstetter, IDF é do Clima), 16, 17.
 
+### hecras_hdf v0.1.0 (F5 HEC-RAS, 2026-10-10)
+Leitura somente leitura de `.pNN.hdf` do HEC-RAS com h5py (nao executa o programa): `verificar`, `plano`, `malha`, `resultados_2d`, `courant`, `contornos`, `secoes_1d`, `comparar`.
+`python -m tools.dren.hecras_hdf --funcao verificar --arquivo "<...>.p01.hdf"`. Testes: `tests/dren/test_hecras_hdf.py` (18: fixture sintetica em `tests/dren/fixtures/sintetico.py`; 4 contra os `.hdf` reais da TPF, que pesam 24-27 MB e ficam fora do repo: rodam se existir `HECRAS_FIXTURES` ou a copia local, senao sao pulados). Reproduz o HR-02 (area de celula, n, estabilizacao, velocidade) dentro de 5 %. Layout 1D so com fixture sintetica. Courant e estimativa (dX = raiz da area). Layout HDF: `.claude/skills/modelagem-hidraulica-hec-ras/references/hecras-hdf-layout.md`.

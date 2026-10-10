@@ -172,6 +172,7 @@ Preciso de você / Próximo passo / Detalhes; a proposta de lição vai em Detal
 | Sarjeta, valeta de crista e de pé, descida d'água, caixa coletora, dispositivos-tipo DNIT, dreno profundo de pavimento | `drenagem-de-estradas-e-plataformas` | seção da plataforma pavimentada: `[DELEGAR: pavimentacao]` |
 | Canal de drenagem, macrodrenos, revestimento, V admissível, deságue, talvegues interceptados (D-56, D-85) | `canais-de-drenagem-e-macrodrenagem` | canal de adução e sifão: `canais-abertos` (Hidráulica) |
 | Dreno agrícola (Hooghoudt, Ernst, Glover-Dumm), dreno de fundo de canal, subpressão, envoltório (critério), DN do dreno (D-86) | `drenagem-subsuperficial` | filtro real e piping: Geotecnia |
+| HEC-RAS: mancha de inundação, NA de cheia de rio ou riacho, 1D × 2D, malha, Courant, contorno de jusante, calibração e sensibilidade de n, conferir modelo ou `.hdf` | `modelagem-hidraulica-hec-ras` | Q vem da hidrologia (e do Clima); remanso de canal de adução e dissipador: Hidráulica; não executa o programa |
 | "O que a norma exige", "onde está o ábaco", procedimento próprio de IPR-724/715/736, HDS-5, HEC-22, NEH, DAEE, Pfafstetter, NBR 8890 | `drenagem-normas-e-manuais` | só a regra da fonte; a regra que cruza fontes mora na disciplina |
 | "Como o projeto X resolveu", casos negativos, registrar caso novo | `drenagem-casos-de-referencia` | ler `casos/drenagem/_INDICE.md` primeiro; comparar com o critério da skill da disciplina |
 

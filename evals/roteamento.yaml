@@ -3,7 +3,7 @@
 #         · nao_esperado (skills cuja carga seria erro) · nota (justificativa + marcas PAR, DELEGACAO, NAO-GATILHO, CDV, VIGENCIA).
 # Delegação: `delegacao` = blocos [DELEGAR: id] que o agente DEVE emitir; `delegacao_toleravel` = aceitáveis, não exigidos
 #         (ids da MATRIZ_DE_INTERFACES §1). A decisão está nos campos; a nota só explica.
-# Skills do pacote (8): drenagem-fundamentos (núcleo, pré-carregado), hidrologia-de-projeto-para-drenagem,
+# Skills do pacote (9, com modelagem-hidraulica-hec-ras, prefixo hr): drenagem-fundamentos (núcleo, pré-carregado), hidrologia-de-projeto-para-drenagem,
 # bueiros-e-travessias, drenagem-de-estradas-e-plataformas, canais-de-drenagem-e-macrodrenagem, drenagem-subsuperficial,
 # drenagem-normas-e-manuais, drenagem-casos-de-referencia.
 # Prefixos: fund · hid · bue · est · can · dsub · nrm · cas (por skill); par (pares vizinhos, os dois sentidos);
@@ -683,13 +683,14 @@
   delegacao_toleravel: []
 - id: nao-10
   prompt: 'Rode o HEC-RAS 2D para a cheia de TR 100 no talvegue que atravessa a estrada e me dê as manchas de inundação.'
-  esperado: []
+  esperado:
+  - modelagem-hidraulica-hec-ras
   nao_esperado:
-  - drenagem-fundamentos
   - bueiros-e-travessias
-  nota: 'NAO-GATILHO: simulação 2D é consultoria, fora de escopo (perfil). Nenhuma skill; dizer o que a consultoria deve entregar (Q, hidrograma, geometria, rugosidade), sem rodar nem estimar manchas.'
+  nota: 'Atualizado em 2026-10-10 (D9 + MATRIZ §2): HEC-RAS de cheia e mancha entrou no escopo do Drenagem; o caso deixou de ser NAO-GATILHO. O programa não está instalado: a skill é carregada, o agente diz que não executa, pede Q/hidrograma, terreno, n e contorno, sem estimar manchas. IDF e ARF do TR 100 são do Clima (tolerável).'
   delegacao: []
-  delegacao_toleravel: []
+  delegacao_toleravel:
+  - clima
 
 # ---------------------------------------------------------------- pedidos mistos (parte própria + parte alheia)
 - id: mis-01
@@ -864,3 +865,74 @@
   nota: 'VIGENCIA: âmbito de norma regional (DAEE) rotulado; limite do racional é ponto aberto (2 km² DAEE, 3 km² PMSP, 80 ha HDS-2, 3,5 km² projetos do acervo): padrão provisório declarado, sem decidir.'
   delegacao: []
   delegacao_toleravel: []
+
+# ---------------------------------------------------------------- HEC-RAS (skill modelagem-hidraulica-hec-ras, D9; F6 2026-10-10)
+- id: hr-01
+  prompt: 'Preciso modelar a cheia de TR 100 num riacho com planície larga que corre paralelo ao canal de adução, e depois um trecho confinado com ponte. Uso 1D, 2D ou 1D/2D, e com que equação no 2D?'
+  esperado:
+  - modelagem-hidraulica-hec-ras
+  nao_esperado:
+  - canais-de-drenagem-e-macrodrenagem
+  nota: 'Escolha 1D × 2D e equação (difusão padrão do programa; SWE nas situações da lista). Sem número para calcular: sem delegação obrigatória; Clima tolerável para a chuva do TR 100.'
+  delegacao: []
+  delegacao_toleravel:
+  - clima
+- id: hr-02
+  prompt: 'A TPF entregou o modelo 2D da captação: n único 0,035, contorno de jusante por declividade 0,01 % (no .u01 está 0,000093), sem calibração, NA de 390,80 m para o Q95. Posso fixar a cota da captação com esse NA?'
+  esperado:
+  - modelagem-hidraulica-hec-ras
+  nao_esperado:
+  - hidrologia-de-projeto-para-drenagem
+  nota: 'Caso negativo HR-03: critérios de aceitação; resultado indicativo, nunca cota de projeto; pede sensibilidade de n e de contorno. Projeto da captação e bombas é da Hidráulica (tolerável).'
+  delegacao: []
+  delegacao_toleravel:
+  - hidraulica
+- id: hr-03
+  prompt: 'Como leio o NA máximo e a velocidade máxima por célula e verifico malha, passo de tempo e Courant do arquivo .p01.hdf de um plano 2D, sem abrir o HEC-RAS?'
+  esperado:
+  - modelagem-hidraulica-hec-ras
+  nao_esperado:
+  - drenagem-normas-e-manuais
+  nota: 'Leitura somente leitura com tools/dren/hecras_hdf.py (verificar, malha, courant); sem delegação.'
+  delegacao: []
+  delegacao_toleravel: []
+- id: hr-04
+  prompt: 'Preciso do remanso em um trecho de 3 km do canal de adução revestido, por passo padrão, com duas estruturas de controle e um regulador de nível. Pode ser feito no HEC-RAS?'
+  esperado: []
+  nao_esperado:
+  - modelagem-hidraulica-hec-ras
+  - canais-de-drenagem-e-macrodrenagem
+  nota: 'NAO-GATILHO/PAR com a Hidráulica (MATRIZ §2): remanso em canal de adução e estruturas de controle são da Hidráulica (canais-abertos); o Drenagem delimita a interface e delega, sem skill.'
+  delegacao:
+  - hidraulica
+  delegacao_toleravel: []
+- id: hr-05
+  prompt: 'Dimensione o bueiro celular da travessia do km 12 para a vazão de 18 m³/s, com HW admissível de 2,4 m e tailwater de 1,1 m.'
+  esperado:
+  - bueiros-e-travessias
+  nao_esperado:
+  - modelagem-hidraulica-hec-ras
+  nota: 'PAR com a skill HEC-RAS: dimensionar bueiro (HW/D, controle) é bueiros-e-travessias; o HEC-RAS só confere a cota de montante e não foi pedido. Q e TR dados: sem delegação obrigatória.'
+  delegacao: []
+  delegacao_toleravel: []
+- id: hr-06
+  prompt: 'Calculei a vazão de TR 100 da bacia (Tc, SCS, pico de 412 m³/s). Antes de rodar o 2D, quero saber que sensibilidades fazer (n, TR, malha), qual o critério de estabilização e como entrego o parecer do modelo.'
+  esperado:
+  - modelagem-hidraulica-hec-ras
+  nao_esperado: []
+  nota: 'Sensibilidade de n (±20 %) e de TR, duas malhas, estabilização, entregáveis. A vazão já veio calculada: hidrologia só toleravel como remissão; sem delegação obrigatória.'
+  delegacao: []
+  delegacao_toleravel:
+  - clima
+- id: hr-07
+  prompt: 'Preciso da vazão de TR 50 da bacia de 640 km² do rio Verde (sem ARF ainda) e depois da mancha de inundação no HEC-RAS na travessia do aqueduto.'
+  esperado:
+  - hidrologia-de-projeto-para-drenagem
+  - modelagem-hidraulica-hec-ras
+  nao_esperado:
+  - bueiros-e-travessias
+  nota: 'MISTO: Q de bacia (hidrologia) e modelo (HEC-RAS); a chuva de TR 50 e o ARF não vêm no pedido: [DELEGAR: clima] obrigatório (regra 1 de desempate). Cadeia hidrologia → modelagem. Hidráulica tolerável: o aqueduto como estrutura é dela (D18; ajustado após a rodada do juiz, gabarito sem o par).'
+  delegacao:
+  - clima
+  delegacao_toleravel:
+  - hidraulica

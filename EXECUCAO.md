@@ -121,3 +121,12 @@ ou de manutenção.
 - Seção C: 10 marcas `xfail` com `strict=False` viraram `strict=True` (test_bueiros 8, test_hidrologia 2); nenhum número mudou.
 - Item 13: página 162 do DNIT-DREN renderizada (copiada só esse PDF para `_tmp/dren/`): h = profundidade da valeta em cm; registrado no PARA_O_ANDRE_F7.
 - `python -m pytest tests -q`: 273 passed, 14 xfailed.
+
+
+## 2026-10-10 (servidor) - F3, F5 e F6 do HEC-RAS (D9)
+
+- F3: 2 leitores Sonnet (HRM+2DUM; UM+Mapper), 4 manuais mapeados (~210 p. lidas, ~60 tabelas e 12 exemplos localizados, 15 divergencias). `referencias/_mapa_parcial/HECRAS.md` (A e B ao lado) e secao G5 no `MAPA_DE_CONHECIMENTO.md`. Conferido no `_texto`: "+-20 %" de n esta em HRM p. 389 (ruptura de barragem), nao no UM p. 328 ("faixa realista"); o padrao 2D do programa e difusao (2DUM p. 196, 211), contra o "SWE-ELM por padrao" do PLANO §11.2 (corrigido na skill).
+- F5: `tools/dren/hecras_hdf.py` 0.1.0 (8 funcoes, CLI) + `tests/dren/test_hecras_hdf.py`: 18 testes (14 sinteticos, 4 reais; HR-02 reproduzido: celulas 31.313, area mediana 99,93 m2, media 648, max 4.348, n 0,035, dNA 0,0005 e 0,040 m, vel. p95 0,86 e 2,18, max 7,16 e 3,56 m/s; Courant estimado so-velocidade max 7,16 no Q95). Os `.hdf` reais (24-27 MB) nao entram no repo; fixture sintetica documentada.
+- F6: skill `modelagem-hidraulica-hec-ras` (SKILL.md 21,7 KB + `references/hecras-hdf-layout.md`; description 961 car.). Roteamento: linha nova em `drenagem-fundamentos` §6 e no perfil do agente (HEC-RAS sai de "fora de escopo"; modulo `hecras_hdf` listado). `verificar_citacoes.py`: 741 citacoes, 1 falha, preexistente (FHWA-HEC11 p. 48-49, expoente 1,5 conferido na imagem, em `canais-de-drenagem`); 0 falha nos arquivos novos.
+- Evals: 7 casos `hr-01..07` + `nao-10` reescrito (HEC-RAS deixou de ser nao-gatilho); juiz Haiku: 7/8, falha corrigida no gabarito de hr-07 (hidraulica toleravel): 8/8 (`evals/resultados/2026-10-10-roteamento-hecras.md`). 95 casos no total.
+- `python -m pytest tests -q`: 291 passed, 14 xfailed (273 + 18).

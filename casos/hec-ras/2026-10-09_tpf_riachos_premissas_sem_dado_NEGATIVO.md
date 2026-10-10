@@ -3,7 +3,7 @@
 **Tipo:** negativo (premissas e omissões; nenhum erro aritmético provado). `REL-FINAL` (id 1709) e `HR-RF` como em HR-04; marcas A e B; sem ✓h.
 
 ## Evidências
-1. **Malha de 50 m** para riachos de calha estreita (REL-FINAL:57). Sem estudo de sensibilidade de malha nem breaklines nas margens declarados (A: nenhuma menção nas p. 55-62). Para fins de mancha em planície larga, 50 m pode bastar; para a lâmina em calha, não (o manual do 2D recomenda refinar a calha com breaklines: HEC-RAS 2D UM 6.6, p. 53 [USACE-HECRAS-2DUM-66 p. 53]).
+1. **Malha de 50 m** para riachos de calha estreita (REL-FINAL:57). Sem estudo de sensibilidade de malha nem breaklines nas margens declarados (A: nenhuma menção nas p. 55-62). Para fins de mancha em planície larga, 50 m pode bastar; para a lâmina em calha, não (o manual do 2D recomenda refinar a calha com breaklines: [USACE-HECRAS-2DUM-66 p. 53]).
 2. **n único = 0,040** (REL-FINAL:57), contra 0,035 no rio Verde e no São Francisco no mesmo relatório (REL-FINAL:41, 52, 54). Sem justificativa da diferença nem uso de mapa de uso do solo.
 3. **Contorno de jusante por declividade (0,012 %)** sem descrição da seção de saída nem do que existe a jusante dos riachos (REL-FINAL:55-57). A profundidade normal imposta só vale para seção uniforme com a declividade do leito local; arquivo `.u01` dos riachos não conferido para esse valor (só a declividade de 0,002 nos contornos de entrada foi lida).
 4. **Sem ARF.** Sub-bacia Recife-SB1 tem 932,21 km² e usa a IDF pontual sem redução por área (REL-FINAL:56-57; A: nenhuma menção a ARF). Para bacias dessa ordem, o ARF costuma ser < 1 e o Q de pico SCS tende a ser superestimado; sem número, não quantificado. Premissa de treinamento: ARF é entrega do Clima (`chuvas-intensas-e-idf`).

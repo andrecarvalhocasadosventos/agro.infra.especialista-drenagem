@@ -10,3 +10,9 @@
 4. **Conferência humana (✓h) dos números dos casos HR-01 a HR-06.** Nenhum virou gabarito. Opção: conferir 10 números-chave contra o PDF. Recomendação: conferir Tab. 5 e Tab. 8 (REL-FINAL p. 42 e 56-57) primeiro. Fica parado: `evals/casos_numericos.yaml` de HEC-RAS.
 5. **Leitura do Data Room.** A listagem completa de `4. Relatórios\` do Data Room não foi feita (Drive saturado). Só o `2026.09.29 - HECRAS` foi lido. Pode haver outros arquivos HEC-RAS sem texto indexado. Recomendação: a sessão `/treinar squad` pode rodar a listagem quando o Drive estiver livre.
 6. **FHWA (HEC-18/HDS-7 sobre pontes) sem URL verificada**: o servidor não alcançou `fhwa.dot.gov` (código 000). Recomendação: tentar de outra máquina; item de prioridade B.
+
+## 2026-10-10 (servidor) - HEC-RAS: F3, F5, F6
+
+1. **Skill pronta para o seu aceite; criterios de aceitacao sao premissa de treinamento.** Sem numero nos manuais para: estabilizacao (dNA <= 0,01 m em 2 h), limiar de sensibilidade de n (0,3 m), erro de volume e tamanho de celula. Opcoes: aceitar como estao (rotulados) ou fixar valores do CDV. Recomendacao: aceitar. Fica parado: nada.
+2. **Layout 1D do `hecras_hdf.py` nao verificado em arquivo real** (a TPF so entregou 2D). Pedir a TPF um `.hdf` 1D (o rio Verde, ja pedido no item 3 de 2026-10-09) ou um exemplo do HEC-RAS (Muncie). Fica parado: `secoes_1d` valido so com fixture sintetica.
+3. **Falha preexistente do `verificar_citacoes.py`**: FHWA-HEC11 p. 48-49 (expoente 1,5 de C_sf, conferido na imagem, triagem manual da sessao anterior). Nao alterei a skill `canais-de-drenagem-e-macrodrenagem`.

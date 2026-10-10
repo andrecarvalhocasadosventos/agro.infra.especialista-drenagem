@@ -2,7 +2,7 @@ id: drenagem
 nome: Especialista Drenagem
 agente: engenheiro-de-drenagem
 nucleo: drenagem-fundamentos
-versao: 0.2.0
+versao: 0.3.0
 estado: em-treinamento
 modelo_padrao: sonnet
 variavel_raiz: DRENAGEM_ROOT
@@ -20,6 +20,6 @@ dependencias_externas:
 delega_para: [clima, hidraulica, geotecnia, terraplenagem, pavimentacao, irrigacao, orcamento]
 recebe_de: [hidraulica, clima, geotecnia, terraplenagem, irrigacao, pavimentacao]
 fase_atual: F9
-proximo_passo: "Portão F7 pendente: André responde PARA_O_ANDRE_F7.md (itens 1-19, 21-23; item 20 implementado como opção, padrão Manning até ele decidir qual fórmula é o padrão). Plano HEC-RAS (PLANO §11, D9): F3 dos 4 manuais v6.6, F5 hecras_verifica.py (rashdf/h5py, só leitura), F6 da skill modelagem-hidraulica-hec-ras após decisões de fronteira e instalação; depois F10 e F11"
+proximo_passo: "Portão F7 pendente (André responde PARA_O_ANDRE_F7.md). HEC-RAS (D9): F3, F5 (hecras_hdf.py) e F6 (skill modelagem-hidraulica-hec-ras) feitas em 2026-10-10; faltam instalar o HEC-RAS no SRVCVERSP (opcional), .hdf 1D real para validar secoes_1d, conferência humana dos casos HR-01 a HR-06 e rodada completa do juiz de roteamento; depois F10 e F11"
 ultima_sessao: 2026-10-10
 maquina_treinamento: SRVCVERSP

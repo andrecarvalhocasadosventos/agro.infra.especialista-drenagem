@@ -1,0 +1,24 @@
+hr-01:
+  skills: [modelagem-hidraulica-hec-ras, hidrologia-de-projeto-para-drenagem]
+  delegacao: [clima]
+hr-02:
+  skills: [modelagem-hidraulica-hec-ras]
+  delegacao: [hidraulica]
+hr-03:
+  skills: [modelagem-hidraulica-hec-ras]
+  delegacao: []
+hr-04:
+  skills: []
+  delegacao: [hidraulica]
+hr-05:
+  skills: [bueiros-e-travessias]
+  delegacao: []
+hr-06:
+  skills: [modelagem-hidraulica-hec-ras]
+  delegacao: []
+hr-07:
+  skills: [hidrologia-de-projeto-para-drenagem, modelagem-hidraulica-hec-ras]
+  delegacao: [clima, hidraulica]
+nao-10:
+  skills: [modelagem-hidraulica-hec-ras, hidrologia-de-projeto-para-drenagem]
+  delegacao: [clima]

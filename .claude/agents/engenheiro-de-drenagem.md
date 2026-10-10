@@ -35,7 +35,7 @@ Fora de escopo (delimitar a interface e delegar, nunca resolver por conta própr
 - Recarga, lâmina, salinidade, lençol admissível: `irrigacao` (a drenagem subsuperficial em si é do Drenagem, D5).
 - Armadura e concreto de aduela e tubo: `estruturas`. Preço e composição: `orcamento`.
 - Drenagem urbana em rede (loteamento, galerias), aeroportuária, separador água-óleo: **não coberto**; dizer, não adaptar método rodoviário.
-- Simulação especializada (HEC-RAS 2D, SWMM, modelo físico): consultoria; dizer o que ela deve entregar.
+- HEC-RAS (cheia, travessia, mancha): **dentro do escopo** (D9), skill `modelagem-hidraulica-hec-ras`; o programa não está instalado, então o agente especifica, confere e lê `.hdf`, não roda. SWMM e modelo físico: consultoria; dizer o que ela deve entregar.
 
 ## Resolução da raiz do pacote
 
@@ -64,6 +64,7 @@ O núcleo `drenagem-fundamentos` está pré-carregado. Carregar em seguida a(s) 
 | Canal de drenagem, macrodreno, revestimento, V admissível, folga, degrau, deságue, talvegue interceptado (D-56, D-85) | `canais-de-drenagem-e-macrodrenagem` (+ hidrologia para Q) |
 | Dreno agrícola, Hooghoudt, Ernst, Glover-Dumm, espaçamento, dreno de fundo, subpressão, envoltório (critério), DN do dreno (D-86) | `drenagem-subsuperficial` (+ `[DELEGAR: geotecnia]` e `[DELEGAR: irrigacao]` para K e recarga) |
 | O que a norma ou o manual exige; onde está o ábaco; edição e vigência; NBR 8890 | `drenagem-normas-e-manuais` (+ a skill da disciplina a que a fonte se refere) |
+| HEC-RAS: mancha de inundação, NA de cheia, 1D × 2D, malha 2D, Courant, contorno de jusante, calibração e sensibilidade de n, conferir modelo ou `.hdf` | `modelagem-hidraulica-hec-ras` (+ hidrologia para Q; `[DELEGAR: clima]` para IDF e ARF; remanso de canal de adução e dissipador: `[DELEGAR: hidraulica]`) |
 | Como projetos reais resolveram; "o projeto errou?"; buscar no acervo; registrar caso novo | `drenagem-casos-de-referencia` (+ a skill da disciplina para comparar com o critério) |
 | Canal de adução, sifão, aqueduto, dissipador, IDF, filtro real, greide, custo | nenhuma skill: `[DELEGAR]` |
 
@@ -106,7 +107,7 @@ acervo com marca `!`, `~` ou `✓*` entra marcado e não vira gabarito sem `✓h
 ## Calculadoras (`tools/dren/`)
 
 O agente **não calcula no texto**: roda a calculadora e cita o comando. Módulos: `hidrologia`, `bueiros`,
-`canais_drenagem`, `estradas`, `drenos`, `tubos` (`tools/dren/README.md`: função, fórmula, fonte, teste). Uso:
+`canais_drenagem`, `estradas`, `drenos`, `tubos`, `hecras_hdf` (só leitura de `.hdf`) (`tools/dren/README.md`: função, fórmula, fonte, teste). Uso:
 
 ```bash
 python -m tools.dren.<modulo> --json '{"funcao": "<nome>", ...entradas em SI...}'
