@@ -179,7 +179,7 @@ def test_iuiu_dp08_racional():
 
 @pytest.mark.xfail(reason="DP11 t1 (1051:322): S e Tc da bacia nao informados; hipotese S=i do dreno, "
                           "Tc Kirpich e i=P/Tc; divergencia > 5 % (ver DIVERGENCIAS.md)",
-                   strict=False)
+                   strict=True)
 def test_iuiu_dp11_mcmath():
     A, L, S = 189.0, 4670.0, 0.0028
     tc = h.kirpich(L, S)
@@ -210,7 +210,7 @@ def test_baixio_hu_geometria_e_qp():
 
 @pytest.mark.xfail(reason="Baixio 902:1: hietograma (tabela T-K, ordenamento) nao recuperavel do acervo; "
                           "hipotese: blocos alternados com P=55,56 mm distribuida em 12 blocos de d. "
-                          "Pico depende do ordenamento (ver DIVERGENCIAS.md)", strict=False)
+                          "Pico depende do ordenamento (ver DIVERGENCIAS.md)", strict=True)
 def test_baixio_hut_pico_tr25():
     hu = h.hidrograma_unitario_triangular(3.234, 0.9633, 0.16055)
     # hietograma triangular (maior bloco no centro), total 55,56 mm em 12 blocos

@@ -114,3 +114,10 @@ ou de manutenção.
 - D9 (HEC-RAS): inventário `casos/hec-ras/INVENTARIO_TPF.md` (8 documentos; 2 modelos HEC-RAS 6.5 em 2 `.zip` do Data Room; leitura de 3 `.hdf` com h5py, `h5py` 3.16 instalada no venv do squad). F1: 7 itens em `tools/fontes_candidatas.yaml` (4 PDFs v6.6 com URL verificada + 3 `link_only`); `tools/montar_fontes.py` agora respeita `metodo`/`link_only`. F2: 4 PDFs baixados em `referencias/05_USACE/` (482 + 286 + 837 + 193 páginas), `_texto/`, `_catalogo.yaml` (56 documentos), FTS reconstruído em `D: - AGRO\squad\bibdren\db\corpus.sqlite` (52 documentos, 8.194 páginas, 50,5 MB); **a cópia para `_infra/bibdren/db` fica para o Agent Builder**. F4: 6 casos (3 positivos, 3 negativos) e `_INDICE.md`. PLANO §11: plano da skill `modelagem-hidraulica-hec-ras`, proposta de fronteira (pendência do `/treinar squad`), recomendação de bibliotecas.
 - Não feito: listagem completa do Data Room (Drive saturado), F3 dos manuais novos, calculadora de verificação HEC-RAS (F5), F6.
 
+
+## 2026-10-10 (servidor) — itens de trabalho sem decisão (DECISOES_2026-10-10 E1)
+
+- Item 20 (Wesseling): `drenos.capacidade_tubo_dreno`/`diametro_minimo_dreno` aceitam `formula="wesseling"` (opção; padrão Manning inalterado) e `wesseling_coeficiente(a, nu)`; 4 testes novos (valor de mão, livro a 1 % com Blasius a = 0,40 e ν = 1,3e-6, padrão inalterado, D-86 DN300 s = 1e-4: 17,6 L/s × 7,86 L/s Manning n 0,016). Domínio da fonte [FAO-IDP62 p. 214]: tubo tecnicamente liso, não corrugado; aviso emitido.
+- Seção C: 10 marcas `xfail` com `strict=False` viraram `strict=True` (test_bueiros 8, test_hidrologia 2); nenhum número mudou.
+- Item 13: página 162 do DNIT-DREN renderizada (copiada só esse PDF para `_tmp/dren/`): h = profundidade da valeta em cm; registrado no PARA_O_ANDRE_F7.
+- `python -m pytest tests -q`: 273 passed, 14 xfailed.

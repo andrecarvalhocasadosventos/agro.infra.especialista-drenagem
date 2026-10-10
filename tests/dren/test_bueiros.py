@@ -234,7 +234,7 @@ def test_baixio_orificio_tr50():
 
 @pytest.mark.xfail(reason="Baixio BU-CP0-15: caso diz folga 0,66 m com TN=408,31, mas 408,31-407,846=0,464 m "
                           "(inconsistencia aritmetica do gabarito; TN implicito seria 408,51). Ver DIVERGENCIAS.md",
-                   strict=False)
+                   strict=True)
 def test_baixio_folga_ao_tn():
     h = b.verificacao_por_orificio(61.98, 12.5, 0.62)
     assert 408.31 - (403.335 + 1.25 + h) == pytest.approx(0.66, abs=0.01)
@@ -251,11 +251,11 @@ OBRAS_BAIXIO = {  # nome: (Q50, (B,H), n_celulas, i)
 
 @pytest.mark.parametrize("obra", [
     pytest.param("BU-CP0-13", marks=pytest.mark.xfail(
-        reason="legado (orificio) x HDS-5 alas 30-75: -8,0 % (>5 %); ver DIVERGENCIAS.md", strict=False)),
+        reason="legado (orificio) x HDS-5 alas 30-75: -8,0 % (>5 %); ver DIVERGENCIAS.md", strict=True)),
     pytest.param("BU-CP0-15", marks=pytest.mark.xfail(
-        reason="legado (orificio) x HDS-5 alas 30-75: -6,4 % (>5 %); ver DIVERGENCIAS.md", strict=False)),
+        reason="legado (orificio) x HDS-5 alas 30-75: -6,4 % (>5 %); ver DIVERGENCIAS.md", strict=True)),
     pytest.param("BU-CP0-18", marks=pytest.mark.xfail(
-        reason="legado (orificio) x HDS-5 alas 30-75: -7,8 % (>5 %); ver DIVERGENCIAS.md", strict=False)),
+        reason="legado (orificio) x HDS-5 alas 30-75: -7,8 % (>5 %); ver DIVERGENCIAS.md", strict=True)),
     "BU-CP0-27",
     "BU-CS1-01",
 ])
@@ -311,7 +311,7 @@ def test_jaiba_vazao_2_44_tambem_dentro_da_tolerancia():
 # --- CSB: BTCC-No17 (doc 1341:205) -----------------------------------------
 @pytest.mark.xfail(reason="CSB BTCC-N17: Manning n=0,015, y=1,5 m, i=0,0045 da 28,6 m3/s (3 cel. 2x2) "
                           "vs Q=39,18 do projeto (-27 %); V/Yo da Tab 4.7 nao reproduzem (doc 1341:205). "
-                          "Ver DIVERGENCIAS.md", strict=False)
+                          "Ver DIVERGENCIAS.md", strict=True)
 def test_csb_btcc17_capacidade_manning():
     m = b.manning_lamina("retangular", (2.0, 2.0), 1.5, 0.015, 0.0045)
     assert 3 * m["Q"] == pytest.approx(39.18, rel=0.05)
@@ -334,11 +334,11 @@ def test_xingo_continuidade_bu01():
 @pytest.mark.parametrize("nome,B,i,Q,cel,y_doc,V_doc", [
     pytest.param("BU-01", 1.5, 0.01009, 8.96, 2, 0.96, 3.10, marks=pytest.mark.xfail(
         reason="Xingo BU-01: Manning normal da y=0,83 m V=3,6 vs doc 0,96 m/3,10 (energia/remanso; "
-               "ver DIVERGENCIAS.md)", strict=False)),
+               "ver DIVERGENCIAS.md)", strict=True)),
     pytest.param("BU-06", 2.5, 0.0119, 39.30, 2, 1.76, 4.46, marks=pytest.mark.xfail(
-        reason="Xingo BU-06: yn=1,42 vs 1,76 m doc (energia/remanso)", strict=False)),
+        reason="Xingo BU-06: yn=1,42 vs 1,76 m doc (energia/remanso)", strict=True)),
     pytest.param("BU-24", 3.0, 0.00976, 48.8, 2, 1.87, 4.36, marks=pytest.mark.xfail(
-        reason="Xingo BU-24: yn=1,50 vs 1,87 m doc (energia/remanso)", strict=False)),
+        reason="Xingo BU-24: yn=1,50 vs 1,87 m doc (energia/remanso)", strict=True)),
 ])
 def test_xingo_lamina_normal_vs_doc(nome, B, i, Q, cel, y_doc, V_doc):
     yn = b.profundidade_normal(Q / cel, "retangular", (B, B), 0.015, i)

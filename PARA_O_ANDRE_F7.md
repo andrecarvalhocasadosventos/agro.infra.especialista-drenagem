@@ -51,7 +51,7 @@ Nenhuma pede mudança de fórmula. Proposta de veredito por grupo; basta "C ok" 
 | Gabarito do projeto inconsistente (Baixio folga ao TN; CSB BTCC-N17 −27 %; Delmiro DN170 6,9× e DN230 4,7×; CSB 2DN150) | 5 | **gabarito errado ou ilegível**: casos negativos; não corrigir a calculadora |
 | Dado não recuperável do acervo (Baixio HUT TR25; Delmiro BHD1 +5,3 %; Iuiu DP11 McMath) | 3 | **sem gabarito**: o hietograma ou o S da bacia não está no documento; manter xfail estrito |
 
-Também proponho tornar estritos (`strict=True`) os 6 xfail que hoje não são. Nenhum número muda.
+Os xfail que não eram estritos (10 marcas em `test_bueiros.py` e `test_hidrologia.py`) já foram tornados `strict=True` em 2026-10-10 (nenhum número muda; 273 passed, 14 xfailed).
 
 ## D. Fronteira com o Hidráulico (para a sessão /treinar squad)
 
@@ -80,3 +80,25 @@ sua decisão (`Agent Builder/DECISOES_2026-10-09.md`), os caminhos novos só val
 bancos copiados para disco local curto (sugestão `D:\bib*`), nunca lidos direto do Drive. Até lá, nesta máquina, o
 acervo e o `corpus.sqlite` estão indisponíveis. A F10 deve rodar no servidor, depois de ajustar `PACOTE.yaml`, o
 núcleo e o agente para o caminho local de lá.
+
+## Informação de trabalho (2026-10-10, servidor; não decide nada)
+
+**Item 13: o que a página diz (conferido na imagem, DNIT-DREN PDF p. 162 = p. 158 impressa).** Para valeta em terra até
+0,3 m³/s: f = 0,2·h, "f = folga (bordo livre), em cm; **h = profundidade da valeta, em cm**". Para 0,3 a 10,0 m³/s:
+f = √(46·h), sem nova definição de f e h, na mesma legenda. Logo h é a **profundidade da valeta (do fundo ao topo),
+em cm**, não a lâmina d'água, e f sai em cm. Ressalva: com essas unidades f = h quando h = 46 cm e f > h abaixo disso
+(h = 30 cm dá f = 37 cm), o que é fisicamente estranho; a fórmula só faz sentido para valetas fundas (h > ~50 cm; h = 100 cm
+dá f = 68 cm; h = 200 cm dá f = 96 cm). A decisão (incluir ou não, e com que faixa de h) continua sua. Imagem local:
+`D: - AGRO\work\_tmp\dren\p162.png`.
+
+**Item 20: implementado como opção, padrão inalterado (Manning n 0,016).** `capacidade_tubo_dreno(D, s, formula="wesseling")`
+e `diametro_minimo_dreno(..., formula="wesseling")`; `wesseling_coeficiente(a, nu)` deriva C por Blasius. Conferido em
+[FAO-IDP62 p. 214]: Q = 89·d^2,714·s^0,571, Q em m³/s, d = diâmetro interno em m, s = H/B (perda de carga admissível por
+comprimento, **não** a declividade do tubo). **Domínio do texto: tubo "tecnicamente liso" (perfurado, cimento, cerâmica;
+Blasius a = 0,40), não corrugado.** Para corrugado o FAO usa Manning com Km (Eq. 11, p. 215) ou Blasius com a = 0,77
+(C ≈ 62, bem abaixo de 89). Ou seja, a premissa do item 20 ("lateral e coletor corrugado") **extrapola** a fórmula; a
+função emite aviso. Teste de livro: derivando Blasius (a = 0,40, inflow linear) obtém-se C = 89,8 com ν = 1,3·10⁻⁶ m²/s
+(0,9 % de 89; ν a 10 °C, não dado no trecho) e 93,2 com ν = 10⁻⁶ (o "≈ 10⁻⁶" do texto; 4,7 %).
+Efeito no **D-86** (DN300, s = 1·10⁻⁴): Manning n 0,016 = 7,86 L/s; n 0,011 = 11,4 L/s; Wesseling = 17,6 L/s
+(2,24× e 1,54×). Com a = 0,77 o C cai a ~62 (≈ 12 L/s). Por isso a escolha da fórmula (e do Km/a do corrugado) pesa até
+2× no D-86; a recomendação "incluir antes da F10" fica atendida como opção, mas **qual fórmula é o padrão é decisão sua**.

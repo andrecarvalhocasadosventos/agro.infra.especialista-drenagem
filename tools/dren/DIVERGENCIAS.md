@@ -178,7 +178,7 @@ do lote B neste arquivo foi sobrescrita pela gravação concorrente do lote A). 
 |---|---|---|---|
 | `drenos.criterio_de_filtro_hidraulico`: fator único 4 de Terzaghi | pendente F7 (decisão) | DNIT-DREN p. 252–253 (D15f ≤ 5·D85s e ≥ 5·D15s) | fator 4 é mais exigente na retenção e menos na permeabilidade que o DNIT |
 | `drenos.POROSIDADE_DRENAVEL` (tabela sem página) | pendente F7 (decisão) | EMBRAPA-DREN-SUBT Tab. 3 p. 14 | L de Glover-Dumm muda +13 % areia, +8 % franco, −18 % argila |
-| Wesseling Q = 89·d^2,714·s^0,571 ausente | pendente F7 (decisão: incluir função) | FAO-IDP62 p. 214; Embrapa p. 16 (expoente 0,572) | Manning com declividade subestima ~1,8× a capacidade do lateral corrugado; pesa no D-86 |
+| Wesseling Q = 89·d^2,714·s^0,571 ausente | implementado como opção em 2026-10-10 (`formula="wesseling"`; padrão segue Manning até decisão do André; domínio: tubo tecnicamente liso) | FAO-IDP62 p. 214; Embrapa p. 16 (expoente 0,572) | Manning com declividade subestima ~1,8× a capacidade do lateral corrugado; pesa no D-86 |
 | 1,2 L/s/ha dos evals dsub-03/04 | pendente (origem) | sem fonte no corpus (1 L/s/ha = 8,64 mm/d) | 10,4 mm/d está fora da faixa de irrigado árido 1–2 mm/d (FAO-IDP62 p. 113–114) |
 | `canais_drenagem` sem velocidade mínima | pendente F7 (decisão) | NRCS-CPS608-2023 p. 2 (0,43 m/s); Salitre 1584:105 (0,30) | Delmiro: trecho com V = 0,292 m/s falha com qualquer piso |
 | folga de dreno 25 % do tirante | pendente F7 (decisão) | CPS608 p. 2 e HEC-15 p. 34 (0,15 m) | proposta max(25 %; 0,15 m): DS-1.1/C Delmiro 0,108 → 0,15 m |

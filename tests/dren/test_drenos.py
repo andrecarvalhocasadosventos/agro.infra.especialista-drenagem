@@ -506,3 +506,35 @@ def test_cli_argumentos_nomeados_e_erro():
     assert p.returncode == 0, p.stdout + p.stderr
     assert json.loads(p.stdout)["saidas"]["atende"] is True
     assert _cli(["--funcao", "nao_existe"]).returncode == 2
+
+
+# ---------------------------------------------------------------- Wesseling (opcao; padrao segue Manning)
+# Item 20 do PARA_O_ANDRE_F7. Q = 89 d^2,714 s^0,571 [FAO-IDP62 p. 214]; formula para tubo tecnicamente liso.
+def test_wesseling_valor_de_mao():
+    # 89 * 0,30^2,714 * 1e-3^0,571 = 6,57e-2 m3/s (tabela de tubo-dreno-e-coletores.md)
+    assert D.capacidade_tubo_dreno(0.30, 1e-3, formula="wesseling")["Q"] == pytest.approx(6.57e-2, rel=0.01)
+    assert D.capacidade_tubo_dreno(0.10, 1e-3, formula="wesseling")["Q"] == pytest.approx(3.33e-3, rel=0.01)
+
+
+def test_wesseling_teste_de_livro_blasius_a040():
+    # Livro: "quase os mesmos resultados das Eq. 6-9 com a = 40" (Blasius a = 0,40). Derivacao de Blasius com
+    # inflow linear reproduz C = 89 a 1 % com nu = 1,3e-6 m2/s (10 C; nu nao e dado no trecho) e a 5 % com
+    # nu = 1e-6 (o "aprox. 1e-6" do texto).
+    assert D.wesseling_coeficiente(0.40, 1.3e-6) == pytest.approx(89.0, rel=0.01)
+    assert D.wesseling_coeficiente(0.40, 1.0e-6) == pytest.approx(89.0, rel=0.05)
+
+
+def test_wesseling_padrao_continua_manning_e_aviso_dominio():
+    assert D.capacidade_tubo_dreno(0.30, 1e-4)["Q"] == pytest.approx(7.86e-3, rel=0.01)  # padrao n = 0,016
+    r = D.capacidade_tubo_dreno(0.30, 1e-4, formula="wesseling")
+    assert any("tecnicamente liso" in a for a in r["avisos"])
+    assert D.diametro_minimo_dreno(r["Q"], 1e-4, formula="wesseling")["D_minimo"] == pytest.approx(0.30, rel=1e-3)
+
+
+def test_wesseling_d86_dn300_efeito():
+    # D-86: DN300, s = 1e-4. Manning n 0,016 -> 7,86e-3; n 0,011 -> 1,14e-2; Wesseling -> 1,76e-2 m3/s
+    qm16 = D.capacidade_tubo_dreno(0.30, 1e-4, n=0.016)["Q"]
+    qm11 = D.capacidade_tubo_dreno(0.30, 1e-4, n=0.011)["Q"]
+    qw = D.capacidade_tubo_dreno(0.30, 1e-4, formula="wesseling")["Q"]
+    assert qw == pytest.approx(1.76e-2, rel=0.01)
+    assert qw / qm16 == pytest.approx(2.24, rel=0.02) and qw / qm11 == pytest.approx(1.54, rel=0.02)

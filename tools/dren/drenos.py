@@ -385,6 +385,12 @@ def capacidade_tubo_dreno(D, S, n=0.016, formula="manning"):
     formula = 'xingo' : LEGADO Q = 33,5 D^2,67 S^0,5 (Xingo Lote I, doc 1419:21, tubo PEAD perfurado,
     y/d = 0,938; D em m, Q em m3/s -- unidades A CONFIRMAR; reproduz 0,0135 m3/s para D=0,30, S=1e-4;
     equivale a Manning pleno com n ~ 0,0093 e nao e uma formula de Manning).
+    formula = 'wesseling': OPCAO (padrao continua 'manning' ate decisao do Andre, PARA_O_ANDRE_F7 item 20):
+    Q = 89 d^2,714 s^0,571 [FAO-IDP62 p. 214], Q [m3/s], d = diametro interno [m], s = H/B = perda de carga
+    admissivel por comprimento (m/m, gradiente com inflow continuo ao longo do dreno), NAO a declividade
+    do tubo; n nao e usado. Dominio do texto: tubo "tecnicamente liso" (perfurado, cimento, ceramica; Blasius
+    a = 0,40); para PEAD corrugado o FAO usa Manning com Km (Eq. 11) ou Blasius com a = 0,77 (ver
+    `wesseling_coeficiente`, C ~ 62). O corrugado com 89 e extrapolacao: aviso emitido, decisao do Andre.
     Fonte: Manning (Chow, cap. 5); caso Xingo. Validade: tubo reto, S constante, sem entrada de ar.
     """
     f = formula.lower()
@@ -397,9 +403,22 @@ def capacidade_tubo_dreno(D, S, n=0.016, formula="manning"):
         Q = 33.5 * D ** 2.67 * math.sqrt(S)
         n_imp = 0.31169 * D ** (8.0 / 3.0) * math.sqrt(S) / Q
         av = ["legado Xingo: unidades a confirmar; n pleno implicito=%.4f" % n_imp]
+    elif f == "wesseling":
+        Q = 89.0 * D ** 2.714 * S ** 0.571
+        av = ["Wesseling (FAO-IDP62 p. 214): tubo tecnicamente liso (a = 0,40); S aqui e s = H/B (perda de carga "
+              "admissivel / comprimento), nao a declividade; para corrugado e extrapolacao (usar Manning com Km "
+              "ou wesseling_coeficiente(a=0,77)); n ignorado"]
     else:
-        raise ValueError("formula: 'manning' ou 'xingo'")
+        raise ValueError("formula: 'manning', 'xingo' ou 'wesseling'")
     return {"Q": Q, "metodo": "capacidade de tubo dreno (%s)" % f, "avisos": av}
+
+
+def wesseling_coeficiente(a=0.40, nu=1.3e-6, g=9.81):
+    """Coeficiente C de Q = C d^2,714 s^0,571 derivado de Blasius (lambda = a Re^-1/4) com inflow linear
+    ao longo do dreno [FAO-IDP62 Eq. 1-9, p. 213-214]: C = [2 g (11/4) (pi/4)^(7/4) / (a nu^(1/4))]^(4/7).
+    a = 0,3164 liso; 0,40 tecnicamente liso (C ~ 89,8 com nu = 1,3e-6 m2/s, 10 C; 93,2 com nu = 1e-6, o
+    'aprox. 1e-6' do texto); 0,77 corrugado (Zuidema) (C ~ 62). nu em m2/s."""
+    return (2.0 * g * 2.75 * (math.pi / 4.0) ** 1.75 / (a * nu ** 0.25)) ** (4.0 / 7.0)
 
 
 def diametro_minimo_dreno(Q, S, n=0.016, formula="manning", comerciais=(0.05, 0.065, 0.08, 0.10, 0.125,
@@ -752,6 +771,7 @@ FUNCOES = {
     "tempo_de_drenagem": tempo_de_drenagem,
     "vazao_de_dreno": vazao_de_dreno,
     "capacidade_tubo_dreno": capacidade_tubo_dreno,
+    "wesseling_coeficiente": wesseling_coeficiente,
     "diametro_minimo_dreno": diametro_minimo_dreno,
     "capacidade_tubo_parcial": capacidade_tubo_parcial,
     "vazao_unitaria_darcy_dreno_fundo": vazao_unitaria_darcy_dreno_fundo,
