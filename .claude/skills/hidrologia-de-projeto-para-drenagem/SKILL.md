@@ -1,15 +1,16 @@
 ---
 name: hidrologia-de-projeto-para-drenagem
 description: >
-  Transforma chuva em vazão de projeto para drenagem de perímetro irrigado: tempo de concentração (Kirpich, Kirpich
-  modificada DNIT, DNOS, Picking, Ven Te Chow, NERC, Bransby-Williams, Giandotti, Dooge, lâmina NEH, lag SCS), método
-  racional (C ponderado, limite de área), McMath, SCS-CN com hidrograma unitário e blocos alternados, TR e risco, o que
-  consumir de chuvas-intensas-e-idf e os casos Delmiro Gouveia e CAC. Use quando: "vazão de projeto da bacia", "tempo
-  de concentração", "Kirpich", "NERC", "método racional", "coeficiente C", "McMath", "curva CN", "hidrograma
-  unitário", "hietograma", "TR × risco", "risco na vida útil", "a IDF recebida cobre o Tc?", "racional vale até quantos km²?". Não
-  use para: bueiro e HW/D (use bueiros-e-travessias); sarjeta, valeta, descida (drenagem-de-estradas-e-plataformas);
-  canal (canais-de-drenagem-e-macrodrenagem); dreno agrícola (drenagem-subsuperficial); ajustar IDF e séries
-  (chuvas-intensas-e-idf, Clima); reservatório (reservatorios-e-pequenas-barragens); preço (engenheiro-de-custos).
+  Transforma chuva em vazão de projeto para drenagem de perímetro irrigado: tempo de concentração (Kirpich e Kirpich
+  modificada DNIT, DNOS, NERC, Giandotti, lag SCS), método racional (C ponderado, limite de área), McMath, SCS-CN com
+  hidrograma unitário e blocos alternados, TR e risco, o que consumir de chuvas-intensas-e-idf e os casos Delmiro
+  Gouveia e CAC. Use quando: "vazão de projeto da bacia", "tempo de concentração", "Kirpich", "NERC", "método racional",
+  "coeficiente C", "McMath", "curva CN", "hidrograma unitário", "hietograma", "TR × risco", "a IDF recebida cobre o
+  Tc?", "racional vale até quantos km²?". Não use para: bueiro e HW/D (bueiros-e-travessias); sarjeta, valeta, descida
+  (drenagem-de-estradas-e-plataformas); canal (canais-de-drenagem-e-macrodrenagem); dreno agrícola
+  (drenagem-subsuperficial); ajustar IDF e séries (chuvas-intensas-e-idf, Clima); reservatório
+  (reservatorios-e-pequenas-barragens); vigência de fonte e da IDF de Pfafstetter (drenagem-normas-e-manuais); preço
+  (engenheiro-de-custos).
 ---
 
 # Hidrologia de projeto para drenagem de perímetro irrigado

@@ -1,15 +1,16 @@
 ---
 name: drenagem-normas-e-manuais
 description: >
-  Guia das fontes do Especialista em Drenagem: edição e vigência, licença, o que cada norma ou manual
-  pede, páginas-chave, armadilhas de leitura e divergências. Cobre DNIT IPR-724, IPR-715, IPR-736 (Álbum 2018), IPR-726,
-  ES 018/020/021, DER/PR ES-DR, HDS-5, HEC-12/13/22, HDS-3, NEH 630 cap. 15, 624 e 650, DAEE, Pfafstetter (só localizar;
-  IDF é do Clima), ABTC e NBR 8890 (fechada: citar, não transcrever), ILRI 16 e 56, EM 1601 e 2902, WSDOT. Use quando: "o
-  que o IPR-724 exige", "onde está a tabela de Ke", "qual edição do HDS-5", "está vigente", "qual a página", "a NBR
-  8890 está no corpus", "as fontes divergem", "o DAEE vale fora de SP". Não use para: fórmula de disciplina (use
-  hidrologia-de-projeto-para-drenagem, bueiros-e-travessias, drenagem-de-estradas-e-plataformas,
-  canais-de-drenagem-e-macrodrenagem, drenagem-subsuperficial); pedido amplo (use drenagem-fundamentos); caso de projeto
-  (use drenagem-casos-de-referencia); IDF (Clima); fontes de canal, adutora, bomba, vertedouro e irrigação (normas-e-manuais do Hidráulico); preço (engenheiro-de-custos).
+  Guia das fontes do Especialista em Drenagem: edição e vigência, licença, o que cada norma ou manual pede,
+  páginas-chave, armadilhas de leitura e divergências. Cobre DNIT IPR-724, 715, 736 e 726, ES 018/020/021, DER/PR,
+  HDS-5, HEC-12/13/22, HDS-3, NEH 630, 624 e 650, DAEE, Pfafstetter (só localizar; IDF é do Clima), ABTC e NBR 8890
+  (fechada: citar, não transcrever), ILRI 16 e 56, EM 1601 e 2902. Use quando: "o que o IPR-724 exige", "onde está a
+  tabela de Ke", "qual edição do HDS-5", "está vigente", "qual a página", "a IDF de Pfafstetter ainda vale?", "a NBR
+  8890 está no corpus", "as fontes divergem". Não use para: fórmula de disciplina (hidrologia-de-projeto-para-drenagem,
+  bueiros-e-travessias, drenagem-de-estradas-e-plataformas, canais-de-drenagem-e-macrodrenagem,
+  drenagem-subsuperficial); pedido amplo (drenagem-fundamentos); caso de projeto (drenagem-casos-de-referencia); IDF
+  (Clima); fontes de canal, adutora, bomba, vertedouro e irrigação (normas-e-manuais do Hidráulico); preço
+  (engenheiro-de-custos).
 ---
 
 # Normas e manuais de drenagem: guia das fontes

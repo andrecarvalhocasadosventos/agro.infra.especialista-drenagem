@@ -1,0 +1,468 @@
+fund-01:
+  skills:
+  - drenagem-fundamentos
+  delegacao: []
+fund-02:
+  skills:
+  - drenagem-fundamentos
+  delegacao: []
+fund-03:
+  skills:
+  - drenagem-fundamentos
+  delegacao: []
+hid-01:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  delegacao: []
+hid-02:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  - bueiros-e-travessias
+  delegacao:
+  - hidraulica
+hid-03:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  delegacao: []
+hid-04:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  delegacao: []
+hid-05:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  delegacao: []
+bue-01:
+  skills:
+  - bueiros-e-travessias
+  delegacao:
+  - hidraulica
+bue-02:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  - bueiros-e-travessias
+  delegacao:
+  - clima
+  - hidraulica
+bue-03:
+  skills:
+  - bueiros-e-travessias
+  delegacao: []
+bue-04:
+  skills:
+  - bueiros-e-travessias
+  delegacao:
+  - hidraulica
+bue-05:
+  skills:
+  - bueiros-e-travessias
+  delegacao: []
+bue-06:
+  skills:
+  - bueiros-e-travessias
+  - drenagem-casos-de-referencia
+  delegacao:
+  - terraplenagem
+  - hidraulica
+est-01:
+  skills:
+  - drenagem-de-estradas-e-plataformas
+  - hidrologia-de-projeto-para-drenagem
+  delegacao:
+  - clima
+est-02:
+  skills:
+  - drenagem-de-estradas-e-plataformas
+  - hidrologia-de-projeto-para-drenagem
+  delegacao:
+  - clima
+est-03:
+  skills:
+  - drenagem-de-estradas-e-plataformas
+  delegacao:
+  - clima
+est-04:
+  skills:
+  - drenagem-de-estradas-e-plataformas
+  - hidrologia-de-projeto-para-drenagem
+  - drenagem-casos-de-referencia
+  delegacao:
+  - clima
+can-01:
+  skills:
+  - canais-de-drenagem-e-macrodrenagem
+  delegacao: []
+can-02:
+  skills:
+  - canais-de-drenagem-e-macrodrenagem
+  - drenagem-casos-de-referencia
+  delegacao: []
+can-03:
+  skills:
+  - canais-de-drenagem-e-macrodrenagem
+  - hidrologia-de-projeto-para-drenagem
+  delegacao:
+  - clima
+can-04:
+  skills:
+  - canais-de-drenagem-e-macrodrenagem
+  - bueiros-e-travessias
+  delegacao:
+  - orcamento
+dsub-01:
+  skills:
+  - drenagem-subsuperficial
+  delegacao: []
+dsub-02:
+  skills: []
+  delegacao:
+  - geotecnia
+dsub-03:
+  skills:
+  - drenagem-subsuperficial
+  delegacao: []
+dsub-04:
+  skills:
+  - drenagem-subsuperficial
+  - canais-de-drenagem-e-macrodrenagem
+  delegacao: []
+nrm-01:
+  skills:
+  - drenagem-normas-e-manuais
+  - bueiros-e-travessias
+  delegacao: []
+nrm-02:
+  skills:
+  - drenagem-normas-e-manuais
+  - canais-de-drenagem-e-macrodrenagem
+  delegacao: []
+nrm-03:
+  skills:
+  - bueiros-e-travessias
+  delegacao: []
+nrm-04:
+  skills:
+  - drenagem-normas-e-manuais
+  delegacao: []
+cas-01:
+  skills:
+  - drenagem-casos-de-referencia
+  - bueiros-e-travessias
+  delegacao: []
+cas-02:
+  skills:
+  - drenagem-casos-de-referencia
+  - bueiros-e-travessias
+  delegacao: []
+cas-03:
+  skills:
+  - drenagem-casos-de-referencia
+  - drenagem-subsuperficial
+  delegacao: []
+cas-04:
+  skills:
+  - drenagem-casos-de-referencia
+  delegacao: []
+par-01:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  - bueiros-e-travessias
+  delegacao:
+  - clima
+par-02:
+  skills:
+  - bueiros-e-travessias
+  delegacao: []
+par-03:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  - bueiros-e-travessias
+  delegacao:
+  - clima
+par-04:
+  skills:
+  - drenagem-de-estradas-e-plataformas
+  delegacao: []
+par-05:
+  skills:
+  - canais-de-drenagem-e-macrodrenagem
+  delegacao: []
+par-06:
+  skills: []
+  delegacao:
+  - hidraulica
+par-07:
+  skills:
+  - drenagem-de-estradas-e-plataformas
+  delegacao: []
+par-08:
+  skills:
+  - canais-de-drenagem-e-macrodrenagem
+  - hidrologia-de-projeto-para-drenagem
+  delegacao:
+  - clima
+par-09:
+  skills:
+  - drenagem-subsuperficial
+  delegacao:
+  - geotecnia
+par-10:
+  skills:
+  - canais-de-drenagem-e-macrodrenagem
+  delegacao: []
+par-11:
+  skills:
+  - drenagem-de-estradas-e-plataformas
+  delegacao:
+  - geotecnia
+  - pavimentacao
+par-12:
+  skills:
+  - drenagem-subsuperficial
+  delegacao:
+  - geotecnia
+par-13:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  - drenagem-de-estradas-e-plataformas
+  delegacao:
+  - clima
+par-14:
+  skills:
+  - drenagem-de-estradas-e-plataformas
+  - drenagem-normas-e-manuais
+  delegacao: []
+par-15:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  - canais-de-drenagem-e-macrodrenagem
+  delegacao:
+  - clima
+par-16:
+  skills:
+  - canais-de-drenagem-e-macrodrenagem
+  delegacao: []
+par-17:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  - bueiros-e-travessias
+  delegacao:
+  - clima
+del-01:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  delegacao:
+  - clima
+del-02:
+  skills:
+  - bueiros-e-travessias
+  delegacao:
+  - hidraulica
+del-03:
+  skills:
+  - drenagem-subsuperficial
+  delegacao:
+  - geotecnia
+del-04:
+  skills:
+  - drenagem-de-estradas-e-plataformas
+  delegacao:
+  - terraplenagem
+  - clima
+del-05:
+  skills:
+  - drenagem-de-estradas-e-plataformas
+  - hidrologia-de-projeto-para-drenagem
+  delegacao:
+  - clima
+  - pavimentacao
+  - geotecnia
+del-06:
+  skills:
+  - drenagem-subsuperficial
+  delegacao:
+  - geotecnia
+  - irrigacao
+del-07:
+  skills:
+  - bueiros-e-travessias
+  delegacao:
+  - orcamento
+del-08:
+  skills: []
+  delegacao:
+  - estruturas
+del-09:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  - bueiros-e-travessias
+  delegacao:
+  - hidraulica
+  - clima
+nao-01:
+  skills: []
+  delegacao:
+  - clima
+nao-02:
+  skills: []
+  delegacao:
+  - hidraulica
+nao-03:
+  skills: []
+  delegacao:
+  - geotecnia
+nao-04:
+  skills: []
+  delegacao:
+  - terraplenagem
+nao-05:
+  skills: []
+  delegacao:
+  - pavimentacao
+nao-06:
+  skills: []
+  delegacao:
+  - irrigacao
+nao-07:
+  skills: []
+  delegacao:
+  - orcamento
+nao-08:
+  skills: []
+  delegacao:
+  - estruturas
+nao-09:
+  skills: []
+  delegacao: []
+nao-10:
+  skills:
+  - modelagem-hidraulica-hec-ras
+  - hidrologia-de-projeto-para-drenagem
+  delegacao:
+  - clima
+mis-01:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  - bueiros-e-travessias
+  delegacao:
+  - clima
+mis-02:
+  skills:
+  - bueiros-e-travessias
+  delegacao:
+  - hidraulica
+  - orcamento
+mis-03:
+  skills:
+  - drenagem-de-estradas-e-plataformas
+  delegacao:
+  - terraplenagem
+mis-04:
+  skills:
+  - drenagem-subsuperficial
+  delegacao:
+  - irrigacao
+mis-05:
+  skills:
+  - canais-de-drenagem-e-macrodrenagem
+  delegacao:
+  - hidraulica
+cdv-01:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  - bueiros-e-travessias
+  delegacao:
+  - clima
+cdv-02:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  - bueiros-e-travessias
+  delegacao:
+  - clima
+cdv-03:
+  skills:
+  - bueiros-e-travessias
+  delegacao: []
+cdv-04:
+  skills:
+  - bueiros-e-travessias
+  - hidrologia-de-projeto-para-drenagem
+  delegacao:
+  - hidraulica
+  - clima
+cdv-05:
+  skills:
+  - canais-de-drenagem-e-macrodrenagem
+  delegacao: []
+cdv-06:
+  skills:
+  - drenagem-subsuperficial
+  delegacao: []
+cdv-07:
+  skills:
+  - drenagem-subsuperficial
+  delegacao:
+  - irrigacao
+cdv-08:
+  skills: []
+  delegacao: []
+vig-01:
+  skills:
+  - drenagem-normas-e-manuais
+  - bueiros-e-travessias
+  delegacao: []
+vig-02:
+  skills:
+  - drenagem-normas-e-manuais
+  - bueiros-e-travessias
+  delegacao: []
+vig-03:
+  skills:
+  - drenagem-normas-e-manuais
+  delegacao: []
+vig-04:
+  skills:
+  - drenagem-normas-e-manuais
+  - hidrologia-de-projeto-para-drenagem
+  delegacao:
+  - clima
+vig-05:
+  skills:
+  - drenagem-normas-e-manuais
+  - hidrologia-de-projeto-para-drenagem
+  delegacao: []
+hr-01:
+  skills:
+  - modelagem-hidraulica-hec-ras
+  - hidrologia-de-projeto-para-drenagem
+  delegacao:
+  - clima
+  - hidraulica
+hr-02:
+  skills:
+  - modelagem-hidraulica-hec-ras
+  delegacao:
+  - hidraulica
+hr-03:
+  skills:
+  - modelagem-hidraulica-hec-ras
+  delegacao: []
+hr-04:
+  skills: []
+  delegacao:
+  - hidraulica
+hr-05:
+  skills:
+  - bueiros-e-travessias
+  delegacao: []
+hr-06:
+  skills:
+  - modelagem-hidraulica-hec-ras
+  delegacao: []
+hr-07:
+  skills:
+  - hidrologia-de-projeto-para-drenagem
+  - modelagem-hidraulica-hec-ras
+  delegacao:
+  - clima
+  - hidraulica
